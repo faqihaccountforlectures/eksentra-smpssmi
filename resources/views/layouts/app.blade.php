@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Portal Akademik') - SMP Science Mutiara Insani</title>
+    <title>@yield('title', 'Portal Ekstrakurikuler') - SMP Science Mutiara Insani</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-white-off text-navy-dark antialiased">
@@ -13,16 +13,14 @@
 
     <div class="flex h-screen overflow-hidden">
         
-        <!-- FUNGSI KODE: Sidebar navigasi utama.
-             Pada layar desktop (md ke atas), sidebar berposisi statis dan dapat disembunyikan/dimunculkan dengan tombol toggle.
-             Pada layar mobile (< md), sidebar bertindak sebagai drawer off-canvas yang meluncur dari kiri. -->
+        <!-- FUNGSI KODE: Sidebar navigasi utama -->
         <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-navy-dark flex flex-col transition-all duration-300 ease-in-out transform -translate-x-full md:static md:translate-x-0 shrink-0 shadow-2xl md:shadow-none">
             <!-- Logo area -->
             <div class="h-20 flex items-center justify-between px-6 bg-white-pure border-b border-navy-light/20 shrink-0">
                 <div class="flex items-center">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo SMP Science Mutiara Insani" class="w-10 h-10 object-contain mr-3 shrink-0">
                     <div>
-                        <h2 class="text-[14px] font-bold text-navy-dark tracking-wide leading-tight font-heading">Portal Akademik</h2>
+                        <h2 class="text-[13px] font-bold text-navy-dark tracking-wide leading-tight font-heading">Portal Ekstrakurikuler</h2>
                         <p class="text-[9px] text-gray-muted font-bold uppercase tracking-wider mt-0.5">SMP Science Mutiara Insani</p>
                     </div>
                 </div>
@@ -40,35 +38,22 @@
                     Dasbor
                 </a>
                 
-                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Menu Utama</p>
-
-                <!-- Menu Tahun Ajaran (Hanya muncul jika yang login adalah admin) -->
                 @if(Auth::user()->role === 'admin')
+                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Akademik Dasar</p>
+
+                <!-- Menu Tahun Ajaran -->
                 <a href="{{ route('academic-years.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('academic-years.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
                     <svg class="w-5 h-5 {{ request()->routeIs('academic-years.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     Tahun Ajaran
                 </a>
                 
+                <!-- Menu Kelas -->
                 <a href="{{ route('classes.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('classes.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
                     <svg class="w-5 h-5 {{ request()->routeIs('classes.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     Kelas
                 </a>
 
-                <a href="{{ route('subjects.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('subjects.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('subjects.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Mata Pelajaran
-                </a>
-
-                <a href="{{ route('teacher-assignments.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('teacher-assignments.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('teacher-assignments.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    Penugasan Guru
-                </a>
-
-                <a href="{{ route('lesson-schedules.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('lesson-schedules.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('lesson-schedules.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Jadwal Pelajaran
-                </a>
-
+                <!-- Menu Pembagian Kelas -->
                 <a href="{{ route('class-enrollments.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('class-enrollments.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
                     <svg class="w-5 h-5 {{ request()->routeIs('class-enrollments.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     Pembagian Kelas
@@ -90,7 +75,8 @@
                     </svg>
                     Data Siswa
                 </a>
-                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Keuangan & Ekskul</p>
+
+                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Ekstrakurikuler & Keuangan</p>
 
                 <!-- Navigasi Menu Ekstrakurikuler -->
                 <a href="{{ route('extracurriculars.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('extracurriculars.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
@@ -117,59 +103,42 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('admin.profile.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     Profil & Akun Admin
                 </a>
+
                 @elseif(Auth::user()->role === 'guru')
-                <!-- MENU KHUSUS GURU -->
+                <!-- MENU KHUSUS GURU (PEMBINA EKSTRAKURIKULER) -->
+                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Ekstrakurikuler</p>
+
+                <a href="{{ route('guru.extracurriculars.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('guru.extracurriculars.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
+                    <svg class="w-5 h-5 {{ request()->routeIs('guru.extracurriculars.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                    Ekskul Binaan & Penilaian
+                </a>
+
+                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Akun Saya</p>
+
                 <a href="{{ route('guru.profile.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('guru.profile.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
                     <svg class="w-5 h-5 {{ request()->routeIs('guru.profile.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                     Profil Saya
                 </a>
-                <a href="{{ route('guru.classes.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('guru.classes.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('guru.classes.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    Kelas Saya
-                </a>
-                
-                <a href="{{ route('guru.schedules.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('guru.schedules.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('guru.schedules.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Jadwal Mengajar
-                </a>
-
-                <!-- Menu Materi Pelajaran Guru -->
-                <a href="{{ route('guru.materials.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('guru.materials.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('guru.materials.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Materi Pelajaran
-                </a>
-
-                <a href="{{ route('guru.extracurriculars.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('guru.extracurriculars.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('guru.extracurriculars.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                    Ekstrakurikuler Binaan
-                </a>
 
                 @elseif(Auth::user()->role === 'siswa')
-                <!-- Menu Khusus Siswa -->
-                <a href="{{ route('siswa.profile.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('siswa.profile.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('siswa.profile.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    Profil Saya
-                </a>
-
-                <a href="{{ route('siswa.timetables.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('siswa.timetables.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('siswa.timetables.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Jadwal Pelajaran
-                </a>
-
-                <!-- Menu Materi Pelajaran Siswa -->
-                <a href="{{ route('siswa.materials.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('siswa.materials.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
-                    <svg class="w-5 h-5 {{ request()->routeIs('siswa.materials.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    Materi Pelajaran
-                </a>
+                <!-- MENU KHUSUS SISWA -->
+                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Aktivitas Siswa</p>
 
                 <a href="{{ route('siswa.extracurriculars.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('siswa.extracurriculars.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
                     <svg class="w-5 h-5 {{ request()->routeIs('siswa.extracurriculars.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                    Katalog Ekstrakurikuler
+                    Katalog & Ekskul Saya
                 </a>
                 
                 <a href="{{ route('siswa.payments.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('siswa.payments.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
                     <svg class="w-5 h-5 {{ request()->routeIs('siswa.payments.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     Riwayat Pembayaran
+                </a>
+
+                <p class="px-4 pt-3 pb-1 text-[10px] font-bold text-navy-light uppercase tracking-widest">Akun Saya</p>
+
+                <a href="{{ route('siswa.profile.index') }}" class="flex items-center gap-3 px-4 py-1.5 rounded-lg text-sm transition-all {{ request()->routeIs('siswa.profile.*') ? 'bg-navy-base/40 text-white-off font-bold border-l-4 border-navy-light shadow-inner' : 'text-white-off/70 hover:bg-navy-base/20 hover:text-white-off font-medium group' }}">
+                    <svg class="w-5 h-5 {{ request()->routeIs('siswa.profile.*') ? 'text-navy-light' : 'text-navy-light/70 group-hover:text-navy-light transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Profil Saya
                 </a>
                 @endif
             </nav>

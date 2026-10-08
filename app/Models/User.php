@@ -49,11 +49,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Relasi ke penugasan mengajar guru (TeacherAssignment).
+     * Relasi ke kegiatan ekstrakurikuler yang dibina oleh guru ini.
      */
-    public function teacherAssignments()
+    public function extracurriculars()
     {
-        return $this->hasMany(TeacherAssignment::class, 'teacher_id');
+        return $this->hasMany(Extracurricular::class, 'teacher_id');
     }
 
     /**

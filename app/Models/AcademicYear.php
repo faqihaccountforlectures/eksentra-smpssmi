@@ -17,10 +17,10 @@ class AcademicYear extends Model
     ];
 
     /**
-     * Relasi ke penugasan guru pada tahun ajaran ini.
+     * Relasi ke riwayat penilaian ekstrakurikuler pada tahun ajaran ini
      */
-    public function teacherAssignments()
+    public function extracurricularGrades()
     {
-        return $this->hasMany(TeacherAssignment::class, 'academic_year_id');
+        return $this->hasMany(ExtracurricularGrade::class, 'academic_year_id');
     }
 }

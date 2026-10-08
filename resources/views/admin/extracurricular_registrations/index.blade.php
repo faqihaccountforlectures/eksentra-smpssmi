@@ -162,6 +162,23 @@
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                     Disetujui
                                 </span>
+                                @if($registration->grades && $registration->grades->count() > 0)
+                                    <div class="mt-1.5 flex flex-col gap-1 items-center">
+                                        @foreach($registration->grades->groupBy('academic_year_id') as $yearId => $gradesInYear)
+                                            @php
+                                                $yearName = $gradesInYear->first()->academicYear->year_name ?? '';
+                                                $ganjil = $gradesInYear->firstWhere('semester', 'ganjil');
+                                                $genap = $gradesInYear->firstWhere('semester', 'genap');
+                                            @endphp
+                                            <div class="text-[9px] bg-navy-light/10 text-navy-dark px-2 py-0.5 rounded border border-navy-light/20 flex items-center gap-1 font-semibold" title="Tahun Ajaran {{ $yearName }}">
+                                                <span class="text-gray-muted">{{ $yearName }}:</span>
+                                                <span class="{{ $ganjil ? 'font-bold text-navy-base' : 'text-gray-400' }}">Ganjil {{ $ganjil ? $ganjil->grade : '-' }}</span>
+                                                <span>|</span>
+                                                <span class="{{ $genap ? 'font-bold text-navy-base' : 'text-gray-400' }}">Genap {{ $genap ? $genap->grade : '-' }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             @elseif($registration->status === 'rejected')
                                 <span class="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200/60 text-rose-700 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
                                     <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>

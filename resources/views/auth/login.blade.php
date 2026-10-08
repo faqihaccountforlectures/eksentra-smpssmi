@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Portal Akademik SMPS MI</title>
+    <title>Login - Portal Ekstrakurikuler SMPS MI</title>
     <!-- Vite Assets (CSS & JS) untuk Custom Scrollbar & Styling -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Tailwind CSS CDN Fallback -->
@@ -28,7 +28,7 @@
         </div>
 
         <!-- Teks Judul Portal -->
-        <h1 class="text-xl font-bold text-[#0f172a] mb-0.5 font-heading">Portal Akademik</h1>
+        <h1 class="text-xl font-bold text-[#0f172a] mb-0.5 font-heading">Portal Ekstrakurikuler</h1>
         <p class="text-gray-500 text-xs font-semibold mb-6">SMP Science Mutiara Insani</p>
 
         <!-- Pesan Error Session (Jika ada error login atau akses ditolak) -->

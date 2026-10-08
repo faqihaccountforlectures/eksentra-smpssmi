@@ -12,7 +12,7 @@ class ExtracurricularRegistration extends Model
     protected $fillable = [
         'student_id',
         'extracurricular_id',
-        'status'
+        'status',
     ];
 
     public function student()
@@ -23,5 +23,13 @@ class ExtracurricularRegistration extends Model
     public function extracurricular()
     {
         return $this->belongsTo(Extracurricular::class, 'extracurricular_id');
+    }
+
+    /**
+     * Relasi ke riwayat nilai ekstrakurikuler per tahun ajaran dan semester
+     */
+    public function grades()
+    {
+        return $this->hasMany(ExtracurricularGrade::class, 'registration_id');
     }
 }

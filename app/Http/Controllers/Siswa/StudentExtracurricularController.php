@@ -18,9 +18,10 @@ class StudentExtracurricularController extends Controller
         // Ambil semua daftar ekskul yang tersedia beserta nama guru pembinanya
         $extracurriculars = Extracurricular::with('teacher.teacherProfile')->get();
         
-        // Ambil riwayat pendaftaran siswa saat ini, lalu jadikan id ekskul sebagai kunci (key)
-        // Ini berguna agar di view kita mudah mengecek: apakah ekskul A statusnya pending/approved?
-        $myRegistrations = ExtracurricularRegistration::where('student_id', auth()->id())
+        // Ambil riwayat pendaftaran siswa saat ini beserta nilai per tahun ajaran & semester
+        // Lalu jadikan id ekskul sebagai kunci (key)
+        $myRegistrations = ExtracurricularRegistration::with(['grades.academicYear'])
+                            ->where('student_id', auth()->id())
                             ->get()
                             ->keyBy('extracurricular_id');
 

@@ -17,7 +17,7 @@
         </div>
 
         <div class="relative z-10">
-            <h2 class="text-3xl font-bold mb-3 font-heading tracking-wide">Selamat Datang di Dasbor Portal Akademik</h2>
+            <h2 class="text-3xl font-bold mb-3 font-heading tracking-wide">Selamat Datang di Dasbor Portal Ekstrakurikuler</h2>
             <p class="text-navy-light text-lg">Anda saat ini masuk sebagai <span class="font-bold uppercase text-white-off px-2 py-0.5 bg-navy-dark/50 rounded-md border border-navy-base/50">{{ Auth::user()->role }}</span>. Berikut adalah ringkasan data dan aktivitas sistem untuk hari ini.</p>
         </div>
     </div>

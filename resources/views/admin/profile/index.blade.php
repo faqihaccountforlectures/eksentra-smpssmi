@@ -85,7 +85,7 @@
                     <div>
                         <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Email Resmi Admin <span class="text-rose-500">*</span></label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="admin@smpsmi.com" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm" required>
-                        <p class="text-[10px] text-gray-muted mt-1">Gunakan alamat email ini untuk masuk / login ke dalam portal akademik.</p>
+                        <p class="text-[10px] text-gray-muted mt-1">Gunakan alamat email ini untuk masuk / login ke dalam portal ekstrakurikuler.</p>
                     </div>
 
                     <!-- Input 3: Nomor Telepon / WhatsApp Admin -->

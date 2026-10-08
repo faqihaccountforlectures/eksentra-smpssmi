@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\AcademicYearController;
-use App\Http\Controllers\Admin\SubjectController;
-use App\Http\Controllers\Admin\TeacherAssignmentController;
-use App\Http\Controllers\Admin\LessonScheduleController;
 use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\ExtracurricularRegistrationController;
 use App\Http\Controllers\Siswa\StudentExtracurricularController;
@@ -105,55 +102,6 @@ Route::put('/admin/classes/{id}', [\App\Http\Controllers\Admin\ClassRoomControll
 // Menghapus data kelas secara permanen
 Route::delete('/admin/classes/{id}', [\App\Http\Controllers\Admin\ClassRoomController::class, 'destroy'])->name('classes.destroy');
 
-// ==========================================
-// RUTE MASTER DATA MATA PELAJARAN (SUBJECTS)
-// ==========================================
-// Menampilkan daftar lengkap mata pelajaran (Wajib & Muatan Lokal)
-Route::get('/admin/subjects', [SubjectController::class, 'index'])->name('subjects.index');
-// Mengunduh berkas template CSV untuk impor data mata pelajaran
-Route::get('/admin/subjects/template', [SubjectController::class, 'downloadTemplate'])->name('subjects.template');
-// Memproses impor massal data mata pelajaran dari berkas CSV/Excel
-Route::post('/admin/subjects/import', [SubjectController::class, 'import'])->name('subjects.import');
-// Menampilkan formulir untuk menambah mata pelajaran baru
-Route::get('/admin/subjects/create', [SubjectController::class, 'create'])->name('subjects.create');
-// Menyimpan data mata pelajaran baru ke basis data
-Route::post('/admin/subjects', [SubjectController::class, 'store'])->name('subjects.store');
-// Menampilkan formulir untuk mengubah mata pelajaran
-Route::get('/admin/subjects/{id}/edit', [SubjectController::class, 'edit'])->name('subjects.edit');
-// Memperbarui data mata pelajaran pada basis data
-Route::put('/admin/subjects/{id}', [SubjectController::class, 'update'])->name('subjects.update');
-// Menghapus data mata pelajaran secara permanen
-Route::delete('/admin/subjects/{id}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
-
-// ==========================================
-// RUTE PENUGASAN GURU (TEACHER ASSIGNMENTS)
-// ==========================================
-// Mengunduh berkas template CSV untuk impor data penugasan guru
-Route::get('/teacher-assignments/template', [TeacherAssignmentController::class, 'downloadTemplate'])->name('teacher-assignments.template');
-// Memproses impor massal data penugasan guru dari berkas CSV/Excel
-Route::post('/teacher-assignments/import', [TeacherAssignmentController::class, 'import'])->name('teacher-assignments.import');
-// Menampilkan daftar penugasan guru (alokasi guru pada mata pelajaran)
-Route::get('/teacher-assignments', [TeacherAssignmentController::class, 'index'])->name('teacher-assignments.index');
-// Menampilkan formulir pendaftaran penugasan guru baru
-Route::get('/teacher-assignments/create', [TeacherAssignmentController::class, 'create'])->name('teacher-assignments.create');
-// Menyimpan data penugasan guru ke basis data
-Route::post('/teacher-assignments', [TeacherAssignmentController::class, 'store'])->name('teacher-assignments.store');
-// Menampilkan formulir ubah penugasan berdasarkan ID guru dan ID mata pelajaran
-Route::get('/teacher-assignments/{teacher_id}/{subject_id}/edit', [TeacherAssignmentController::class, 'edit'])->name('teacher-assignments.edit');
-// Memperbarui data penugasan guru pada basis data
-Route::put('/teacher-assignments/{teacher_id}/{subject_id}', [TeacherAssignmentController::class, 'update'])->name('teacher-assignments.update');
-// Menghapus data penugasan guru secara permanen
-Route::delete('/teacher-assignments/{teacher_id}/{subject_id}', [TeacherAssignmentController::class, 'destroy'])->name('teacher-assignments.destroy');
-
-// ==========================================
-// RUTE MANAJEMEN JADWAL PELAJARAN (TIMETABLES)
-// ==========================================
-// Mengunduh berkas template matriks CSV untuk impor data jadwal pelajaran mingguan
-Route::get('/lesson-schedules/template', [LessonScheduleController::class, 'downloadTemplate'])->name('lesson-schedules.template');
-// Memproses impor massal data jadwal pelajaran matriks dari berkas CSV/Excel
-Route::post('/lesson-schedules/import', [LessonScheduleController::class, 'import'])->name('lesson-schedules.import');
-// Menginisialisasi rute sumber daya (resource) untuk jadwal pelajaran
-Route::resource('lesson-schedules', LessonScheduleController::class);
 
 // ==========================================
 // RUTE EKSTRAKURIKULER (EXTRACURRICULARS)
@@ -264,71 +212,43 @@ Route::delete('/admin/class-enrollments/{enrollment_id}', [\App\Http\Controllers
 });
 
 // ==========================================
-// GRUP RUTE KHUSUS GURU
+// GRUP RUTE KHUSUS GURU (PEMBINA EKSTRAKURIKULER)
 // ==========================================
 Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
-// Menampilkan halaman utama dasbor guru
-Route::get('/dashboard', [\App\Http\Controllers\Guru\DashboardController::class, 'index'])->name('guru.dashboard');
-// Menampilkan daftar kelas yang ditugaskan sebagai wali kelas
-Route::get('/classes', [\App\Http\Controllers\Guru\MyClassController::class, 'index'])->name('guru.classes.index');
-// Menampilkan detail perwalian siswa di kelas yang bersangkutan
-Route::get('/classes/{id}', [\App\Http\Controllers\Guru\MyClassController::class, 'show'])->name('guru.classes.show');
-// Menampilkan jadwal mengajar mingguan guru
-Route::get('/schedules', [\App\Http\Controllers\Guru\ScheduleController::class, 'index'])->name('guru.schedules.index');
-// Menampilkan informasi profil akun guru
-Route::get('/profile', [\App\Http\Controllers\Guru\ProfileController::class, 'index'])->name('guru.profile.index');
-// Memperbarui informasi profil guru
-Route::put('/profile', [\App\Http\Controllers\Guru\ProfileController::class, 'update'])->name('guru.profile.update');
-// Menampilkan daftar ekstrakurikuler yang dibina oleh guru bersangkutan
-Route::get('/extracurriculars', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'index'])->name('guru.extracurriculars.index');
-// Menampilkan daftar siswa yang tergabung dalam ekstrakurikuler binaan
-Route::get('/extracurriculars/{id}', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'show'])->name('guru.extracurriculars.show');
+    // Menampilkan halaman utama dasbor pembina ekstrakurikuler
+    Route::get('/dashboard', [\App\Http\Controllers\Guru\DashboardController::class, 'index'])->name('guru.dashboard');
 
-// ==========================================
-// RUTE MATERI PELAJARAN (GURU)
-// ==========================================
-// Menampilkan daftar materi pelajaran yang diunggah guru
-Route::get('/materials', [\App\Http\Controllers\Guru\LearningMaterialController::class, 'index'])->name('guru.materials.index');
-// Menampilkan formulir penambahan materi pelajaran baru
-Route::get('/materials/create', [\App\Http\Controllers\Guru\LearningMaterialController::class, 'create'])->name('guru.materials.create');
-// Menyimpan data dan berkas materi pelajaran baru ke basis data
-Route::post('/materials', [\App\Http\Controllers\Guru\LearningMaterialController::class, 'store'])->name('guru.materials.store');
-// Menampilkan formulir pengubahan data materi pelajaran
-Route::get('/materials/{id}/edit', [\App\Http\Controllers\Guru\LearningMaterialController::class, 'edit'])->name('guru.materials.edit');
-// Memperbarui data materi pelajaran pada basis data
-Route::put('/materials/{id}', [\App\Http\Controllers\Guru\LearningMaterialController::class, 'update'])->name('guru.materials.update');
-// Menghapus data dan berkas materi pelajaran secara permanen
-Route::delete('/materials/{id}', [\App\Http\Controllers\Guru\LearningMaterialController::class, 'destroy'])->name('guru.materials.destroy');
-// Mengunduh berkas fisik materi pelajaran
-Route::get('/materials/{id}/download', [\App\Http\Controllers\Guru\LearningMaterialController::class, 'download'])->name('guru.materials.download');
+    // Menampilkan informasi profil akun guru
+    Route::get('/profile', [\App\Http\Controllers\Guru\ProfileController::class, 'index'])->name('guru.profile.index');
+    // Memperbarui informasi profil guru
+    Route::put('/profile', [\App\Http\Controllers\Guru\ProfileController::class, 'update'])->name('guru.profile.update');
+
+    // Menampilkan daftar ekstrakurikuler yang dibina oleh guru bersangkutan
+    Route::get('/extracurriculars', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'index'])->name('guru.extracurriculars.index');
+    // Menampilkan detail ekstrakurikuler & daftar anggota siswa untuk penilaian
+    Route::get('/extracurriculars/{id}', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'show'])->name('guru.extracurriculars.show');
+    // Menyimpan / memperbarui nilai dan catatan perkembangan siswa ekstrakurikuler
+    Route::post('/extracurriculars/{id}/grade/{registration_id}', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'updateGrade'])->name('guru.extracurriculars.grade');
 });
 
 // ==========================================
 // GRUP RUTE KHUSUS SISWA
 // ==========================================
 Route::middleware(['auth', 'role:siswa'])->group(function () {
-// Menampilkan informasi profil akun siswa
-Route::get('/siswa/profile', [\App\Http\Controllers\Siswa\ProfileController::class, 'index'])->name('siswa.profile.index');
-// Memperbarui informasi profil siswa
-Route::put('/siswa/profile', [\App\Http\Controllers\Siswa\ProfileController::class, 'update'])->name('siswa.profile.update');
-// Menampilkan jadwal pelajaran mingguan sesuai kelas siswa
-Route::get('/siswa/timetables', [\App\Http\Controllers\Siswa\TimetableController::class, 'index'])->name('siswa.timetables.index');
-// Menampilkan katalog ekstrakurikuler yang dapat diikuti siswa
-Route::get('/siswa/extracurriculars', [StudentExtracurricularController::class, 'index'])->name('siswa.extracurriculars.index');
-// Mengirimkan pengajuan pendaftaran ekstrakurikuler
-Route::post('/siswa/extracurricular-registrations', [ExtracurricularRegistrationController::class, 'store'])->name('extracurricular-registrations.store');
-// Membatalkan atau keluar dari ekstrakurikuler yang diikuti
-Route::delete('/siswa/extracurricular-registrations/{id}', [ExtracurricularRegistrationController::class, 'destroy'])->name('extracurricular-registrations.destroy');
-// Menampilkan riwayat pembayaran iuran ekstrakurikuler
-Route::get('/siswa/payments', [StudentPaymentController::class, 'index'])->name('siswa.payments.index');
-// Mengunggah bukti pembayaran iuran ekstrakurikuler
-Route::post('/siswa/payments', [StudentPaymentController::class, 'store'])->name('siswa.payments.store');
+    // Menampilkan informasi profil akun siswa
+    Route::get('/siswa/profile', [\App\Http\Controllers\Siswa\ProfileController::class, 'index'])->name('siswa.profile.index');
+    // Memperbarui informasi profil siswa
+    Route::put('/siswa/profile', [\App\Http\Controllers\Siswa\ProfileController::class, 'update'])->name('siswa.profile.update');
 
-// ==========================================
-// RUTE MATERI PELAJARAN (SISWA)
-// ==========================================
-// Menampilkan galeri materi pelajaran sesuai kelas yang diikuti siswa
-Route::get('/siswa/materials', [\App\Http\Controllers\Siswa\StudentLearningMaterialController::class, 'index'])->name('siswa.materials.index');
-// Mengunduh berkas materi pelajaran bagi siswa terdaftar
-Route::get('/siswa/materials/{id}/download', [\App\Http\Controllers\Siswa\StudentLearningMaterialController::class, 'download'])->name('siswa.materials.download');
+    // Menampilkan katalog ekstrakurikuler yang dapat diikuti siswa & status nilai
+    Route::get('/siswa/extracurriculars', [StudentExtracurricularController::class, 'index'])->name('siswa.extracurriculars.index');
+    // Mengirimkan pengajuan pendaftaran ekstrakurikuler
+    Route::post('/siswa/extracurricular-registrations', [ExtracurricularRegistrationController::class, 'store'])->name('extracurricular-registrations.store');
+    // Membatalkan atau keluar dari ekstrakurikuler yang diikuti
+    Route::delete('/siswa/extracurricular-registrations/{id}', [ExtracurricularRegistrationController::class, 'destroy'])->name('extracurricular-registrations.destroy');
+
+    // Menampilkan riwayat pembayaran iuran ekstrakurikuler
+    Route::get('/siswa/payments', [StudentPaymentController::class, 'index'])->name('siswa.payments.index');
+    // Mengunggah bukti pembayaran iuran ekstrakurikuler
+    Route::post('/siswa/payments', [StudentPaymentController::class, 'store'])->name('siswa.payments.store');
 });

@@ -138,6 +138,74 @@
                             </div>
                         
                         @elseif($status === 'approved')
+                            <!-- Kartu Penilaian Siswa jika sudah dinilai per Tahun Ajaran & Semester -->
+                            @if($registration && $registration->grades && $registration->grades->count() > 0)
+                                <div class="mb-4 space-y-2.5">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-bold text-gray-muted uppercase tracking-wider">Nilai Capaian Ekskul:</span>
+                                    </div>
+                                    @foreach($registration->grades->groupBy('academic_year_id') as $yearId => $gradesInYear)
+                                        @php
+                                            $yearName = $gradesInYear->first()->academicYear->year_name ?? 'Tahun Ajaran';
+                                            $ganjil = $gradesInYear->firstWhere('semester', 'ganjil');
+                                            $genap = $gradesInYear->firstWhere('semester', 'genap');
+                                        @endphp
+                                        <div class="p-3 rounded-xl bg-navy-light/10 border border-navy-light/30">
+                                            <div class="font-bold text-navy-dark text-[11px] mb-2 flex items-center justify-between">
+                                                <span class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                    T.A. {{ $yearName }}
+                                                </span>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                                <!-- Semester Ganjil -->
+                                                <div class="bg-white/80 p-2.5 rounded-lg border border-navy-light/20 flex flex-col justify-between">
+                                                    <div>
+                                                        <span class="text-[9px] font-bold text-gray-muted uppercase tracking-wider block">Sem. Ganjil</span>
+                                                        @if($ganjil && $ganjil->grade)
+                                                            <div class="flex items-center gap-1 mt-1">
+                                                                <span class="px-2 py-0.5 rounded bg-navy-base text-white-off font-bold text-xs">
+                                                                    {{ $ganjil->grade }}
+                                                                </span>
+                                                                @if($ganjil->score !== null)
+                                                                    <span class="text-[11px] font-bold text-navy-dark">({{ $ganjil->score }})</span>
+                                                                @endif
+                                                            </div>
+                                                            @if($ganjil->notes)
+                                                                <p class="text-[10px] text-navy-dark/80 italic mt-1.5 leading-snug" title="{{ $ganjil->notes }}">"{{ $ganjil->notes }}"</p>
+                                                            @endif
+                                                        @else
+                                                            <span class="text-[10px] text-gray-400 italic block mt-1">Belum dinilai</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <!-- Semester Genap -->
+                                                <div class="bg-white/80 p-2.5 rounded-lg border border-navy-light/20 flex flex-col justify-between">
+                                                    <div>
+                                                        <span class="text-[9px] font-bold text-gray-muted uppercase tracking-wider block">Sem. Genap</span>
+                                                        @if($genap && $genap->grade)
+                                                            <div class="flex items-center gap-1 mt-1">
+                                                                <span class="px-2 py-0.5 rounded bg-navy-base text-white-off font-bold text-xs">
+                                                                    {{ $genap->grade }}
+                                                                </span>
+                                                                @if($genap->score !== null)
+                                                                    <span class="text-[11px] font-bold text-navy-dark">({{ $genap->score }})</span>
+                                                                @endif
+                                                            </div>
+                                                            @if($genap->notes)
+                                                                <p class="text-[10px] text-navy-dark/80 italic mt-1.5 leading-snug" title="{{ $genap->notes }}">"{{ $genap->notes }}"</p>
+                                                            @endif
+                                                        @else
+                                                            <span class="text-[10px] text-gray-400 italic block mt-1">Belum dinilai</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+
                             <div class="flex gap-2">
                                 <div class="flex-1 py-2.5 bg-emerald-50 border border-emerald-200/60 text-emerald-700 rounded-xl text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center gap-1.5 shadow-sm">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>

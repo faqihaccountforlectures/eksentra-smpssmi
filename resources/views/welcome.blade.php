@@ -29,10 +29,10 @@
                     <a href="#keunggulan" class="nav-link text-gray-muted font-medium hover:text-navy-base transition-all">Keunggulan</a>
                 </div>
 
-                <!-- Tombol Portal Akademik (Arah ke Login) -->
+                <!-- Tombol Portal Ekstrakurikuler (Arah ke Login) -->
                 <div>
                     <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-gradient-to-r from-navy-dark to-navy-base hover:from-navy-base hover:to-navy-dark text-white-off px-5 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-navy-base/20 hover:shadow-lg active:scale-95 transition-all">
-                        <span>Portal Akademik</span>
+                        <span>Portal Ekstrakurikuler</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
                 </div>
