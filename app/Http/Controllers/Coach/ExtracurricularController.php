@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pembina;
+namespace App\Http\Controllers\Coach;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,17 +12,17 @@ use App\Models\ExtracurricularGrade;
 class ExtracurricularController extends Controller
 {
     /**
-     * Menampilkan daftar ekstrakurikuler yang dibina oleh pembina yang sedang login.
+     * Menampilkan daftar ekstrakurikuler yang dibina oleh coach yang sedang login.
      */
     public function index()
     {
-        $pembinaId = Auth::id();
+        $coachId = Auth::id();
         
-        $extracurriculars = Extracurricular::where('teacher_id', $pembinaId)
+        $extracurriculars = Extracurricular::where('coach_id', $coachId)
             ->withCount('registrations')
             ->get();
             
-        return view('pembina.extracurriculars.index', compact('extracurriculars'));
+        return view('coach.extracurriculars.index', compact('extracurriculars'));
     }
 
     /**
@@ -33,9 +33,9 @@ class ExtracurricularController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $pembinaId = Auth::id();
+        $coachId = Auth::id();
         
-        $extracurricular = Extracurricular::where('teacher_id', $pembinaId)
+        $extracurricular = Extracurricular::where('coach_id', $coachId)
             ->withCount('registrations')
             ->findOrFail($id);
 
@@ -69,7 +69,7 @@ class ExtracurricularController extends Controller
             ->paginate(10)
             ->appends(['academic_year_id' => $selectedYearId]);
             
-        return view('pembina.extracurriculars.show', compact(
+        return view('coach.extracurriculars.show', compact(
             'extracurricular', 
             'registrations', 
             'academicYears', 
@@ -79,12 +79,12 @@ class ExtracurricularController extends Controller
 
     /**
      * Memproses penyimpanan / pembaruan nilai ekstrakurikuler siswa untuk Semester Ganjil dan Genap.
-     * Hanya siswa yang berstatus 'approved' yang dapat dinilai oleh guru pembina.
+     * Hanya siswa yang berstatus 'approved' yang dapat dinilai oleh coach.
      */
     public function updateGrade(Request $request, $id, $registrationId)
     {
-        $pembinaId = Auth::id();
-        $extracurricular = Extracurricular::where('teacher_id', $pembinaId)->findOrFail($id);
+        $coachId = Auth::id();
+        $extracurricular = Extracurricular::where('coach_id', $coachId)->findOrFail($id);
         
         $registration = $extracurricular->registrations()
             ->where('status', 'approved')

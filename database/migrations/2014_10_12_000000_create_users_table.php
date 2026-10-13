@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-           $table->id(); // Primary Key: id (BIGINT UNSIGNED)
+            $table->id(); // Primary Key: id (BIGINT UNSIGNED)
+            $table->string('name')->nullable(); // Nama Pengguna
             $table->string('email')->unique(); // Email untuk login / notifikasi
+            $table->string('phone_number')->nullable(); // Nomor WhatsApp / Telepon
             $table->string('password')->nullable(); // Nullable jika login lewat Google OAuth
             $table->string('google_id')->nullable(); // ID akun google dari Socialite
-            $table->enum('role', ['admin', 'pembina', 'siswa'])->default('siswa'); // Hak akses role
+            $table->enum('role', ['admin', 'coach', 'siswa'])->default('siswa'); // Hak akses role
             $table->timestamps();
         });
     }

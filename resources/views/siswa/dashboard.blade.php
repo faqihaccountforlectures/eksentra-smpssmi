@@ -130,7 +130,7 @@
                                             <span class="truncate">{{ $reg->extracurricular->schedule }}</span>
                                         </p>
                                         <p class="text-[11px] text-navy-base font-semibold mt-1">
-                                            Pembina: {{ $reg->extracurricular->teacher->teacherProfile->full_name ?? ($reg->extracurricular->teacher->name ?? '-') }}
+                                            Pembina: {{ $reg->extracurricular->coach->display_name ?? '-' }}
                                         </p>
                                     </div>
                                 </div>

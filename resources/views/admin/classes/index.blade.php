@@ -54,7 +54,7 @@
                             <select name="homeroom_teacher_id" class="w-full bg-white-off/50 border border-navy-light/50 text-navy-dark font-semibold text-sm rounded-xl pl-3 pr-10 py-2 focus:bg-white focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all duration-200 appearance-none">
                                 <option value="">-- Kosongkan / Belum Ada --</option>
                                 @foreach($teachers as $teacher)
-                                    <option value="{{ $teacher->id }}">{{ $teacher->teacherProfile->full_name ?? $teacher->email }}</option>
+                                    <option value="{{ $teacher->id }}">{{ $teacher->display_name ?? $teacher->email }}</option>
                                 @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-navy-base">
@@ -109,9 +109,9 @@
                                     @if($classRoom->homeroomTeacher)
                                         <div class="flex items-center gap-2">
                                             <div class="w-6 h-6 rounded-full bg-navy-base/10 text-navy-base flex items-center justify-center text-[10px] font-bold">
-                                                {{ substr($classRoom->homeroomTeacher->teacherProfile->full_name ?? 'G', 0, 1) }}
+                                                {{ substr($classRoom->homeroomTeacher->display_name ?? 'G', 0, 1) }}
                                             </div>
-                                            <span>{{ $classRoom->homeroomTeacher->teacherProfile->full_name ?? $classRoom->homeroomTeacher->email }}</span>
+                                            <span>{{ $classRoom->homeroomTeacher->display_name ?? $classRoom->homeroomTeacher->email }}</span>
                                         </div>
                                     @else
                                         <span class="text-navy-base italic text-xs">Belum diatur</span>

@@ -226,7 +226,7 @@
                                             Terverifikasi
                                         </span>
                                         @if($payment->verifier)
-                                            <p class="text-[10px] text-gray-muted mt-1 font-semibold">Oleh: {{ $payment->verifier->teacherProfile->full_name ?? $payment->verifier->email }}</p>
+                                            <p class="text-[10px] text-gray-muted mt-1 font-semibold">Oleh: {{ $payment->verifier->display_name ?? $payment->verifier->email }}</p>
                                         @endif
                                     @elseif($payment->payment_status === 'rejected')
                                         <span class="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200/60 text-rose-700 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">

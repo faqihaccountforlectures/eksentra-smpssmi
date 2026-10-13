@@ -20,7 +20,7 @@ class User extends Authenticatable
         'phone_number', // Nomor Telepon / WhatsApp
         'password',
         'google_id',    // Buat nyimpen ID dari Google SSO
-        'role',         // Buat nentuin dia itu admin, guru, atau siswa
+        'role',         // Role pengguna: admin, coach, atau siswa
     ];
 
     // Kolom yang disembunyiin pas datanya diambil (biar password gak bocor di respon API/JSON)
@@ -35,43 +35,36 @@ class User extends Authenticatable
     ];
 
     // Relasi One-to-One: Nentuin kalo satu Akun User punya satu Profil Siswa.
-    // Jadi nanti gampang manggilnya, misal: $user->studentProfile
     public function studentProfile(): HasOne
     {
         return $this->hasOne(StudentProfile::class);
     }
 
-    // Relasi One-to-One: Profil Pembina (pembinaProfile)
-    public function pembinaProfile(): HasOne
+    // Relasi One-to-One: Profil Coach (coachProfile)
+    public function coachProfile(): HasOne
     {
-        return $this->hasOne(PembinaProfile::class);
-    }
-
-    // Relasi One-to-One: Alias profil pembina (teacherProfile) untuk kompatibilitas
-    public function teacherProfile(): HasOne
-    {
-        return $this->hasOne(PembinaProfile::class);
+        return $this->hasOne(CoachProfile::class);
     }
 
     /**
-     * Relasi ke kegiatan ekstrakurikuler yang dibina oleh pembina ini.
+     * Relasi ke kegiatan ekstrakurikuler yang dibina oleh coach ini.
      */
     public function extracurriculars()
     {
-        return $this->hasMany(Extracurricular::class, 'teacher_id');
+        return $this->hasMany(Extracurricular::class, 'coach_id');
     }
 
     /**
      * FUNGSI KODE: Accessor untuk mendapatkan nama lengkap tampilan pengguna.
      * Secara cerdas memeriksa profil pengguna sesuai peran:
-     * - Jika Pembina: mengambil nama dari teacherProfile->full_name.
+     * - Jika Coach: mengambil nama dari coachProfile->full_name.
      * - Jika Siswa: mengambil nama dari studentProfile->full_name.
      * - Jika Admin atau profil belum ada: menggunakan kolom 'name' atau potongan awal email.
      */
     public function getDisplayNameAttribute(): string
     {
-        if (in_array($this->role, ['guru', 'pembina'])) {
-            $profile = $this->relationLoaded('teacherProfile') ? $this->teacherProfile : $this->teacherProfile()->first();
+        if ($this->role === 'coach') {
+            $profile = $this->relationLoaded('coachProfile') ? $this->coachProfile : $this->coachProfile()->first();
             if ($profile && !empty($profile->full_name)) {
                 return $profile->full_name;
             }

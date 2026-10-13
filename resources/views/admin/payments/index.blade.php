@@ -235,7 +235,7 @@
                                     Disetujui
                                 </span>
                                 @if(isset($payment->verifier))
-                                    <div class="text-[10px] text-gray-muted mt-1 font-medium">Oleh: {{ $payment->verifier->teacherProfile->full_name ?? 'Admin' }}</div>
+                                    <div class="text-[10px] text-gray-muted mt-1 font-medium">Oleh: {{ $payment->verifier->display_name ?? 'Admin' }}</div>
                                 @endif
                             @elseif($payment->payment_status === 'rejected')
                                 <span class="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200/60 text-rose-700 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
@@ -243,7 +243,7 @@
                                     Ditolak
                                 </span>
                                 @if(isset($payment->verifier))
-                                    <div class="text-[10px] text-gray-muted mt-1 font-medium">Oleh: {{ $payment->verifier->teacherProfile->full_name ?? 'Admin' }}</div>
+                                    <div class="text-[10px] text-gray-muted mt-1 font-medium">Oleh: {{ $payment->verifier->display_name ?? 'Admin' }}</div>
                                 @endif
                             @endif
                         </td>

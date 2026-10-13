@@ -34,7 +34,7 @@
         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white-off/5 opacity-50 blur-3xl pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
         
         <div class="relative z-10">
-            <h2 class="text-lg font-bold font-heading mb-0.5 tracking-wide">Tahun Ajaran: <span class="text-white-off">{{ strtoupper($activeYear->semester) }} {{ $activeYear->year_name }}</span></h2>
+            <h2 class="text-lg font-bold font-heading mb-0.5 tracking-wide">Tahun Ajaran: <span class="text-white-off">{{ $activeYear->year_name }}</span></h2>
             <p class="text-white-off/70 text-xs">Pilih kelas di bawah ini untuk mengelola pendaftaran siswa.</p>
         </div>
         <div class="relative z-10 flex items-center gap-4">
@@ -94,9 +94,9 @@
                             @if($classRoom->homeroomTeacher)
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-7 h-7 rounded-full bg-navy-light/20 text-navy-base border border-navy-light/40 flex items-center justify-center text-[11px] font-bold shadow-sm">
-                                        {{ substr($classRoom->homeroomTeacher->teacherProfile->full_name ?? 'G', 0, 1) }}
+                                        {{ substr($classRoom->homeroomTeacher->display_name ?? 'G', 0, 1) }}
                                     </div>
-                                    <span>{{ $classRoom->homeroomTeacher->teacherProfile->full_name ?? $classRoom->homeroomTeacher->email }}</span>
+                                    <span>{{ $classRoom->homeroomTeacher->display_name ?? $classRoom->homeroomTeacher->email }}</span>
                                 </div>
                             @else
                                 <span class="text-gray-muted italic text-[11px] bg-white-off/50 px-2.5 py-1 rounded-md border border-navy-light/30">Belum diatur</span>

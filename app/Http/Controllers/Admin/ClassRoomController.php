@@ -17,13 +17,13 @@ class ClassRoomController extends Controller
     {
         // Ngambil semua data kelas beserta relasi wali kelas (dan profil gurunya)
         // Diurutin berdasarkan tingkat kelas (grade_level) terus nama kelas
-        $classes = ClassRoom::with('homeroomTeacher.teacherProfile')
+        $classes = ClassRoom::with('homeroomTeacher')
             ->orderBy('grade_level')
             ->orderBy('name')
             ->paginate(5);
         
         // Ngambil daftar akun yang ber-role 'guru' buat ngisi pilihan dropdown Wali Kelas
-        $teachers = User::where('role', 'guru')->with('teacherProfile')->get();
+        $teachers = User::whereIn('role', ['admin', 'coach'])->get();
 
         return view('admin.classes.index', compact('classes', 'teachers'));
     }
@@ -41,7 +41,7 @@ class ClassRoomController extends Controller
         $classRoom = ClassRoom::findOrFail($id);
         
         // Perlu ngambil daftar guru lagi buat dropdown di halaman edit
-        $teachers = User::where('role', 'guru')->with('teacherProfile')->get();
+        $teachers = User::whereIn('role', ['admin', 'coach'])->get();
 
         return view('admin.classes.edit', compact('classRoom', 'teachers'));
     }

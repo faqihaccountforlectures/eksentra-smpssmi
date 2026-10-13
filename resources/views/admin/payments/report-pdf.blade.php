@@ -121,7 +121,7 @@
                     <td class="text-right">Rp {{ number_format($payment->total_amount, 0, ',', '.') }}</td>
                     <td>
                         @if($payment->payment_status === 'verified' && $payment->verifier)
-                            {{ $payment->verifier->teacherProfile->full_name ?? 'Admin' }}
+                            {{ $payment->verifier->display_name ?? 'Admin' }}
                         @else
                             -
                         @endif

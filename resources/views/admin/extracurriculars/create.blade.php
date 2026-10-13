@@ -50,10 +50,10 @@
                     <div class="md:col-span-1">
                         <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Pembina Ekstrakurikuler <span class="text-rose-500">*</span></label>
                         <div class="relative">
-                            <select name="teacher_id" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium appearance-none cursor-pointer">
+                            <select name="coach_id" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium appearance-none cursor-pointer">
                                 <option value="" disabled selected>Pilih Pembina...</option>
-                                @foreach($pembinas ?? $teachers as $pembina)
-                                    <option value="{{ $pembina->id }}" {{ old('teacher_id') == $pembina->id ? 'selected' : '' }}>{{ $pembina->display_name }}</option>
+                                @foreach($coaches as $coach)
+                                    <option value="{{ $coach->id }}" {{ old('coach_id') == $coach->id ? 'selected' : '' }}>{{ $coach->display_name }}</option>
                                 @endforeach
                             </select>
                             <!-- Panah dropdown -->

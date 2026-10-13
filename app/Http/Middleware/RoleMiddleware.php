@@ -13,7 +13,7 @@ class RoleMiddleware
      * Menangani permintaan masuk dan memeriksa peran (role) pengguna.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     * @param  string  $role  Role yang diizinkan (misal: 'admin', 'guru', 'siswa')
+     * @param  string  $role  Role yang diizinkan (misal: 'admin', 'coach', 'siswa')
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
@@ -24,10 +24,8 @@ class RoleMiddleware
 
         // 2. Cek apakah role pengguna yang sedang login SAMA dengan role yang disyaratkan oleh rute
         $userRole = Auth::user()->role;
-        $isMatch = ($userRole === $role) ||
-                   (in_array($role, ['guru', 'pembina']) && in_array($userRole, ['guru', 'pembina']));
 
-        if (!$isMatch) {
+        if ($userRole !== $role) {
             // Jika tidak sama, tolak akses dengan status 403 (Forbidden)
             abort(403, 'Akses Ditolak. Anda tidak memiliki izin untuk membuka halaman ini.');
         }

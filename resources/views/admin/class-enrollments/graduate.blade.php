@@ -18,7 +18,7 @@
         </div>
         <div>
             <h3 class="text-yellow-800 font-bold text-lg mb-1 font-heading">Manajemen Kelulusan (Alumni) & Tinggal Kelas</h3>
-            <p class="text-yellow-700 text-sm leading-relaxed">Gunakan fitur ini khusus untuk menangani siswa Kelas 9. Siswa yang diluluskan akan diubah statusnya menjadi <strong>Alumni (Lulus)</strong>. Siswa yang gagal (tinggal kelas) akan dimasukkan kembali ke <strong>Kelas 9 Tujuan</strong> di Tahun Ajaran Aktif ({{ $activeYear->semester }} {{ $activeYear->year_name }}).</p>
+            <p class="text-yellow-700 text-sm leading-relaxed">Gunakan fitur ini khusus untuk menangani siswa Kelas 9. Siswa yang diluluskan akan diubah statusnya menjadi <strong>Alumni (Lulus)</strong>. Siswa yang gagal (tinggal kelas) akan dimasukkan kembali ke <strong>Kelas 9 Tujuan</strong> di Tahun Ajaran Aktif ({{ $activeYear->year_name }}).</p>
         </div>
     </div>
 
@@ -43,7 +43,7 @@
                         <option value="">-- Pilih Tahun Ajaran Sebelumnya --</option>
                         @foreach($previousYears as $year)
                             <option value="{{ $year->id }}" {{ $sourceYearId == $year->id ? 'selected' : '' }}>
-                                {{ $year->semester }} {{ $year->year_name }}
+                                {{ $year->year_name }}
                             </option>
                         @endforeach
                     </select>

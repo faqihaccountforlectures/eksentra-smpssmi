@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('image', 255)->nullable();
             $table->text('description')->nullable();
             $table->string('schedule', 100);
-            $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('coach_id')->constrained('users')->onDelete('cascade');
             $table->decimal('fee', 10, 2)->default(100000);
             $table->timestamps();
         });

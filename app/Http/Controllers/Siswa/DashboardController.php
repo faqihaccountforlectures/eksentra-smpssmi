@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $activeYear = AcademicYear::where('is_active', true)->first();
 
         // 3. Ambil seluruh riwayat pendaftaran ekskul siswa beserta nilai
-        $allRegistrations = ExtracurricularRegistration::with(['extracurricular.teacher.teacherProfile', 'grades.academicYear'])
+        $allRegistrations = ExtracurricularRegistration::with(['extracurricular.coach.coachProfile', 'grades.academicYear'])
             ->where('student_id', $user->id)
             ->get();
 

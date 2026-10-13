@@ -24,7 +24,7 @@ class ClassEnrollmentController extends Controller
             return redirect('/dashboard')->with('error', 'Belum ada Tahun Ajaran yang aktif. Silakan seting dulu di menu Tahun Ajaran.');
         }
 
-        $classes = ClassRoom::with('homeroomTeacher.teacherProfile')
+        $classes = ClassRoom::with('homeroomTeacher')
             ->withCount(['enrollments' => function($query) use ($activeYear) {
                 $query->where('academic_year_id', $activeYear->id);
             }])

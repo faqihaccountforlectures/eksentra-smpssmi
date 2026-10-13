@@ -5,23 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TeacherProfile extends PembinaProfile
+class CoachProfile extends Model
 {
     use HasFactory;
 
-    // Daftar kolom yang bisa diisi sekalian (mass assignment)
+    // Nama tabel di database
+    protected $table = 'coach_profiles';
+
+    // Daftar kolom yang dapat diisi secara massal (mass assignment)
     protected $fillable = [
         'user_id',
-        'nip',
-        'teacher_code',
         'full_name',
-        'position',
         'gender',
         'phone_number',
     ];
 
-    // Relasi balik (Inverse) ke tabel users
-    // Biar kalo kita manggil profil guru, kita bisa tau ini profil punya akun (email) siapa
+    /**
+     * Relasi balik (Inverse One-to-One) ke model User
+     */
     public function user()
     {
         return $this->belongsTo(User::class);

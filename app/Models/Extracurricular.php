@@ -14,18 +14,13 @@ class Extracurricular extends Model
         'image',
         'description',
         'schedule',
-        'teacher_id',
+        'coach_id',
         'fee'
     ];
 
-    public function pembina()
+    public function coach()
     {
-        return $this->belongsTo(User::class, 'teacher_id');
-    }
-
-    public function teacher()
-    {
-        return $this->belongsTo(User::class, 'teacher_id');
+        return $this->belongsTo(User::class, 'coach_id');
     }
 
     public function registrations()

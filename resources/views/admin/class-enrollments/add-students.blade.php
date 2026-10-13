@@ -38,7 +38,7 @@
     <div class="bg-white rounded-xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden mb-6 p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <h2 class="text-lg font-bold text-navy-dark font-heading">Pilih Siswa untuk Kelas {{ $classRoom->name }}</h2>
-            <p class="text-xs text-gray-muted mt-1.5">Daftar di bawah ini hanya menampilkan siswa yang <strong class="text-navy-base font-bold">BELUM</strong> mendapatkan kelas di Tahun Ajaran {{ $activeYear->semester }} {{ $activeYear->year_name }}.</p>
+            <p class="text-xs text-gray-muted mt-1.5">Daftar di bawah ini hanya menampilkan siswa yang <strong class="text-navy-base font-bold">BELUM</strong> mendapatkan kelas di Tahun Ajaran {{ $activeYear->year_name }}.</p>
         </div>
         <div class="bg-navy-light/10 px-4 py-2 rounded-lg text-navy-dark text-xs font-bold border border-navy-light/30 whitespace-nowrap shadow-sm uppercase tracking-widest">
             Tersedia: {{ $availableStudents->count() }} Siswa

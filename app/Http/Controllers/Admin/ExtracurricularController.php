@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Extracurricular;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,14 +12,12 @@ class ExtracurricularController extends Controller
 {
     /**
      * Nampilin halaman utama daftar semua ekstrakurikuler.
-     * Ini dipanggil pas admin buka menu Ekstrakurikuler di sidebar.
      */
     public function index()
     {
-        // Ambil semua data ekskul beserta data pembina dan profilnya, urutkan berdasarkan nama, paginate 5
-        $extracurriculars = Extracurricular::with(['pembina.pembinaProfile', 'teacher.teacherProfile'])->orderBy('name')->paginate(5);
+        // Ambil semua data ekskul beserta data coach dan profilnya, urutkan berdasarkan nama, paginate 5
+        $extracurriculars = Extracurricular::with('coach.coachProfile')->orderBy('name')->paginate(5);
         
-        // Kirim datanya ke halaman index
         return view('admin.extracurriculars.index', compact('extracurriculars'));
     }
 
@@ -29,12 +26,10 @@ class ExtracurricularController extends Controller
      */
     public function create()
     {
-        // Ambil data user yang memiliki role pembina untuk dimasukkan ke pilihan dropdown pembina
-        $pembinas = User::whereIn('role', ['pembina', 'guru'])->with('pembinaProfile')->get();
-        $teachers = $pembinas;
+        // Ambil data user yang memiliki role coach untuk dimasukkan ke pilihan dropdown pembina/coach
+        $coaches = User::where('role', 'coach')->with('coachProfile')->get();
         
-        // Buka form create dengan membawa data pembina
-        return view('admin.extracurriculars.create', compact('pembinas', 'teachers'));
+        return view('admin.extracurriculars.create', compact('coaches'));
     }
 
     /**
@@ -42,32 +37,30 @@ class ExtracurricularController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi dulu inputannya
+        // 1. Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // maksimal 2MB
             'description' => 'nullable|string',
             'schedule' => 'required|string|max:100',
-            'teacher_id' => 'required|exists:users,id',
+            'coach_id' => 'required|exists:users,id',
             'fee' => 'required|numeric|min:0',
         ], [
-            // Pesan error custom bahasa indonesia
             'name.required' => 'Nama ekstrakurikuler wajib diisi.',
             'schedule.required' => 'Jadwal wajib diisi.',
-            'teacher_id.required' => 'Pembina harus dipilih.',
+            'coach_id.required' => 'Pembina harus dipilih.',
             'fee.required' => 'Biaya per bulan wajib diisi.',
         ]);
 
-        // 2. Kalau admin upload foto/banner, simpan ke storage public
+        // 2. Kalau upload banner
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('extracurriculars', 'public');
-            $validated['image'] = $path; // simpan lokasi gambarnya ke array validasi
+            $validated['image'] = $path;
         }
 
-        // 3. Simpan datanya ke database
+        // 3. Simpan ke database
         Extracurricular::create($validated);
 
-        // 4. Balikin admin ke halaman daftar ekskul dengan pesan sukses
         return redirect()->route('extracurriculars.index')
                          ->with('success', 'Berhasil! Data Ekstrakurikuler baru telah ditambahkan.');
     }
@@ -77,15 +70,10 @@ class ExtracurricularController extends Controller
      */
     public function edit(string $id)
     {
-        // Cari data ekskulnya, kalau tidak ada otomatis error 404
         $extracurricular = Extracurricular::findOrFail($id);
+        $coaches = User::where('role', 'coach')->with('coachProfile')->get();
         
-        // Ambil data pembina untuk dropdown pembina
-        $pembinas = User::whereIn('role', ['pembina', 'guru'])->with('pembinaProfile')->get();
-        $teachers = $pembinas;
-        
-        // Buka halaman form edit
-        return view('admin.extracurriculars.edit', compact('extracurricular', 'pembinas', 'teachers'));
+        return view('admin.extracurriculars.edit', compact('extracurricular', 'coaches'));
     }
 
     /**
@@ -93,31 +81,30 @@ class ExtracurricularController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Cari data aslinya dulu
         $extracurricular = Extracurricular::findOrFail($id);
 
-        // 1. Validasi inputannya
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
             'schedule' => 'required|string|max:100',
-            'teacher_id' => 'required|exists:users,id',
+            'coach_id' => 'required|exists:users,id',
             'fee' => 'required|numeric|min:0',
+        ], [
+            'name.required' => 'Nama ekstrakurikuler wajib diisi.',
+            'schedule.required' => 'Jadwal wajib diisi.',
+            'coach_id.required' => 'Pembina harus dipilih.',
+            'fee.required' => 'Biaya per bulan wajib diisi.',
         ]);
 
-        // 2. Kalau admin upload foto baru
         if ($request->hasFile('image')) {
-            // Hapus gambar lama dari server (jika ada) biar gak menuh-menuhin memori
             if ($extracurricular->image) {
                 Storage::disk('public')->delete($extracurricular->image);
             }
-            // Simpan gambar baru
             $path = $request->file('image')->store('extracurriculars', 'public');
             $validated['image'] = $path;
         }
 
-        // 3. Update datanya di database
         $extracurricular->update($validated);
 
         return redirect()->route('extracurriculars.index')
@@ -129,15 +116,12 @@ class ExtracurricularController extends Controller
      */
     public function destroy(string $id)
     {
-        // Cari data ekskulnya
         $extracurricular = Extracurricular::findOrFail($id);
         
-        // Hapus juga foto bannernya dari server jika ada
         if ($extracurricular->image) {
             Storage::disk('public')->delete($extracurricular->image);
         }
         
-        // Hapus dari tabel
         $extracurricular->delete();
 
         return redirect()->route('extracurriculars.index')

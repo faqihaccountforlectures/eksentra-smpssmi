@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Dasbor Pembina Ekstrakurikuler')
 @section('header', 'Dasbor Pembina')
@@ -13,15 +13,11 @@
         </div>
 
         <div class="relative z-10">
-            <h2 class="text-3xl font-bold mb-2 font-heading tracking-wide">Selamat Datang, {{ $user->teacherProfile->full_name ?? 'Bapak/Ibu Pembina' }}! 🎉</h2>
+            <h2 class="text-3xl font-bold mb-2 font-heading tracking-wide">Selamat Datang, {{ $user->coachProfile->full_name ?? 'Bapak/Ibu Pembina' }}! 🎉</h2>
             <p class="text-navy-light text-base mb-4">Portal Ekstrakurikuler SMP Science Mutiara Insani. Kelola kegiatan dan penilaian siswa bimbingan Anda.</p>
             
             <!-- Badges Informasi Pembina -->
             <div class="flex flex-wrap gap-3">
-                <div class="bg-navy-dark/50 border border-navy-light/30 px-3.5 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm shadow-sm">
-                    <svg class="w-4 h-4 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                    <span class="font-bold text-xs text-white-off tracking-wide font-mono">NIP: {{ $user->teacherProfile->nip ?? 'Belum Diatur' }}</span>
-                </div>
                 <div class="bg-navy-dark/50 border border-navy-light/30 px-3.5 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm shadow-sm">
                     <svg class="w-4 h-4 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                     <span class="font-bold text-xs text-white-off tracking-wide">Peran: Pembina Ekstrakurikuler</span>
@@ -38,7 +34,7 @@
             <div>
                 <p class="text-[11px] font-bold text-gray-muted uppercase tracking-wider">Ekskul Binaan</p>
                 <h3 class="text-2xl font-bold text-navy-dark font-heading mt-1">{{ $totalExtracurriculars }} <span class="text-xs font-normal text-gray-muted lowercase">kegiatan</span></h3>
-                <a href="{{ route('pembina.extracurriculars.index') }}" class="text-xs font-bold text-navy-base hover:text-navy-dark inline-flex items-center gap-1 mt-2.5 transition-colors">
+                <a href="{{ route('coach.extracurriculars.index') }}" class="text-xs font-bold text-navy-base hover:text-navy-dark inline-flex items-center gap-1 mt-2.5 transition-colors">
                     <span>Lihat Daftar Ekskul</span>
                     <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </a>
@@ -138,7 +134,7 @@
                             </div>
 
                             <div class="flex items-center gap-3 shrink-0">
-                                <a href="{{ route('pembina.extracurriculars.show', $ekskul->id) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-navy-base hover:bg-navy-dark text-white-off font-bold text-xs rounded-xl shadow-sm transition-all hover:scale-105 active:scale-95">
+                                <a href="{{ route('coach.extracurriculars.show', $ekskul->id) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-navy-base hover:bg-navy-dark text-white-off font-bold text-xs rounded-xl shadow-sm transition-all hover:scale-105 active:scale-95">
                                     <span>Input & Lihat Nilai</span>
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </a>
@@ -215,10 +211,10 @@
             <div class="bg-gradient-to-br from-white to-white-off rounded-2xl p-6 border border-navy-light/30 shadow-sm shadow-navy-base/5 relative overflow-hidden group hover:-translate-y-1 hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="w-10 h-10 rounded-full bg-navy-dark text-white-off flex items-center justify-center font-bold font-heading text-lg shrink-0 shadow-inner">
-                        {{ substr($user->teacherProfile->full_name ?? ($user->name ?? 'G'), 0, 1) }}
+                        {{ substr($user->coachProfile->full_name ?? ($user->name ?? 'G'), 0, 1) }}
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h4 class="font-bold text-navy-dark text-sm truncate font-heading">{{ $user->teacherProfile->full_name ?? $user->name }}</h4>
+                        <h4 class="font-bold text-navy-dark text-sm truncate font-heading">{{ $user->coachProfile->full_name ?? $user->name }}</h4>
                         <p class="text-[11px] text-gray-muted truncate">{{ $user->email }}</p>
                     </div>
                 </div>
@@ -226,12 +222,12 @@
                 <div class="space-y-2.5 pt-3 border-t border-navy-light/20 text-xs">
                     <div class="flex justify-between items-center">
                         <span class="text-gray-muted font-medium">Nomor WhatsApp:</span>
-                        <span class="font-bold text-navy-dark font-mono">{{ $user->teacherProfile->phone_number ?? '-' }}</span>
+                        <span class="font-bold text-navy-dark font-mono">{{ $user->coachProfile->phone_number ?? '-' }}</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-muted font-medium">Jenis Kelamin:</span>
                         @php
-                            $g = strtolower($user->teacherProfile->gender ?? '');
+                            $g = strtolower($user->coachProfile->gender ?? '');
                             $gLabel = '-';
                             if ($g === 'l' || $g === 'laki-laki') $gLabel = 'Laki-laki';
                             elseif ($g === 'p' || $g === 'perempuan') $gLabel = 'Perempuan';
@@ -240,7 +236,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('pembina.profile.index') }}" class="mt-4 w-full block text-center py-2 px-4 bg-navy-light/10 hover:bg-navy-light/20 text-navy-base font-bold text-xs rounded-xl border border-navy-light/30 transition-colors">
+                <a href="{{ route('coach.profile.index') }}" class="mt-4 w-full block text-center py-2 px-4 bg-navy-light/10 hover:bg-navy-light/20 text-navy-base font-bold text-xs rounded-xl border border-navy-light/30 transition-colors">
                     Perbarui Profil
                 </a>
             </div>

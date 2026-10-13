@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -35,36 +34,6 @@ return new class extends Migration
             // Memastikan satu pendaftaran hanya memiliki 1 nilai per tahun ajaran dan semester
             $table->unique(['registration_id', 'academic_year_id', 'semester'], 'ext_grades_reg_year_sem_unique');
         });
-
-        // Migrasi data nilai sementara jika ada di extracurricular_registrations
-        $activeYear = DB::table('academic_years')->where('is_active', true)->first() 
-            ?? DB::table('academic_years')->first();
-
-        if ($activeYear) {
-            $existing = DB::table('extracurricular_registrations')
-                ->whereNotNull('grade')
-                ->get();
-
-            foreach ($existing as $row) {
-                DB::table('extracurricular_grades')->insert([
-                    'registration_id' => $row->id,
-                    'academic_year_id' => $activeYear->id,
-                    'semester' => $activeYear->semester ?? 'ganjil',
-                    'grade' => $row->grade,
-                    'score' => $row->score,
-                    'notes' => $row->notes,
-                    'created_at' => $row->graded_at ?? now(),
-                    'updated_at' => $row->graded_at ?? now(),
-                ]);
-            }
-        }
-
-        // Hapus kolom sementara dari extracurricular_registrations
-        if (Schema::hasColumn('extracurricular_registrations', 'grade')) {
-            Schema::table('extracurricular_registrations', function (Blueprint $table) {
-                $table->dropColumn(['grade', 'score', 'notes', 'graded_at']);
-            });
-        }
     }
 
     /**

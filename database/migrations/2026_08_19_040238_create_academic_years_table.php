@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('academic_years', function (Blueprint $table) {
             $table->id();
             $table->string('year_name', 20); // Contoh: "2025/2026"
-            $table->enum('semester', ['ganjil', 'genap']); 
             $table->boolean('is_active')->default(false); // Penanda tahun ajaran yang sedang berjalan
             $table->timestamps();
         });

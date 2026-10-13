@@ -81,7 +81,7 @@
                             </div>
                             <div>
                                 <p class="text-[10px] text-gray-muted font-bold uppercase tracking-wider">Pembina Ekskul</p>
-                                <p class="text-xs font-bold text-navy-dark mt-0.5">{{ $ekskul->teacher->teacherProfile->full_name ?? $ekskul->teacher->email }}</p>
+                                <p class="text-xs font-bold text-navy-dark mt-0.5">{{ $ekskul->coach->display_name ?? $ekskul->coach->email }}</p>
                             </div>
                         </div>
                         

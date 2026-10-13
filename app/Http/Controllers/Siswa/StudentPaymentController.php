@@ -18,7 +18,7 @@ class StudentPaymentController extends Controller
     public function index()
     {
         // Ambil riwayat pembayaran khusus siswa yang login (berdasarkan id)
-        $payments = Payment::with(['extracurricular', 'verifier.teacherProfile'])
+        $payments = Payment::with(['extracurricular', 'verifier'])
             ->where('student_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->get();

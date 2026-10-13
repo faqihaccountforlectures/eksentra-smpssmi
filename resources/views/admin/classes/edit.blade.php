@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Edit Data Kelas')
 @section('header', 'Edit Data Kelas')
@@ -48,7 +48,7 @@
                             <option value="">-- Kosongkan / Belum Ada --</option>
                             @foreach($teachers as $teacher)
                                 <option value="{{ $teacher->id }}" {{ $classRoom->homeroom_teacher_id == $teacher->id ? 'selected' : '' }}>
-                                    {{ $teacher->teacherProfile->full_name ?? $teacher->email }}
+                                    {{ $teacher->display_name ?? $teacher->email }}
                                 </option>
                             @endforeach
                         </select>

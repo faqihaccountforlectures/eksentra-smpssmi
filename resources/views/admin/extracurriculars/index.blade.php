@@ -71,7 +71,7 @@
                         <!-- Pembina -->
                         <td class="px-7 py-4">
                             <div class="font-bold text-navy-dark">
-                                {{ $ekskul->pembina->display_name ?? ($ekskul->teacher->display_name ?? 'Belum ada pembina') }}
+                                {{ $ekskul->coach->display_name ?? 'Belum ada pembina' }}
                             </div>
                         </td>
                         

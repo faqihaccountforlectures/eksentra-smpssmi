@@ -16,7 +16,7 @@ class StudentExtracurricularController extends Controller
     public function index()
     {
         // Ambil semua daftar ekskul yang tersedia beserta nama guru pembinanya
-        $extracurriculars = Extracurricular::with('teacher.teacherProfile')->get();
+        $extracurriculars = Extracurricular::with('coach.coachProfile')->get();
         
         // Ambil riwayat pendaftaran siswa saat ini beserta nilai per tahun ajaran & semester
         // Lalu jadikan id ekskul sebagai kunci (key)

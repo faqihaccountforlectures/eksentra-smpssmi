@@ -18,7 +18,7 @@
         </div>
         <div>
             <h3 class="text-navy-dark font-bold text-lg mb-1 font-heading">Kelas Tujuan: {{ $destinationClass->name }}</h3>
-            <p class="text-gray-muted text-sm leading-relaxed">Anda akan menarik (memigrasikan) siswa-siswa dari kelas lama untuk dimasukkan secara otomatis ke dalam <strong class="text-navy-base">Kelas {{ $destinationClass->name }} (Tingkat {{ $destinationClass->grade_level }})</strong> pada Tahun Ajaran <strong class="text-navy-base">{{ $activeYear->semester }} {{ $activeYear->year_name }}</strong>.</p>
+            <p class="text-gray-muted text-sm leading-relaxed">Anda akan menarik (memigrasikan) siswa-siswa dari kelas lama untuk dimasukkan secara otomatis ke dalam <strong class="text-navy-base">Kelas {{ $destinationClass->name }} (Tingkat {{ $destinationClass->grade_level }})</strong> pada Tahun Ajaran <strong class="text-navy-base">{{ $activeYear->year_name }}</strong>.</p>
         </div>
     </div>
 
@@ -43,7 +43,7 @@
                         <option value="">-- Pilih Tahun Ajaran Sebelumnya --</option>
                         @foreach($previousYears as $year)
                             <option value="{{ $year->id }}" {{ $sourceYearId == $year->id ? 'selected' : '' }}>
-                                {{ $year->semester }} {{ $year->year_name }}
+                                {{ $year->year_name }}
                             </option>
                         @endforeach
                     </select>
