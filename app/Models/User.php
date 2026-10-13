@@ -41,15 +41,20 @@ class User extends Authenticatable
         return $this->hasOne(StudentProfile::class);
     }
 
-    // Relasi One-to-One: Nentuin kalo satu Akun User punya satu Profil Guru.
-    // Cara kerjanya sama persis kayak profil siswa di atas
+    // Relasi One-to-One: Profil Pembina (pembinaProfile)
+    public function pembinaProfile(): HasOne
+    {
+        return $this->hasOne(PembinaProfile::class);
+    }
+
+    // Relasi One-to-One: Alias profil pembina (teacherProfile) untuk kompatibilitas
     public function teacherProfile(): HasOne
     {
-        return $this->hasOne(TeacherProfile::class);
+        return $this->hasOne(PembinaProfile::class);
     }
 
     /**
-     * Relasi ke kegiatan ekstrakurikuler yang dibina oleh guru ini.
+     * Relasi ke kegiatan ekstrakurikuler yang dibina oleh pembina ini.
      */
     public function extracurriculars()
     {
@@ -59,22 +64,22 @@ class User extends Authenticatable
     /**
      * FUNGSI KODE: Accessor untuk mendapatkan nama lengkap tampilan pengguna.
      * Secara cerdas memeriksa profil pengguna sesuai peran:
-     * - Jika Guru: mengambil nama dari teacherProfile->full_name.
+     * - Jika Pembina: mengambil nama dari teacherProfile->full_name.
      * - Jika Siswa: mengambil nama dari studentProfile->full_name.
      * - Jika Admin atau profil belum ada: menggunakan kolom 'name' atau potongan awal email.
      */
     public function getDisplayNameAttribute(): string
     {
-        if ($this->role === 'guru' && $this->relationLoaded('teacherProfile') ? $this->teacherProfile : $this->teacherProfile()->first()) {
-            $profile = $this->teacherProfile;
-            if (!empty($profile->full_name)) {
+        if (in_array($this->role, ['guru', 'pembina'])) {
+            $profile = $this->relationLoaded('teacherProfile') ? $this->teacherProfile : $this->teacherProfile()->first();
+            if ($profile && !empty($profile->full_name)) {
                 return $profile->full_name;
             }
         }
 
-        if ($this->role === 'siswa' && $this->relationLoaded('studentProfile') ? $this->studentProfile : $this->studentProfile()->first()) {
-            $profile = $this->studentProfile;
-            if (!empty($profile->full_name)) {
+        if ($this->role === 'siswa') {
+            $profile = $this->relationLoaded('studentProfile') ? $this->studentProfile : $this->studentProfile()->first();
+            if ($profile && !empty($profile->full_name)) {
                 return $profile->full_name;
             }
         }

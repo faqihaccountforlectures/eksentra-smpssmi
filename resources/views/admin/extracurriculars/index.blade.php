@@ -38,7 +38,7 @@
                 <thead>
                     <tr class="bg-white-off/50 text-gray-muted text-[10px] uppercase tracking-widest border-b border-navy-light/30">
                         <th class="px-7 py-4 font-bold">Nama Ekstrakurikuler</th>
-                        <th class="px-7 py-4 font-bold">Guru Pembina</th>
+                        <th class="px-7 py-4 font-bold">Pembina Ekstrakurikuler</th>
                         <th class="px-7 py-4 font-bold">Jadwal</th>
                         <th class="px-7 py-4 font-bold text-right">Biaya/Bulan</th>
                         <th class="px-7 py-4 font-bold text-right">Aksi</th>
@@ -68,10 +68,10 @@
                             </div>
                         </td>
                         
-                        <!-- Guru Pembina -->
+                        <!-- Pembina -->
                         <td class="px-7 py-4">
                             <div class="font-bold text-navy-dark">
-                                {{ $ekskul->teacher->teacherProfile->full_name ?? 'Belum ada pembina' }}
+                                {{ $ekskul->pembina->display_name ?? ($ekskul->teacher->display_name ?? 'Belum ada pembina') }}
                             </div>
                         </td>
                         

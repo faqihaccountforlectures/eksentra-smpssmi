@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
  * 
  * Sesuai kebijakan keamanan portal:
  * - Login manual (Email & Password) KHUSUS diperuntukkan bagi Administrator.
- * - Siswa dan Guru diwajibkan menggunakan SSO Google (@belajar.id).
+ * - Siswa dan Pembina diwajibkan menggunakan SSO Google (@belajar.id).
  */
 class AuthController extends Controller
 {
@@ -37,7 +37,7 @@ class AuthController extends Controller
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-                return back()->with('error', 'Siswa dan Guru wajib masuk menggunakan tombol Akun Google (@belajar.id).');
+                return back()->with('error', 'Siswa dan Pembina wajib masuk menggunakan tombol Akun Google (@belajar.id).');
             }
 
             // Regenerasi session ID untuk mencegah session fixation attacks

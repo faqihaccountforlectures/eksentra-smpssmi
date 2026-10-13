@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Data Guru')
-@section('header', 'Data Guru')
+@section('title', 'Data Pembina')
+@section('header', 'Data Pembina')
 
 @section('content')
     
@@ -38,7 +38,7 @@
     </div>
     @endif
 
-    {{-- FUNGSI KODE: Tabel Manajemen Data Guru diselaraskan dengan gaya tampilan Data Siswa --}}
+    {{-- FUNGSI KODE: Tabel Manajemen Data Pembina diselaraskan dengan gaya tampilan Data Siswa --}}
     <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden flex flex-col group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
         <!-- Header Tabel & Form Filter -->
         <div class="px-7 py-5 border-b border-navy-light/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white-off/30">
@@ -47,14 +47,14 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </div>
                 <div>
-                    <h2 class="font-bold text-navy-dark font-heading tracking-wide text-base">Daftar Guru / Tenaga Pendidik</h2>
+                    <h2 class="font-bold text-navy-dark font-heading tracking-wide text-base">Daftar Guru / Pembina Ekstrakurikuler</h2>
                     <p class="text-[11px] text-gray-muted mt-0.5 tracking-wide font-bold">Kelola data profil dan akun para guru di sini.</p>
                 </div>
             </div>
             
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
                 <!-- Form Pencarian Guru -->
-                <form action="{{ route('teachers.index') }}" method="GET" class="w-full sm:w-auto">
+                <form action="{{ route('pembina.index') }}" method="GET" class="w-full sm:w-auto">
                     <div class="relative w-full sm:w-64">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-navy-base/60">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -63,15 +63,15 @@
                     </div>
                 </form>
 
-                {{-- FUNGSI KODE: Tombol pemicu modal pop-up untuk mengimpor berkas Excel / CSV data guru --}}
+                {{-- FUNGSI KODE: Tombol pemicu modal pop-up untuk mengimpor berkas Excel / CSV data pembina --}}
                 <button type="button" onclick="openTeacherImportModal()" class="w-full sm:w-auto px-4 py-2.5 bg-white border border-navy-light/50 text-navy-dark hover:text-navy-base hover:bg-navy-light/10 font-bold text-sm rounded-xl shadow-sm hover:shadow active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap">
                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                     Impor Excel / CSV
                 </button>
 
-                <a href="{{ route('teachers.create') }}" class="w-full sm:w-auto px-5 py-2.5 bg-navy-dark text-white-off font-bold text-sm rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md hover:shadow-navy-base/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 border border-transparent whitespace-nowrap">
+                <a href="{{ route('pembina.create') }}" class="w-full sm:w-auto px-5 py-2.5 bg-navy-dark text-white-off font-bold text-sm rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md hover:shadow-navy-base/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 border border-transparent whitespace-nowrap">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Tambah Guru
+                    Tambah Pembina
                 </a>
             </div>
         </div>
@@ -83,7 +83,7 @@
                     <tr class="bg-white-off/50 text-gray-muted text-[10px] uppercase tracking-widest border-b border-navy-light/30">
                         <th class="px-7 py-4 font-bold w-16 text-center">No</th>
                         <th class="px-7 py-4 font-bold w-20 text-center">Kode</th>
-                        <th class="px-7 py-4 font-bold">Profil Guru</th>
+                        <th class="px-7 py-4 font-bold">Profil Pembina</th>
                         <th class="px-7 py-4 font-bold">NIP</th>
                         <th class="px-7 py-4 font-bold">No. Telepon</th>
                         <th class="px-7 py-4 font-bold">Jabatan</th>
@@ -91,15 +91,16 @@
                     </tr>
                 </thead>
                 <tbody class="text-sm divide-y divide-white-off text-navy-base">
-                    @forelse($teachers as $index => $teacher)
+                    @forelse($pembinas as $index => $pembina)
+                    @php $profile = $pembina->pembinaProfile ?? $pembina->teacherProfile; @endphp
                     <tr class="hover:bg-white-off/50 transition-colors group/row">
                         <td class="px-7 py-4 text-center text-gray-muted font-bold font-mono">
-                            {{ $teachers->firstItem() + $index }}
+                            {{ $pembinas->firstItem() + $index }}
                         </td>
                         <td class="px-7 py-4 text-center">
-                            @if(isset($teacher->teacherProfile->teacher_code) && $teacher->teacherProfile->teacher_code)
+                            @if(isset($profile->teacher_code) && $profile->teacher_code)
                                 <span class="bg-navy-light/20 text-navy-dark font-bold font-mono px-2.5 py-1 rounded-lg text-xs border border-navy-light/40">
-                                    {{ $teacher->teacherProfile->teacher_code }}
+                                    {{ $profile->teacher_code }}
                                 </span>
                             @else
                                 <span class="text-gray-muted italic text-xs">-</span>
@@ -108,49 +109,49 @@
                         <td class="px-7 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-navy-light/20 text-navy-dark flex items-center justify-center font-bold text-sm border border-navy-light/40 shrink-0">
-                                    {{ substr($teacher->teacherProfile->full_name ?? 'G', 0, 1) }}
+                                    {{ substr($profile->full_name ?? ($pembina->name ?? 'P'), 0, 1) }}
                                 </div>
                                 <div>
-                                    <p class="font-bold text-navy-dark group-hover/row:text-navy-base transition-colors">{{ $teacher->teacherProfile->full_name ?? 'Belum ada nama' }}</p>
+                                    <p class="font-bold text-navy-dark group-hover/row:text-navy-base transition-colors">{{ $profile->full_name ?? ($pembina->name ?? 'Belum ada nama') }}</p>
                                     <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1.5 mt-0.5 tracking-wide">
                                         <svg class="w-3 h-3 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                        {{ $teacher->email }}
+                                        {{ $pembina->email }}
                                     </p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-7 py-4 font-mono font-medium text-sm">
-                            @if(isset($teacher->teacherProfile->nip) && $teacher->teacherProfile->nip)
-                                {{ $teacher->teacherProfile->nip }}
+                            @if(isset($profile->nip) && $profile->nip)
+                                {{ $profile->nip }}
                             @else
                                 <span class="text-gray-muted italic text-xs">Belum diisi</span>
                             @endif
                         </td>
                         <td class="px-7 py-4 font-mono font-medium text-sm">
-                            @if(isset($teacher->teacherProfile->phone_number) && $teacher->teacherProfile->phone_number)
-                                {{ $teacher->teacherProfile->phone_number }}
+                            @if(isset($profile->phone_number) && $profile->phone_number)
+                                {{ $profile->phone_number }}
                             @else
                                 <span class="text-gray-muted italic text-xs">Belum diisi</span>
                             @endif
                         </td>
                         <td class="px-7 py-4">
                             <span class="inline-flex px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-navy-light/10 text-navy-dark border border-navy-light/30 shadow-sm">
-                                {{ str_replace('_', ' ', $teacher->teacherProfile->position ?? '-') }}
+                                {{ str_replace('_', ' ', $profile->position ?? 'Pembina') }}
                             </span>
                         </td>
                         <td class="px-7 py-4">
                             <div class="flex justify-center items-center gap-2">
-                                <a href="{{ route('teachers.edit', $teacher->id) }}" class="text-gray-muted hover:text-navy-base hover:bg-navy-light/10 p-2 rounded-xl transition-all duration-200" title="Edit Data">
+                                <a href="{{ route('pembina.edit', $pembina->id) }}" class="text-gray-muted hover:text-navy-base hover:bg-navy-light/10 p-2 rounded-xl transition-all duration-200" title="Edit Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </a>
 
-                                <button type="button" onclick="document.getElementById('deleteModal-{{ $teacher->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-rose-500 hover:bg-rose-50 p-2 rounded-xl transition-all duration-200" title="Hapus Data">
+                                <button type="button" onclick="document.getElementById('deleteModal-{{ $pembina->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-rose-500 hover:bg-rose-50 p-2 rounded-xl transition-all duration-200" title="Hapus Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
                         </td>
                     </tr>
-                    @include('admin.teachers.delete')
+                    @include('admin.pembina.delete', ['pembina' => $pembina, 'teacher' => $pembina])
                     @empty
                     <tr>
                         <td colspan="7" class="px-7 py-16 text-center">
@@ -158,10 +159,10 @@
                                 <div class="bg-navy-light/10 p-4 rounded-2xl mb-4 border border-navy-light/30 text-navy-base">
                                     <svg class="w-10 h-10 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                 </div>
-                                <h3 class="text-base font-bold text-navy-dark mb-1 font-heading">Belum Ada Data Guru</h3>
-                                <p class="text-[13px] text-gray-muted mb-5">Belum ada data tenaga pendidik yang cocok dengan pencarian Anda.</p>
-                                <a href="{{ route('teachers.create') }}" class="px-5 py-2.5 bg-white-off text-navy-dark font-bold text-sm rounded-xl hover:bg-navy-light/20 transition-colors shadow-sm border border-navy-light/30">
-                                    Tambah Guru Pertama
+                                <h3 class="text-base font-bold text-navy-dark mb-1 font-heading">Belum Ada Data Pembina</h3>
+                                <p class="text-[13px] text-gray-muted mb-5">Belum ada data pembina ekstrakurikuler yang cocok dengan pencarian Anda.</p>
+                                <a href="{{ route('pembina.create') }}" class="px-5 py-2.5 bg-white-off text-navy-dark font-bold text-sm rounded-xl hover:bg-navy-light/20 transition-colors shadow-sm border border-navy-light/30">
+                                    Tambah Pembina Pertama
                                 </a>
                             </div>
                         </td>
@@ -172,23 +173,23 @@
         </div>
 
         <!-- Footer Tabel & Paginasi -->
-        @if($teachers->hasPages())
+        @if($pembinas->hasPages())
         <div class="px-7 py-4 border-t border-navy-light/30 bg-white-off/30 flex flex-col sm:flex-row justify-between items-center gap-4 mt-auto">
             <span class="text-xs text-gray-muted font-medium">
-                Menampilkan <b class="text-navy-dark">{{ $teachers->firstItem() }}</b> - <b class="text-navy-dark">{{ $teachers->lastItem() }}</b> dari <b class="text-navy-dark">{{ $teachers->total() }}</b> guru
+                Menampilkan <b class="text-navy-dark">{{ $pembinas->firstItem() }}</b> - <b class="text-navy-dark">{{ $pembinas->lastItem() }}</b> dari <b class="text-navy-dark">{{ $pembinas->total() }}</b> guru
             </span>
             <div class="pagination-wrapper">
-                {{ $teachers->appends(request()->all())->links() }}
+                {{ $pembinas->appends(request()->all())->links() }}
             </div>
         </div>
         @else
         <div class="px-7 py-4 border-t border-navy-light/30 bg-white-off/30 flex justify-between items-center text-xs text-gray-muted font-medium mt-auto">
-            <span>Total Guru: <b class="text-navy-dark">{{ $teachers->total() }}</b> data</span>
+            <span>Total Guru: <b class="text-navy-dark">{{ $pembinas->total() }}</b> data</span>
         </div>
         @endif
     </div>
 
-    {{-- FUNGSI KODE: Modal Pop-up untuk Mengunggah Berkas CSV / Excel Data Guru --}}
+    {{-- FUNGSI KODE: Modal Pop-up untuk Mengunggah Berkas CSV / Excel Data Pembina --}}
     <div id="teacherImportModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-navy-dark/60 backdrop-blur-sm p-4 transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-2xl border border-navy-light/30 max-w-lg w-full overflow-hidden transform transition-all">
             <!-- Header Modal -->
@@ -198,7 +199,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-navy-dark font-heading text-base">Impor Data Guru</h3>
+                        <h3 class="font-bold text-navy-dark font-heading text-base">Impor Data Pembina</h3>
                         <p class="text-[11px] text-gray-muted font-medium mt-0.5">Unggah berkas CSV/Excel untuk menambahkan banyak guru sekaligus.</p>
                     </div>
                 </div>
@@ -208,7 +209,7 @@
             </div>
 
             <!-- Isi Modal & Formulir -->
-            <form action="{{ route('teachers.import') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+            <form action="{{ route('pembina.import') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
                 @csrf
 
                 <!-- Panduan & Tombol Unduh Template -->
@@ -217,7 +218,7 @@
                         <p class="text-xs font-bold text-navy-dark">Gunakan Template Resmi</p>
                         <p class="text-[11px] text-gray-muted mt-0.5">Unduh template berformat CSV yang dapat langsung diedit di Microsoft Excel.</p>
                     </div>
-                    <a href="{{ route('teachers.template') }}" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm flex items-center gap-1.5 shrink-0 transition-colors">
+                    <a href="{{ route('pembina.template') }}" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm flex items-center gap-1.5 shrink-0 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         Unduh Template
                     </a>
@@ -251,7 +252,7 @@
         </div>
     </div>
 
-    {{-- FUNGSI KODE: Skrip kendali interaksi buka/tutup modal impor data guru --}}
+    {{-- FUNGSI KODE: Skrip kendali interaksi buka/tutup modal impor data pembina --}}
     <script>
         function openTeacherImportModal() {
             const modal = document.getElementById('teacherImportModal');

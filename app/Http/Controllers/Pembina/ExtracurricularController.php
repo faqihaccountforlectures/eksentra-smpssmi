@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Guru;
+namespace App\Http\Controllers\Pembina;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,17 +12,17 @@ use App\Models\ExtracurricularGrade;
 class ExtracurricularController extends Controller
 {
     /**
-     * Menampilkan daftar ekstrakurikuler yang dibina oleh guru yang sedang login.
+     * Menampilkan daftar ekstrakurikuler yang dibina oleh pembina yang sedang login.
      */
     public function index()
     {
-        $teacherId = Auth::id();
+        $pembinaId = Auth::id();
         
-        $extracurriculars = Extracurricular::where('teacher_id', $teacherId)
+        $extracurriculars = Extracurricular::where('teacher_id', $pembinaId)
             ->withCount('registrations')
             ->get();
             
-        return view('guru.extracurriculars.index', compact('extracurriculars'));
+        return view('pembina.extracurriculars.index', compact('extracurriculars'));
     }
 
     /**
@@ -33,9 +33,9 @@ class ExtracurricularController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $teacherId = Auth::id();
+        $pembinaId = Auth::id();
         
-        $extracurricular = Extracurricular::where('teacher_id', $teacherId)
+        $extracurricular = Extracurricular::where('teacher_id', $pembinaId)
             ->withCount('registrations')
             ->findOrFail($id);
 
@@ -69,7 +69,7 @@ class ExtracurricularController extends Controller
             ->paginate(10)
             ->appends(['academic_year_id' => $selectedYearId]);
             
-        return view('guru.extracurriculars.show', compact(
+        return view('pembina.extracurriculars.show', compact(
             'extracurricular', 
             'registrations', 
             'academicYears', 
@@ -83,8 +83,8 @@ class ExtracurricularController extends Controller
      */
     public function updateGrade(Request $request, $id, $registrationId)
     {
-        $teacherId = Auth::id();
-        $extracurricular = Extracurricular::where('teacher_id', $teacherId)->findOrFail($id);
+        $pembinaId = Auth::id();
+        $extracurricular = Extracurricular::where('teacher_id', $pembinaId)->findOrFail($id);
         
         $registration = $extracurricular->registrations()
             ->where('status', 'approved')

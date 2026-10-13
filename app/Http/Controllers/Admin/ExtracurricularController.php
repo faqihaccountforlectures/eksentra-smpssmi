@@ -17,8 +17,8 @@ class ExtracurricularController extends Controller
      */
     public function index()
     {
-        // Ambil semua data ekskul beserta data guru pembinanya dan profil gurunya, urutkan berdasarkan nama, paginate 5
-        $extracurriculars = Extracurricular::with('teacher.teacherProfile')->orderBy('name')->paginate(5);
+        // Ambil semua data ekskul beserta data pembina dan profilnya, urutkan berdasarkan nama, paginate 5
+        $extracurriculars = Extracurricular::with(['pembina.pembinaProfile', 'teacher.teacherProfile'])->orderBy('name')->paginate(5);
         
         // Kirim datanya ke halaman index
         return view('admin.extracurriculars.index', compact('extracurriculars'));
@@ -29,11 +29,12 @@ class ExtracurricularController extends Controller
      */
     public function create()
     {
-        // Ambil data user yang jabatannya (role) adalah guru, untuk dimasukkan ke pilihan dropdown pembina
-        $teachers = User::where('role', 'guru')->with('teacherProfile')->get();
+        // Ambil data user yang memiliki role pembina untuk dimasukkan ke pilihan dropdown pembina
+        $pembinas = User::whereIn('role', ['pembina', 'guru'])->with('pembinaProfile')->get();
+        $teachers = $pembinas;
         
-        // Buka form create dengan membawa data guru
-        return view('admin.extracurriculars.create', compact('teachers'));
+        // Buka form create dengan membawa data pembina
+        return view('admin.extracurriculars.create', compact('pembinas', 'teachers'));
     }
 
     /**
@@ -79,11 +80,12 @@ class ExtracurricularController extends Controller
         // Cari data ekskulnya, kalau tidak ada otomatis error 404
         $extracurricular = Extracurricular::findOrFail($id);
         
-        // Ambil data guru untuk dropdown pembina
-        $teachers = User::where('role', 'guru')->with('teacherProfile')->get();
+        // Ambil data pembina untuk dropdown pembina
+        $pembinas = User::whereIn('role', ['pembina', 'guru'])->with('pembinaProfile')->get();
+        $teachers = $pembinas;
         
         // Buka halaman form edit
-        return view('admin.extracurriculars.edit', compact('extracurricular', 'teachers'));
+        return view('admin.extracurriculars.edit', compact('extracurricular', 'pembinas', 'teachers'));
     }
 
     /**

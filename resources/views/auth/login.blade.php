@@ -39,11 +39,11 @@
             </div>
         @endif
 
-        <!-- TAB NAVIGASI METODE LOGIN (PISAHKAN SISWA/GURU DAN ADMIN) -->
+        <!-- TAB NAVIGASI METODE LOGIN (PISAHKAN SISWA/PEMBINA DAN ADMIN) -->
         <div class="grid grid-cols-2 p-1 bg-slate-100 rounded-xl mb-6 text-xs font-bold">
-            <!-- Tombol Tab 1: Siswa & Guru -->
+            <!-- Tombol Tab 1: Siswa & Pembina -->
             <button type="button" id="tab-btn-user" onclick="switchLoginTab('user')" class="py-2.5 rounded-lg transition-all shadow-sm bg-white text-blue-600 font-bold">
-                🎓 Siswa & Guru
+                🎓 Siswa & Pembina
             </button>
             <!-- Tombol Tab 2: Admin -->
             <button type="button" id="tab-btn-admin" onclick="switchLoginTab('admin')" class="py-2.5 rounded-lg transition-all text-gray-500 font-medium hover:text-gray-900">
@@ -52,16 +52,16 @@
         </div>
 
         <!-- ========================================================= -->
-        <!-- JALUR 1: LOGIN SISWA & GURU (MENGGUNAKAN GOOGLE BELAJAR.ID) -->
+        <!-- JALUR 1: LOGIN SISWA & PEMBINA (MENGGUNAKAN GOOGLE BELAJAR.ID) -->
         <!-- ========================================================= -->
         <div id="panel-user" class="space-y-4">
             <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-100 text-left">
                 <p class="text-xs font-bold text-blue-950 mb-1 flex items-center gap-1.5">
                     <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Akses Siswa & Guru
+                    Akses Siswa & Pembina
                 </p>
                 <p class="text-[11px] text-blue-800 leading-relaxed font-medium">
-                    Seluruh siswa dan guru wajib masuk menggunakan **Akun Google belajar resmi dari pemerintah** (<code class="bg-blue-100 px-1 py-0.5 rounded text-blue-900 font-semibold">@belajar.id</code> atau email terdaftar).
+                    Seluruh siswa dan pembina wajib masuk menggunakan **Akun Google belajar resmi dari pemerintah** (<code class="bg-blue-100 px-1 py-0.5 rounded text-blue-900 font-semibold">@belajar.id</code> atau email terdaftar).
                 </p>
             </div>
 

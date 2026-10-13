@@ -46,15 +46,14 @@
                         <input type="text" name="name" value="{{ old('name') }}" placeholder="Contoh: Pramuka" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
                     </div>
 
-                    <!-- Dropdown Guru Pembina -->
+                    <!-- Dropdown Pembina Ekstrakurikuler -->
                     <div class="md:col-span-1">
-                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Guru Pembina <span class="text-rose-500">*</span></label>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Pembina Ekstrakurikuler <span class="text-rose-500">*</span></label>
                         <div class="relative">
                             <select name="teacher_id" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium appearance-none cursor-pointer">
                                 <option value="" disabled selected>Pilih Pembina...</option>
-                                <!-- Melakukan perulangan data $teachers dari controller -->
-                                @foreach($teachers as $teacher)
-                                    <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->teacherProfile->full_name ?? $teacher->email }}</option>
+                                @foreach($pembinas ?? $teachers as $pembina)
+                                    <option value="{{ $pembina->id }}" {{ old('teacher_id') == $pembina->id ? 'selected' : '' }}>{{ $pembina->display_name }}</option>
                                 @endforeach
                             </select>
                             <!-- Panah dropdown -->

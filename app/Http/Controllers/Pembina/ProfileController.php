@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Guru;
+namespace App\Http\Controllers\Pembina;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,23 +14,21 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        // Ambil data user yang sedang login beserta profil gurunya
-        $user = Auth::user()->load('teacherProfile');
+        // Ambil data user yang sedang login beserta profil pembinanya
+        $user = Auth::user()->load('pembinaProfile');
 
         // Buka halaman view profil dengan membawa data user tersebut
-        return view('guru.profile.index', compact('user'));
+        return view('pembina.profile.index', compact('user'));
     }
 
     /**
      * Memproses form penyimpanan update profil.
-     * Demi keamanan, kita hanya mengizinkan guru untuk mengubah nomor HP (phone_number).
+     * Demi keamanan, kita hanya mengizinkan pembina untuk mengubah nomor HP (phone_number).
      * Data sensitif seperti NIP, Nama, atau Jabatan tidak boleh diubah dari sini.
      */
     public function update(Request $request)
     {
         // 1. Validasi data yang dikirim dari form
-        // Kita pastikan nomor HP wajib diisi (required), berupa teks maksimal 20 huruf,
-        // dan formatnya harus cocok dengan aturan regex (hanya boleh angka, plus, atau minus)
         $validatedData = $request->validate([
             'phone_number' => 'required|string|max:20|regex:/^([0-9\s\-\+\(\)]*)$/',
         ], [
@@ -42,14 +40,14 @@ class ProfileController extends Controller
         // 2. Ambil data user yang sedang login
         $user = Auth::user();
 
-        // 3. Pastikan user tersebut benar-benar memiliki profil guru
-        if (!$user->teacherProfile) {
-            // Jika anehnya tidak ada profil, kembalikan dengan pesan error
-            return redirect()->back()->with('error', 'Profil guru tidak ditemukan di database.');
+        // 3. Pastikan user tersebut benar-benar memiliki profil pembina
+        $profile = $user->pembinaProfile ?? $user->teacherProfile;
+        if (!$profile) {
+            return redirect()->back()->with('error', 'Profil pembina tidak ditemukan di database.');
         }
 
-        // 4. Update data profil gurunya (HANYA nomor HP yang diperbarui)
-        $user->teacherProfile->update([
+        // 4. Update data profil pembina (HANYA nomor HP yang diperbarui)
+        $profile->update([
             'phone_number' => $validatedData['phone_number']
         ]);
 

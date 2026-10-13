@@ -18,6 +18,11 @@ class Extracurricular extends Model
         'fee'
     ];
 
+    public function pembina()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
+
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');

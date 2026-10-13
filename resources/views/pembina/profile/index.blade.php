@@ -1,6 +1,6 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
-@section('title', 'Profil Guru')
+@section('title', 'Profil Pembina')
 @section('header', 'Profil Saya')
 
 @section('content')
@@ -37,7 +37,7 @@
                 </div>
                 
                 <div class="px-6 pb-6 relative">
-                    <!-- Avatar Inisial Guru -->
+                    <!-- Avatar Inisial Pembina -->
                     <div class="w-24 h-24 mx-auto rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center -mt-12 mb-4 overflow-hidden relative">
                         <div class="w-full h-full bg-navy-dark text-white-off flex items-center justify-center font-heading font-bold text-3xl shadow-inner">
                             {{ substr($user->teacherProfile->full_name ?? ($user->name ?? 'G'), 0, 1) }}
@@ -49,7 +49,7 @@
                     </h3>
                     
                     <div class="inline-block px-3 py-1 bg-navy-light/10 text-navy-base font-bold text-xs rounded-lg border border-navy-light/30 mb-4">
-                        {{ $user->teacherProfile->position ?? 'Guru Pengajar' }}
+                        {{ $user->teacherProfile->position ?? 'Pembina Pengajar' }}
                     </div>
                     
                     <div class="space-y-3 text-left">
@@ -121,7 +121,7 @@
                     <h3 class="font-bold text-navy-dark text-base font-heading">Pengaturan Nomor Kontak</h3>
                 </div>
                 
-                <form action="{{ route('guru.profile.update') }}" method="POST" class="p-7">
+                <form action="{{ route('pembina.profile.update') }}" method="POST" class="p-7">
                     @csrf
                     @method('PUT')
                     
@@ -156,3 +156,4 @@
 
 </div>
 @endsection
+

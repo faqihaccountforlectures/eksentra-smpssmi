@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Guru;
+namespace App\Http\Controllers\Pembina;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -13,20 +13,20 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     /**
-     * Menampilkan halaman dashboard utama untuk Guru Pembina Ekstrakurikuler.
+     * Menampilkan halaman dashboard utama untuk Pembina Pembina Ekstrakurikuler.
      */
     public function index()
     {
-        $teacherId = Auth::id();
-        $user = Auth::user()->load('teacherProfile');
+        $pembinaId = Auth::id();
+        $user = Auth::user()->load('pembinaProfile');
 
         Carbon::setLocale('id');
         $todayName = Carbon::now()->isoFormat('dddd'); 
 
         $activeYear = AcademicYear::where('is_active', true)->first();
 
-        // 1. Ekstrakurikuler yang dibina oleh guru ini
-        $myExtracurriculars = Extracurricular::where('teacher_id', $teacherId)
+        // 1. Ekstrakurikuler yang dibina oleh pembina ini
+        $myExtracurriculars = Extracurricular::where('teacher_id', $pembinaId)
             ->withCount([
                 'registrations as approved_count' => function ($q) {
                     $q->where('status', 'approved');
@@ -74,7 +74,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('guru.dashboard', compact(
+        return view('pembina.dashboard', compact(
             'user',
             'todayName',
             'activeYear',

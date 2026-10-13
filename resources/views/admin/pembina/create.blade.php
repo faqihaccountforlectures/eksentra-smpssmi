@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Data Guru')
-@section('header', 'Tambah Data Guru')
+@section('title', 'Tambah Data Pembina')
+@section('header', 'Tambah Data Pembina')
 
 @section('content')
     <!-- Pake max-w-4xl biar formnya agak lebar buat nampung 2 kolom (Akun & Biodata) -->
     <div class="max-w-5xl mx-auto">
         <!-- Header Page -->
         <div class="flex items-center gap-4 mb-6">
-            <a href="{{ route('teachers.index') }}" class="p-2.5 bg-white rounded-xl shadow-sm border border-navy-light/30 text-gray-muted hover:text-navy-base hover:bg-navy-light/10 transition-all active:scale-95">
+            <a href="{{ route('pembina.index') }}" class="p-2.5 bg-white rounded-xl shadow-sm border border-navy-light/30 text-gray-muted hover:text-navy-base hover:bg-navy-light/10 transition-all active:scale-95">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </a>
             <div>
@@ -28,7 +28,7 @@
         </div>
         @endif
 
-        <form action="{{ route('teachers.store') }}" method="POST">
+        <form action="{{ route('pembina.store') }}" method="POST">
             @csrf
             
             <!-- Grid buat misahin area Informasi Akun dan area Biodata -->
@@ -73,10 +73,10 @@
                         </div>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-grow">
-                            <!-- Kode Guru -->
+                            <!-- Kode Pembina -->
                             <div>
                                 <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide flex items-center justify-between">
-                                    <span>Kode Guru (Jadwal)</span>
+                                    <span>Kode Pembina (Jadwal)</span>
                                     <span class="text-[11px] text-gray-muted font-normal">Opsional (Contoh: 1, 2)</span>
                                 </label>
                                 <input type="text" name="teacher_code" value="{{ old('teacher_code') }}" placeholder="Contoh: 1, 2, ..., 20" class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
@@ -115,7 +115,7 @@
                                 <div class="relative">
                                     <select name="position" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 appearance-none shadow-sm font-medium cursor-pointer">
                                         <option value="" disabled {{ old('position') ? '' : 'selected' }}>Pilih jabatan...</option>
-                                        <option value="guru" {{ old('position') == 'guru' ? 'selected' : '' }}>Guru / Tenaga Pendidik</option>
+                                        <option value="guru" {{ old('position') == 'guru' ? 'selected' : '' }}>Guru / Pembina Ekstrakurikuler</option>
                                         <option value="kepala_sekolah" {{ old('position') == 'kepala_sekolah' ? 'selected' : '' }}>Kepala Sekolah</option>
                                         <option value="wakil_kepala_sekolah" {{ old('position') == 'wakil_kepala_sekolah' ? 'selected' : '' }}>Wakil Kepala Sekolah</option>
                                     </select>
@@ -137,11 +137,11 @@
 
             <!-- Area Tombol Aksi di Kanan Bawah -->
             <div class="mt-6 flex justify-end gap-3">
-                <a href="{{ route('teachers.index') }}" class="px-6 py-2.5 bg-white-off text-gray-muted font-bold text-sm rounded-xl hover:bg-navy-light/10 hover:text-navy-dark border border-navy-light/30 transition-colors shadow-sm active:scale-95">
+                <a href="{{ route('pembina.index') }}" class="px-6 py-2.5 bg-white-off text-gray-muted font-bold text-sm rounded-xl hover:bg-navy-light/10 hover:text-navy-dark border border-navy-light/30 transition-colors shadow-sm active:scale-95">
                     Batal
                 </a>
                 <button type="submit" class="px-8 py-2.5 bg-navy-dark text-white-off font-bold text-sm rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md hover:shadow-navy-base/20 active:scale-95 transition-all duration-200 flex items-center gap-2 border border-transparent">
-                    <span>Simpan Data Guru</span>
+                    <span>Simpan Data Pembina</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </button>
             </div>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Detail & Penilaian Ekstrakurikuler')
 @section('header', 'Detail & Penilaian Ekstrakurikuler')
@@ -33,7 +33,7 @@
     <!-- Header / Navigasi Kembali & Filter Tahun Ajaran -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div class="flex items-center gap-4">
-            <a href="{{ route('guru.extracurriculars.index') }}" class="p-2 bg-white rounded-xl border border-navy-light/30 text-navy-base hover:border-navy-base/50 hover:scale-105 transition-all shadow-sm">
+            <a href="{{ route('pembina.extracurriculars.index') }}" class="p-2 bg-white rounded-xl border border-navy-light/30 text-navy-base hover:border-navy-base/50 hover:scale-105 transition-all shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </a>
             <div>
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Filter Tahun Ajaran -->
-        <form method="GET" action="{{ route('guru.extracurriculars.show', $extracurricular->id) }}" class="flex items-center gap-2 bg-white p-2 rounded-xl border border-navy-light/30 shadow-sm shrink-0">
+        <form method="GET" action="{{ route('pembina.extracurriculars.show', $extracurricular->id) }}" class="flex items-center gap-2 bg-white p-2 rounded-xl border border-navy-light/30 shadow-sm shrink-0">
             <label for="academic_year_id" class="text-xs font-bold text-navy-dark whitespace-nowrap pl-2">Tahun Ajaran:</label>
             <select name="academic_year_id" id="academic_year_id" onchange="this.form.submit()" class="px-3 py-1.5 rounded-lg border border-navy-light/30 text-xs font-bold text-navy-base bg-white-off focus:outline-none focus:ring-2 focus:ring-navy-base">
                 @foreach($academicYears as $year)
@@ -211,7 +211,7 @@
                                                 '{{ $gradeGenap->grade ?? '' }}',
                                                 '{{ $gradeGenap->score ?? '' }}',
                                                 '{{ addslashes($gradeGenap->notes ?? '') }}',
-                                                '{{ route('guru.extracurriculars.grade', [$extracurricular->id, $reg->id]) }}'
+                                                '{{ route('pembina.extracurriculars.grade', [$extracurricular->id, $reg->id]) }}'
                                             )"
                                             class="inline-flex items-center gap-1 px-3 py-1.5 bg-navy-light/10 hover:bg-navy-light/20 text-navy-dark rounded-lg font-bold text-xs border border-navy-light/30 transition-all hover:scale-105">
                                             <svg class="w-3.5 h-3.5 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
@@ -369,3 +369,4 @@
     }
 </script>
 @endsection
+

@@ -101,7 +101,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-navy-dark text-base font-heading tracking-wide">Ekstrakurikuler & Penilaian</h3>
-                        <p class="text-[11px] text-gray-muted mt-0.5 font-bold tracking-wide">Kegiatan yang aktif diikuti beserta evaluasi nilai dari guru pembina.</p>
+                        <p class="text-[11px] text-gray-muted mt-0.5 font-bold tracking-wide">Kegiatan yang aktif diikuti beserta evaluasi nilai dari pembina ekstrakurikuler.</p>
                     </div>
                 </div>
                 <a href="{{ route('siswa.extracurriculars.index') }}" class="text-xs font-bold text-navy-base hover:text-navy-dark transition-colors">Lihat Semua</a>

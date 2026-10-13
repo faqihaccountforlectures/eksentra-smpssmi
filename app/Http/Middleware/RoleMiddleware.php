@@ -23,7 +23,11 @@ class RoleMiddleware
         }
 
         // 2. Cek apakah role pengguna yang sedang login SAMA dengan role yang disyaratkan oleh rute
-        if (Auth::user()->role !== $role) {
+        $userRole = Auth::user()->role;
+        $isMatch = ($userRole === $role) ||
+                   (in_array($role, ['guru', 'pembina']) && in_array($userRole, ['guru', 'pembina']));
+
+        if (!$isMatch) {
             // Jika tidak sama, tolak akses dengan status 403 (Forbidden)
             abort(403, 'Akses Ditolak. Anda tidak memiliki izin untuk membuka halaman ini.');
         }

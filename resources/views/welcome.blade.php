@@ -67,7 +67,7 @@
             <div class="flex flex-wrap justify-center gap-4">
                 <a href="{{ route('login') }}" class="inline-flex items-center gap-2.5 bg-white-pure hover:bg-white-off text-navy-dark px-7 py-3.5 rounded-xl font-bold text-sm transition-all shadow-xl hover:-translate-y-0.5 active:scale-95">
                     <svg class="w-5 h-5 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                    <span>Masuk Portal Siswa & Guru</span>
+                    <span>Masuk Portal Siswa & Pembina</span>
                 </a>
             </div>
 

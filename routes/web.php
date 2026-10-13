@@ -58,8 +58,8 @@ Route::get('/dashboard', function () {
     // Mengarahkan pengguna ke dasbor spesifik berdasarkan peran mereka
     if ($role === 'admin') {
         return app(\App\Http\Controllers\Admin\DashboardController::class)->index();
-    } elseif ($role === 'guru') {
-        return app(\App\Http\Controllers\Guru\DashboardController::class)->index();
+    } elseif ($role === 'guru' || $role === 'pembina') {
+        return app(\App\Http\Controllers\Pembina\DashboardController::class)->index();
     } elseif ($role === 'siswa') {
         return app(\App\Http\Controllers\Siswa\DashboardController::class)->index();
     }
@@ -149,24 +149,34 @@ Route::put('/admin/profile', [AdminProfileController::class, 'updateProfile'])->
 Route::put('/admin/profile/password', [AdminProfileController::class, 'updatePassword'])->name('admin.profile.update-password');
 
 // ==========================================
-// RUTE MASTER DATA GURU (TEACHERS)
+// RUTE MASTER DATA PEMBINA EKSTRAKURIKULER
 // ==========================================
-// Menampilkan daftar keseluruhan data guru yang terdaftar
-Route::get('/admin/teachers', [\App\Http\Controllers\Admin\TeacherController::class, 'index'])->name('teachers.index');
-// Mengunduh berkas template CSV untuk impor data guru
-Route::get('/admin/teachers/template', [\App\Http\Controllers\Admin\TeacherController::class, 'downloadTemplate'])->name('teachers.template');
-// Memproses impor massal data guru dari berkas CSV/Excel
-Route::post('/admin/teachers/import', [\App\Http\Controllers\Admin\TeacherController::class, 'import'])->name('teachers.import');
-// Menampilkan formulir pendaftaran akun dan profil guru baru
-Route::get('/admin/teachers/create', [\App\Http\Controllers\Admin\TeacherController::class, 'create'])->name('teachers.create');
-// Menyimpan data akun dan profil guru ke basis data melalui transaksi DB
-Route::post('/admin/teachers', [\App\Http\Controllers\Admin\TeacherController::class, 'store'])->name('teachers.store');
-// Menampilkan formulir perubahan data profil guru
-Route::get('/admin/teachers/{id}/edit', [\App\Http\Controllers\Admin\TeacherController::class, 'edit'])->name('teachers.edit');
-// Memperbarui data akun dan profil guru pada basis data
-Route::put('/admin/teachers/{id}', [\App\Http\Controllers\Admin\TeacherController::class, 'update'])->name('teachers.update');
-// Menghapus akun dan profil guru secara permanen
-Route::delete('/admin/teachers/{id}', [\App\Http\Controllers\Admin\TeacherController::class, 'destroy'])->name('teachers.destroy');
+// Menampilkan daftar keseluruhan data pembina yang terdaftar
+Route::get('/admin/pembina', [\App\Http\Controllers\Admin\PembinaController::class, 'index'])->name('pembina.index');
+// Mengunduh berkas template CSV untuk impor data pembina
+Route::get('/admin/pembina/template', [\App\Http\Controllers\Admin\PembinaController::class, 'downloadTemplate'])->name('pembina.template');
+// Memproses impor massal data pembina dari berkas CSV/Excel
+Route::post('/admin/pembina/import', [\App\Http\Controllers\Admin\PembinaController::class, 'import'])->name('pembina.import');
+// Menampilkan formulir pendaftaran akun dan profil pembina baru
+Route::get('/admin/pembina/create', [\App\Http\Controllers\Admin\PembinaController::class, 'create'])->name('pembina.create');
+// Menyimpan data akun dan profil pembina ke basis data melalui transaksi DB
+Route::post('/admin/pembina', [\App\Http\Controllers\Admin\PembinaController::class, 'store'])->name('pembina.store');
+// Menampilkan formulir perubahan data profil pembina
+Route::get('/admin/pembina/{id}/edit', [\App\Http\Controllers\Admin\PembinaController::class, 'edit'])->name('pembina.edit');
+// Memperbarui data akun dan profil pembina pada basis data
+Route::put('/admin/pembina/{id}', [\App\Http\Controllers\Admin\PembinaController::class, 'update'])->name('pembina.update');
+// Menghapus akun dan profil pembina secara permanen
+Route::delete('/admin/pembina/{id}', [\App\Http\Controllers\Admin\PembinaController::class, 'destroy'])->name('pembina.destroy');
+
+// Alias kompatibilitas rute guru / teachers
+Route::get('/admin/teachers', [\App\Http\Controllers\Admin\PembinaController::class, 'index'])->name('teachers.index');
+Route::get('/admin/teachers/template', [\App\Http\Controllers\Admin\PembinaController::class, 'downloadTemplate'])->name('teachers.template');
+Route::post('/admin/teachers/import', [\App\Http\Controllers\Admin\PembinaController::class, 'import'])->name('teachers.import');
+Route::get('/admin/teachers/create', [\App\Http\Controllers\Admin\PembinaController::class, 'create'])->name('teachers.create');
+Route::post('/admin/teachers', [\App\Http\Controllers\Admin\PembinaController::class, 'store'])->name('teachers.store');
+Route::get('/admin/teachers/{id}/edit', [\App\Http\Controllers\Admin\PembinaController::class, 'edit'])->name('teachers.edit');
+Route::put('/admin/teachers/{id}', [\App\Http\Controllers\Admin\PembinaController::class, 'update'])->name('teachers.update');
+Route::delete('/admin/teachers/{id}', [\App\Http\Controllers\Admin\PembinaController::class, 'destroy'])->name('teachers.destroy');
 
 // ==========================================
 // RUTE DATA SISWA (STUDENTS)
@@ -212,23 +222,33 @@ Route::delete('/admin/class-enrollments/{enrollment_id}', [\App\Http\Controllers
 });
 
 // ==========================================
-// GRUP RUTE KHUSUS GURU (PEMBINA EKSTRAKURIKULER)
+// GRUP RUTE KHUSUS PEMBINA (EKSTRAKURIKULER)
 // ==========================================
-Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
+Route::middleware(['auth', 'role:pembina'])->prefix('pembina')->group(function () {
     // Menampilkan halaman utama dasbor pembina ekstrakurikuler
-    Route::get('/dashboard', [\App\Http\Controllers\Guru\DashboardController::class, 'index'])->name('guru.dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Pembina\DashboardController::class, 'index'])->name('pembina.dashboard');
 
-    // Menampilkan informasi profil akun guru
-    Route::get('/profile', [\App\Http\Controllers\Guru\ProfileController::class, 'index'])->name('guru.profile.index');
-    // Memperbarui informasi profil guru
-    Route::put('/profile', [\App\Http\Controllers\Guru\ProfileController::class, 'update'])->name('guru.profile.update');
+    // Menampilkan informasi profil akun pembina
+    Route::get('/profile', [\App\Http\Controllers\Pembina\ProfileController::class, 'index'])->name('pembina.profile.index');
+    // Memperbarui informasi profil pembina
+    Route::put('/profile', [\App\Http\Controllers\Pembina\ProfileController::class, 'update'])->name('pembina.profile.update');
 
-    // Menampilkan daftar ekstrakurikuler yang dibina oleh guru bersangkutan
-    Route::get('/extracurriculars', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'index'])->name('guru.extracurriculars.index');
+    // Menampilkan daftar ekstrakurikuler yang dibina oleh pembina bersangkutan
+    Route::get('/extracurriculars', [\App\Http\Controllers\Pembina\ExtracurricularController::class, 'index'])->name('pembina.extracurriculars.index');
     // Menampilkan detail ekstrakurikuler & daftar anggota siswa untuk penilaian
-    Route::get('/extracurriculars/{id}', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'show'])->name('guru.extracurriculars.show');
+    Route::get('/extracurriculars/{id}', [\App\Http\Controllers\Pembina\ExtracurricularController::class, 'show'])->name('pembina.extracurriculars.show');
     // Menyimpan / memperbarui nilai dan catatan perkembangan siswa ekstrakurikuler
-    Route::post('/extracurriculars/{id}/grade/{registration_id}', [\App\Http\Controllers\Guru\ExtracurricularController::class, 'updateGrade'])->name('guru.extracurriculars.grade');
+    Route::post('/extracurriculars/{id}/grade/{registration_id}', [\App\Http\Controllers\Pembina\ExtracurricularController::class, 'updateGrade'])->name('pembina.extracurriculars.grade');
+});
+
+// Alias kompatibilitas rute guru
+Route::middleware(['auth', 'role:guru'])->prefix('guru')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Pembina\DashboardController::class, 'index'])->name('guru.dashboard');
+    Route::get('/profile', [\App\Http\Controllers\Pembina\ProfileController::class, 'index'])->name('guru.profile.index');
+    Route::put('/profile', [\App\Http\Controllers\Pembina\ProfileController::class, 'update'])->name('guru.profile.update');
+    Route::get('/extracurriculars', [\App\Http\Controllers\Pembina\ExtracurricularController::class, 'index'])->name('guru.extracurriculars.index');
+    Route::get('/extracurriculars/{id}', [\App\Http\Controllers\Pembina\ExtracurricularController::class, 'show'])->name('guru.extracurriculars.show');
+    Route::post('/extracurriculars/{id}/grade/{registration_id}', [\App\Http\Controllers\Pembina\ExtracurricularController::class, 'updateGrade'])->name('guru.extracurriculars.grade');
 });
 
 // ==========================================
