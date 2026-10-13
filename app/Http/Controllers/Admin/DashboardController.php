@@ -19,8 +19,8 @@ class DashboardController extends Controller
         // 1. Hitung total siswa aktif
         $totalSiswa = User::where('role', 'siswa')->count();
 
-        // 2. Hitung total guru
-        $totalGuru = User::where('role', 'guru')->count();
+        // 2. Hitung total coach (pembina ekstrakurikuler)
+        $totalCoach = User::where('role', 'coach')->count();
 
         // 3. Hitung pendaftaran ekstrakurikuler yang perlu verifikasi (pending)
         $pendingRegistrations = ExtracurricularRegistration::where('status', 'pending')->count();
@@ -50,7 +50,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'totalSiswa',
-            'totalGuru',
+            'totalCoach',
             'pendingRegistrations',
             'pendingPayments',
             'pemasukanBulanIni',

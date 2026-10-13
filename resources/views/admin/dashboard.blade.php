@@ -56,13 +56,13 @@
             </div>
         </div>
         
-        <!-- Kartu 2: Indikator Total Guru -->
+        <!-- Kartu 2: Indikator Total Coach -->
         <div class="bg-white p-5 rounded-2xl border border-navy-light/30 shadow-sm shadow-navy-base/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
             <div>
-                <p class="text-[11px] font-bold text-gray-muted uppercase tracking-wider">Total Guru Aktif</p>
-                <h3 class="text-2xl font-bold text-navy-dark font-heading mt-1">{{ $totalGuru }}</h3>
-                <a href="{{ route('teachers.index') }}" class="text-xs font-bold text-navy-base hover:text-navy-dark inline-flex items-center gap-1 mt-2.5 transition-colors">
-                    <span>Lihat Data Guru</span>
+                <p class="text-[11px] font-bold text-gray-muted uppercase tracking-wider">Total Coach Aktif</p>
+                <h3 class="text-2xl font-bold text-navy-dark font-heading mt-1">{{ $totalCoach }}</h3>
+                <a href="{{ route('coaches.index') }}" class="text-xs font-bold text-navy-base hover:text-navy-dark inline-flex items-center gap-1 mt-2.5 transition-colors">
+                    <span>Lihat Data Coach</span>
                     <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </a>
             </div>
