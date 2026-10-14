@@ -6,8 +6,8 @@
 @section('content')
     <!-- Alert Pesan Sukses / Error -->
     @if(session('success'))
-        <div class="bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 px-5 py-4 rounded-xl mb-6 shadow-sm shadow-emerald-500/10 flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
-            <div class="bg-emerald-500 p-2 rounded-lg text-white">
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-5 py-4 rounded-xl mb-6 shadow-sm flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
+            <div class="bg-emerald-100 p-2 rounded-lg text-emerald-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <span class="text-sm font-bold tracking-wide">{{ session('success') }}</span>
@@ -15,8 +15,8 @@
     @endif
 
     @if(session('error'))
-        <div class="bg-rose-50 border-l-4 border-rose-500 text-rose-800 px-5 py-4 rounded-xl mb-6 shadow-sm shadow-rose-500/10 flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
-            <div class="bg-rose-500 p-2 rounded-lg text-white">
+        <div class="bg-rose-50 border border-rose-200 text-rose-800 px-5 py-4 rounded-xl mb-6 shadow-sm flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
+            <div class="bg-rose-100 p-2 rounded-lg text-rose-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <span class="text-sm font-bold tracking-wide">{{ session('error') }}</span>
@@ -24,7 +24,7 @@
     @endif
 
     @if($errors->any())
-        <div class="bg-rose-50 border-l-4 border-rose-500 text-rose-800 px-5 py-4 rounded-xl mb-6 shadow-sm shadow-rose-500/10 flex flex-col gap-1.5 animate-[fade-in-down_0.5s_ease-out]">
+        <div class="bg-rose-50 border border-rose-200 text-rose-800 px-5 py-4 rounded-xl mb-6 shadow-sm flex flex-col gap-1.5 animate-[fade-in-down_0.5s_ease-out]">
             @foreach($errors->all() as $error)
                 <span class="text-xs font-bold tracking-wide flex items-center gap-2">
                     <svg class="w-4 h-4 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -49,42 +49,38 @@
                     </div>
                 </div>
 
-                <!-- Banner Informasi Rekening Pembayaran Resmi (Tema Gelap Neon Cyberpunk) -->
-                <div class="relative overflow-hidden rounded-xl p-4 mb-5 border border-cyan-500/30 bg-gradient-to-br from-[#0d1629]/95 via-[#081226]/95 to-[#050b18]/95 shadow-[0_4px_25px_rgba(0,0,0,0.6)] group/card">
-                    <!-- Ornamen Cahaya Neon -->
-                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-cyan-500/15 rounded-full blur-xl pointer-events-none"></div>
-                    <div class="absolute -left-6 -bottom-6 w-20 h-20 bg-teal-500/10 rounded-full blur-xl pointer-events-none"></div>
-
-                    <div class="flex items-center gap-2 mb-3 relative z-10">
-                        <div class="p-1.5 bg-amber-500/15 border border-amber-400/40 rounded-lg text-amber-300 shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.25)]">
+                <!-- Banner Informasi Rekening Pembayaran Resmi -->
+                <div class="relative overflow-hidden rounded-xl p-4 mb-5 border border-blue-100 bg-blue-50/70">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="p-1.5 bg-blue-100 border border-blue-200 rounded-lg text-blue-800 shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                             </svg>
                         </div>
-                        <h4 class="text-xs font-black font-heading text-white tracking-wide">Rekening Resmi Pembayaran</h4>
+                        <h4 class="text-xs font-bold font-heading text-blue-900 tracking-wide">Rekening Resmi Pembayaran</h4>
                     </div>
                     
-                    <div class="space-y-2 text-xs bg-[#070b14]/80 backdrop-blur-md p-3 rounded-lg border border-cyan-500/20 relative z-10">
+                    <div class="space-y-2 text-xs bg-white p-3 rounded-lg border border-blue-100 shadow-sm">
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] text-slate-400 font-medium">Bank Tujuan:</span>
-                            <span class="font-bold text-white tracking-wide">Bank Sinarmas</span>
+                            <span class="text-[11px] text-slate-500 font-medium">Bank Tujuan:</span>
+                            <span class="font-bold text-slate-800 tracking-wide">Bank Sinarmas</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] text-slate-400 font-medium">No. Rekening:</span>
+                            <span class="text-[11px] text-slate-500 font-medium">No. Rekening:</span>
                             <div class="flex items-center gap-1.5">
-                                <span class="font-mono font-bold text-amber-300 text-xs tracking-wider drop-shadow-[0_0_8px_rgba(245,158,11,0.35)]">0058091286</span>
-                                <button type="button" onclick="navigator.clipboard.writeText('0058091286'); alert('Nomor rekening Bank Sinarmas (0058091286) berhasil disalin!');" class="text-[10px] font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/30 px-2 py-0.5 rounded transition-all active:scale-95 shadow-[0_0_8px_rgba(6,182,212,0.2)]" title="Salin No. Rekening">
+                                <span class="font-mono font-bold text-blue-900 text-xs tracking-wider">0058091286</span>
+                                <button type="button" onclick="navigator.clipboard.writeText('0058091286'); alert('Nomor rekening Bank Sinarmas (0058091286) berhasil disalin!');" class="text-[10px] font-bold bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 px-2 py-0.5 rounded transition-all active:scale-95" title="Salin No. Rekening">
                                     Salin
                                 </button>
                             </div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] text-slate-400 font-medium">Atas Nama:</span>
-                            <span class="font-bold text-slate-200 text-[11px]">Sarah Meiyana Putri Utami (Ms. Sarah)</span>
+                            <span class="text-[11px] text-slate-500 font-medium">Atas Nama:</span>
+                            <span class="font-semibold text-slate-700 text-[11px]">Sarah Meiyana Putri Utami (Ms. Sarah)</span>
                         </div>
                     </div>
-                    <p class="text-[10px] text-cyan-300/90 mt-2.5 font-medium relative z-10 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <p class="text-[10px] text-slate-600 mt-2.5 font-medium flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
                         <span><b>Biaya Iuran:</b> Rp 100.000,- / ekskul per bulan.</span>
                     </p>
                 </div>
@@ -166,7 +162,7 @@
                         </div>
 
                         <!-- Tombol Submit -->
-                        <button type="submit" class="w-full mt-4 py-2.5 bg-gradient-to-r from-cyan-400 to-teal-400 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.35)] active:scale-95 transition-all flex items-center justify-center gap-2">
+                        <button type="submit" class="w-full mt-4 py-2.5 bg-blue-800 hover:bg-blue-900 text-white font-bold text-xs rounded-xl shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                             <span>Kirim Bukti Pembayaran</span>
                         </button>

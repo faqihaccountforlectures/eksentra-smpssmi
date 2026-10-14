@@ -138,7 +138,7 @@ class ClassEnrollmentController extends Controller
         $destinationClass = ClassRoom::findOrFail($classId);
 
         // Ambil daftar tahun ajaran selain yang sedang aktif (untuk dropdown Tahun Ajaran Asal)
-        $previousYears = AcademicYear::where('id', '!=', $activeYear->id)->orderBy('year_name', 'desc')->orderBy('semester', 'desc')->get();
+        $previousYears = AcademicYear::where('id', '!=', $activeYear->id)->orderBy('year_name', 'desc')->get();
         
         // Ambil daftar semua kelas (untuk dropdown Kelas Asal)
         $allClasses = ClassRoom::orderBy('grade_level')->orderBy('name')->get();
@@ -223,7 +223,7 @@ class ClassEnrollmentController extends Controller
         }
 
         // Ambil daftar tahun ajaran selain yang sedang aktif (untuk dropdown Tahun Ajaran Asal)
-        $previousYears = AcademicYear::where('id', '!=', $activeYear->id)->orderBy('year_name', 'desc')->orderBy('semester', 'desc')->get();
+        $previousYears = AcademicYear::where('id', '!=', $activeYear->id)->orderBy('year_name', 'desc')->get();
         
         // Ambil daftar kelas asal (Hanya kelas 9)
         $sourceClasses = ClassRoom::where('grade_level', 9)->orderBy('name')->get();

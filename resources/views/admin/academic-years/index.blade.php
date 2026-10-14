@@ -27,42 +27,42 @@
         
         <!-- KOLOM KIRI: Panel Formulir Tambah Data -->
         <div class="xl:col-span-1">
-            <div class="bg-white p-7 rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 relative overflow-hidden group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
-                <div class="flex items-center gap-3 mb-6 border-b border-white-off pb-4">
-                    <div class="bg-white-off p-2.5 rounded-xl text-navy-dark group-hover:bg-navy-dark group-hover:text-white-off transition-colors duration-300">
+            <div class="bg-white p-6 sm:p-7 rounded-2xl shadow-sm border border-blue-100 hover:border-blue-300 transition-colors duration-200">
+                <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                    <div class="bg-blue-50 p-2.5 rounded-xl text-blue-800 border border-blue-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
-                    <h2 class="text-base font-bold text-navy-dark font-heading tracking-wide">Registrasi Tahun Ajaran</h2>
+                    <h2 class="text-base font-bold text-slate-900 font-heading tracking-wide">Registrasi Tahun Ajaran</h2>
                 </div>
                 
                 <!-- FUNGSI KODE: Form mengarah ke method STORE di AcademicYearController -->
-                <form action="{{ route('academic-years.store') }}" method="POST" class="space-y-5">
+                <form action="{{ route('academic-years.store') }}" method="POST" class="space-y-4">
                     @csrf
                     
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-muted mb-1.5 uppercase tracking-wider">Nama Tahun Ajaran</label>
-                        <input type="text" name="year_name" placeholder="Contoh: 2026/2027" required class="w-full bg-white-off/50 border border-navy-light/50 text-navy-dark font-semibold text-sm rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all duration-300 placeholder:text-gray-muted/50 placeholder:font-normal">
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Tahun Ajaran</label>
+                        <input type="text" name="year_name" placeholder="Contoh: 2026/2027" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold text-xs rounded-xl px-3.5 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-700 outline-none transition-all placeholder:text-slate-400">
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-muted mb-1.5 uppercase tracking-wider">Status Aktivasi</label>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Status Aktivasi</label>
                         <div class="relative">
-                            <select name="is_active" required class="w-full bg-white-off/50 border border-navy-light/50 text-navy-dark font-semibold text-sm rounded-xl pl-4 pr-10 py-3 focus:bg-white focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all duration-300 appearance-none">
+                            <select name="is_active" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold text-xs rounded-xl pl-3.5 pr-10 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-700 outline-none transition-all appearance-none cursor-pointer">
                                 <option value="1">Aktifkan Secara Global</option>
                                 <option value="0">Tandai Tidak Aktif</option>
                             </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-navy-base">
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                         </div>
                         <!-- Informasi Bantuan Tambahan -->
-                        <div class="mt-3 flex items-start gap-2 text-gray-muted bg-white-off p-3 rounded-lg border border-navy-light/30">
+                        <div class="mt-3 flex items-start gap-2 text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
                             <svg class="w-4 h-4 shrink-0 mt-0.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <p class="text-[11px] leading-relaxed">Pengaktifan data ini akan membatalkan status aktif pada entri Tahun Ajaran lainnya secara otomatis.</p>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-navy-dark text-white-off font-bold text-sm py-3.5 rounded-xl hover:bg-navy-base hover:shadow-lg hover:shadow-navy-base/20 active:scale-[0.98] transition-all duration-300 flex justify-center items-center gap-2 mt-2">
+                    <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold text-xs py-3 rounded-xl transition-colors duration-200 flex justify-center items-center gap-2 mt-2 shadow-sm active:scale-95">
                         <span>Simpan Konfigurasi</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                     </button>
@@ -72,7 +72,7 @@
 
         <!-- KOLOM KANAN: Panel Tabel Daftar Data -->
         <div class="xl:col-span-2">
-            <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden flex flex-col h-full group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
+            <div class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden flex flex-col h-full hover:border-blue-300 transition-colors duration-200">
                 
                 <!-- Header Panel Tabel -->
                 <div class="px-7 py-5 border-b border-navy-light/30 bg-white-off/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">

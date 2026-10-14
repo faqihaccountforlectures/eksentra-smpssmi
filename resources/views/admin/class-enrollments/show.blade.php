@@ -17,7 +17,7 @@
     @endif
 
     <div class="mb-6 flex items-center justify-between">
-        <a href="{{ route('class-enrollments.index') }}" class="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-300 transition-colors">
+        <a href="{{ route('class-enrollments.index') }}" class="inline-flex items-center gap-2 text-slate-500 hover:text-blue-800 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             <span class="font-medium text-sm">Kembali ke Daftar Kelas</span>
         </a>
@@ -98,9 +98,9 @@
                         <td class="px-7 py-4 font-medium">
                             @if(isset($enrollment->student->studentProfile->gender))
                                 @if($enrollment->student->studentProfile->gender === 'laki-laki')
-                                    <span class="inline-flex items-center gap-1.5 bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-widest uppercase shadow-sm">Laki-laki</span>
+                                    <span class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-widest uppercase shadow-sm">Laki-laki</span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 bg-rose-500/10 text-rose-300 border border-rose-500/30 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-widest uppercase shadow-sm">Perempuan</span>
+                                    <span class="inline-flex items-center gap-1.5 bg-pink-50 text-pink-700 border border-pink-200 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-widest uppercase shadow-sm">Perempuan</span>
                                 @endif
                             @else
                                 <span class="text-gray-muted italic">-</span>
@@ -114,29 +114,26 @@
                     </tr>
 
                     <!-- MODAL HAPUS ENROLLMENT -->
-                    <div id="removeModal-{{ $enrollment->id }}" class="hidden fixed inset-0 z-[9999] bg-[#070b14]/80 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300">
-                        <div class="glow-card w-full max-w-md rounded-2xl border border-rose-500/30 overflow-hidden text-center relative p-6 sm:p-7 shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_30px_rgba(244,63,94,0.18)] animate-[scale-in_0.2s_ease-out]">
-                            <!-- Ornamen Glow Merah -->
-                            <div class="absolute -right-8 -top-8 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none"></div>
-
+                    <div id="removeModal-{{ $enrollment->id }}" class="hidden fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+                        <div class="bg-white w-full max-w-md rounded-2xl border border-slate-200 overflow-hidden text-center relative p-6 sm:p-7 shadow-xl animate-[scale-in_0.2s_ease-out]">
                             <div class="relative z-10">
-                                <div class="w-14 h-14 bg-rose-500/15 border border-rose-500/40 text-rose-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+                                <div class="w-14 h-14 bg-rose-50 border border-rose-200 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                 </div>
 
-                                <h3 class="font-extrabold text-lg sm:text-xl text-white font-heading tracking-wide mb-2">Keluarkan Siswa?</h3>
-                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6 font-medium">
-                                    Anda yakin ingin mengeluarkan <span class="font-bold text-cyan-300">{{ $enrollment->student->studentProfile->full_name ?? $enrollment->student->email }}</span> dari kelas ini? Data kehadiran dan nilai mungkin akan terpengaruh.
+                                <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Keluarkan Siswa?</h3>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
+                                    Anda yakin ingin mengeluarkan <span class="font-bold text-slate-900">{{ $enrollment->student->studentProfile->full_name ?? $enrollment->student->email }}</span> dari kelas ini? Data kehadiran dan nilai mungkin akan terpengaruh.
                                 </p>
                                 
                                 <form action="{{ route('class-enrollments.destroy', $enrollment->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">
                                     @csrf
                                     @method('DELETE')
                                     
-                                    <button type="button" onclick="document.getElementById('removeModal-{{ $enrollment->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl border border-cyan-500/20 hover:border-cyan-400/40 transition-all active:scale-95 shadow-sm">
+                                    <button type="button" onclick="document.getElementById('removeModal-{{ $enrollment->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm">
                                         Batal
                                     </button>
-                                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:shadow-[0_0_30px_rgba(244,63,94,0.6)] active:scale-95 transition-all flex items-center justify-center gap-2">
+                                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         <span>Ya, Keluarkan</span>
                                     </button>

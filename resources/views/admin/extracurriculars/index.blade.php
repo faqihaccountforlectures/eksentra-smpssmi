@@ -6,8 +6,8 @@
 @section('content')
     <!-- Alert Pesan Sukses -->
     @if(session('success'))
-        <div class="bg-white border-l-4 border-navy-base text-navy-dark px-5 py-4 rounded-xl mb-6 shadow-sm shadow-navy-base/10 flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
-            <div class="bg-navy-base p-2 rounded-lg text-white-off">
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-5 py-4 rounded-xl mb-6 shadow-sm flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
+            <div class="bg-emerald-100 p-2 rounded-lg text-emerald-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <span class="text-sm font-bold tracking-wide">{{ session('success') }}</span>

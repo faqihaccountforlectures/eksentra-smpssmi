@@ -6,8 +6,8 @@
 @section('content')
     <!-- Alert pesan sukses atau error -->
     @if(session('success'))
-        <div class="bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 px-5 py-4 rounded-xl mb-6 shadow-sm shadow-emerald-500/10 flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
-            <div class="bg-emerald-500 p-2 rounded-lg text-white">
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-5 py-4 rounded-xl mb-6 shadow-sm flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
+            <div class="bg-emerald-100 p-2 rounded-lg text-emerald-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <span class="text-sm font-bold tracking-wide">{{ session('success') }}</span>
@@ -15,8 +15,8 @@
     @endif
 
     @if(session('error'))
-        <div class="bg-rose-50 border-l-4 border-rose-500 text-rose-800 px-5 py-4 rounded-xl mb-6 shadow-sm shadow-rose-500/10 flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
-            <div class="bg-rose-500 p-2 rounded-lg text-white">
+        <div class="bg-rose-50 border border-rose-200 text-rose-800 px-5 py-4 rounded-xl mb-6 shadow-sm flex items-center gap-3 animate-[fade-in-down_0.5s_ease-out]">
+            <div class="bg-rose-100 p-2 rounded-lg text-rose-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <span class="text-sm font-bold tracking-wide">{{ session('error') }}</span>
@@ -38,19 +38,18 @@
                 $status = $registration ? $registration->status : null;
             @endphp
 
-            <div class="bg-white rounded-2xl shadow-sm border border-cyan-500/25 overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-lg hover:border-cyan-400/40 transition-all duration-300">
-                <!-- Header Kartu Foto / Gradien Gelap Neon -->
-                <div class="h-36 relative overflow-hidden text-white flex flex-col justify-end p-5 group/header border-b border-cyan-500/20">
+            <div class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-md hover:border-blue-300 transition-all duration-300">
+                <!-- Header Kartu Foto / Gradien Navy -->
+                <div class="h-36 relative overflow-hidden text-white flex flex-col justify-end p-5 group/header border-b border-slate-100">
                     @if($ekskul->image)
                         <img src="{{ asset('storage/' . $ekskul->image) }}" class="absolute inset-0 w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500" alt="{{ $ekskul->name }}">
-                        <!-- Overlay gradien hitam/navy agar teks nama ekskul kontras dan terbaca jelas -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#070b14]/95 via-[#070b14]/60 to-transparent"></div>
+                        <!-- Overlay gradien navy agar teks nama ekskul kontras dan terbaca jelas -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent"></div>
                     @else
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#0c162d] via-[#09152b] to-[#070b14]"></div>
-                        <div class="absolute -right-6 -top-6 w-32 h-32 bg-cyan-500/15 rounded-full blur-2xl group-hover/header:bg-cyan-500/25 transition-colors duration-500"></div>
-                        <div class="absolute left-4 top-4 w-16 h-16 bg-teal-500/10 rounded-full blur-xl"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950"></div>
+                        <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover/header:bg-white/15 transition-colors duration-500"></div>
                     @endif
-                    <h3 class="text-lg font-black font-heading tracking-wide relative z-10 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-white">{{ $ekskul->name }}</h3>
+                    <h3 class="text-lg font-bold font-heading tracking-wide relative z-10 drop-shadow-sm text-white">{{ $ekskul->name }}</h3>
                 </div>
                 
                 <!-- Body Kartu -->
@@ -102,7 +101,7 @@
                             <form action="{{ route('extracurricular-registrations.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="extracurricular_id" value="{{ $ekskul->id }}">
-                                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-cyan-400 to-teal-400 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.35)] active:scale-95 transition-all">
+                                <button type="submit" class="w-full py-2.5 bg-blue-800 hover:bg-blue-900 text-white font-bold text-xs rounded-xl shadow-sm active:scale-95 transition-all">
                                     Daftar Ekstrakurikuler
                                 </button>
                             </form>
@@ -200,29 +199,26 @@
                             </div>
 
                             <!-- Modal Confirm Keluar Ekskul -->
-                            <div id="unenrollModal-{{ $ekskul->id }}" class="hidden fixed inset-0 z-[9999] bg-[#070b14]/80 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300">
-                                <div class="glow-card w-full max-w-md rounded-2xl border border-rose-500/30 overflow-hidden text-center relative p-6 sm:p-7 shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_30px_rgba(244,63,94,0.18)] animate-[scale-in_0.2s_ease-out]">
-                                    <!-- Ornamen Glow Merah -->
-                                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none"></div>
-
+                            <div id="unenrollModal-{{ $ekskul->id }}" class="hidden fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+                                <div class="bg-white w-full max-w-md rounded-2xl border border-slate-200 overflow-hidden text-center relative p-6 sm:p-7 shadow-xl animate-[scale-in_0.2s_ease-out]">
                                     <div class="relative z-10">
-                                        <div class="w-14 h-14 bg-rose-500/15 border border-rose-500/40 text-rose-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+                                        <div class="w-14 h-14 bg-rose-50 border border-rose-200 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                                         </div>
 
-                                        <h3 class="font-extrabold text-lg sm:text-xl text-white font-heading tracking-wide mb-2">Keluar Ekstrakurikuler?</h3>
-                                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6 font-medium">
-                                            Apakah Anda yakin ingin berhenti mengikuti ekstrakurikuler <span class="font-bold text-cyan-300">{{ $ekskul->name }}</span>? Riwayat pembayaran Anda akan tetap tersimpan aman.
+                                        <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Keluar Ekstrakurikuler?</h3>
+                                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
+                                            Apakah Anda yakin ingin berhenti mengikuti ekstrakurikuler <span class="font-bold text-slate-900">{{ $ekskul->name }}</span>? Riwayat pembayaran Anda akan tetap tersimpan aman.
                                         </p>
                                         
                                         <form action="{{ route('extracurricular-registrations.destroy', $ekskul->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">
                                             @csrf
                                             @method('DELETE')
                                             
-                                            <button type="button" onclick="document.getElementById('unenrollModal-{{ $ekskul->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl border border-cyan-500/20 hover:border-cyan-400/40 transition-all active:scale-95 shadow-sm">
+                                            <button type="button" onclick="document.getElementById('unenrollModal-{{ $ekskul->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm">
                                                 Batal
                                             </button>
-                                            <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:shadow-[0_0_30px_rgba(244,63,94,0.6)] active:scale-95 transition-all flex items-center justify-center gap-2">
+                                            <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                                                 <span>Ya, Keluar</span>
                                             </button>

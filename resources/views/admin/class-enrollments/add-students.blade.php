@@ -75,9 +75,9 @@
                                 <td class="px-7 py-4">
                                     @if(isset($student->studentProfile->gender))
                                         @if($student->studentProfile->gender === 'laki-laki')
-                                            <span class="inline-flex items-center gap-1.5 text-gray-muted text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></div> Laki-laki</span>
+                                            <span class="inline-flex items-center gap-1.5 text-slate-700 text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-blue-600"></div> Laki-laki</span>
                                         @else
-                                            <span class="inline-flex items-center gap-1.5 text-gray-muted text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div> Perempuan</span>
+                                            <span class="inline-flex items-center gap-1.5 text-slate-700 text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-pink-500"></div> Perempuan</span>
                                         @endif
                                     @else
                                         -
@@ -90,9 +90,9 @@
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 sticky bottom-4 z-10 bg-[#0d1527]/90 backdrop-blur-xl p-3.5 sm:p-4 rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.6)] border border-cyan-500/25">
-                <a href="{{ route('class-enrollments.show', $classRoom->id) }}" class="px-5 py-2 rounded-xl text-xs font-bold text-slate-300 bg-[#070b14] border border-cyan-500/25 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-cyan-500/10 transition-all flex items-center">Batal</a>
-                <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-teal-400 hover:brightness-110 shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all flex items-center gap-2 active:scale-95">
+            <div class="flex justify-end gap-3 sticky bottom-4 z-10 bg-white/95 backdrop-blur-xl p-3.5 sm:p-4 rounded-xl shadow-lg border border-blue-200">
+                <a href="{{ route('class-enrollments.show', $classRoom->id) }}" class="px-5 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 hover:bg-slate-200 hover:text-slate-900 transition-all flex items-center">Batal</a>
+                <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-blue-800 hover:bg-blue-900 transition-all flex items-center gap-2 active:scale-95 shadow-sm border border-blue-700">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                     <span>Simpan & Masukkan ke Kelas</span>
                 </button>

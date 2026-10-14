@@ -249,39 +249,39 @@
 </div>
 
 <!-- MODAL INPUT / UBAH NILAI (GANJIL & GENAP) -->
-<div id="gradeModal" class="fixed inset-0 z-[9999] hidden bg-[#070b14]/80 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300">
-    <div class="glow-card rounded-2xl max-w-xl w-full p-6 sm:p-7 shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_30px_rgba(6,182,212,0.2)] border border-cyan-500/30 relative animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
+<div id="gradeModal" class="fixed inset-0 z-[9999] hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 sm:p-7 shadow-xl border border-slate-200 relative animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
         <!-- Close Button -->
-        <button type="button" onclick="closeGradeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors">
+        <button type="button" onclick="closeGradeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
 
-        <div class="mb-5 pb-3 border-b border-cyan-500/20">
-            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-3 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+        <div class="mb-5 pb-3 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-800 flex items-center justify-center mb-3 border border-blue-200 shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
-            <h3 class="text-lg font-extrabold text-white font-heading">Penilaian Ekstrakurikuler Siswa</h3>
-            <p class="text-xs text-slate-300 mt-1">
-                Siswa: <strong id="modalStudentName" class="text-cyan-300 font-bold"></strong> • 
-                Tahun Ajaran: <strong id="modalYearName" class="text-teal-300 font-bold"></strong>
+            <h3 class="text-lg font-bold text-slate-900 font-heading">Penilaian Ekstrakurikuler Siswa</h3>
+            <p class="text-xs text-slate-500 mt-1">
+                Siswa: <strong id="modalStudentName" class="text-slate-900 font-bold"></strong> • 
+                Tahun Ajaran: <strong id="modalYearName" class="text-slate-900 font-bold"></strong>
             </p>
         </div>
 
-        <form id="gradeForm" method="POST" action="" class="space-y-5 text-xs">
+        <form id="gradeForm" method="POST" action="" class="space-y-4 text-xs">
             @csrf
             <input type="hidden" name="academic_year_id" value="{{ $selectedYear->id ?? '' }}">
 
             <!-- SECTION 1: SEMESTER GANJIL -->
-            <div class="bg-[#070b14]/70 p-4 rounded-xl border border-cyan-500/20 space-y-3">
-                <div class="flex items-center gap-2 pb-2 border-b border-cyan-500/15">
-                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
-                    <h4 class="font-bold text-white text-xs uppercase tracking-wider">1. Semester Ganjil</h4>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-200">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-700"></span>
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider">1. Semester Ganjil</h4>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label for="inputGanjilGrade" class="block font-bold text-slate-200 mb-1">Predikat Nilai</label>
-                        <select name="ganjil_grade" id="inputGanjilGrade" class="w-full px-3 py-2 rounded-xl border border-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-semibold text-white bg-[#0d1527]">
+                        <label for="inputGanjilGrade" class="block font-bold text-slate-700 mb-1">Predikat Nilai</label>
+                        <select name="ganjil_grade" id="inputGanjilGrade" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-700 font-semibold text-slate-800 bg-white">
                             <option value="">-- Kosongkan / Belum Dinilai --</option>
                             <option value="A">A (Sangat Baik)</option>
                             <option value="B">B (Baik)</option>
@@ -291,28 +291,28 @@
                     </div>
 
                     <div>
-                        <label for="inputGanjilScore" class="block font-bold text-slate-200 mb-1">Nilai Angka (0 - 100)</label>
-                        <input type="number" name="ganjil_score" id="inputGanjilScore" min="0" max="100" placeholder="Contoh: 90" class="w-full px-3 py-2 rounded-xl border border-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-medium text-white bg-[#0d1527]">
+                        <label for="inputGanjilScore" class="block font-bold text-slate-700 mb-1">Nilai Angka (0 - 100)</label>
+                        <input type="number" name="ganjil_score" id="inputGanjilScore" min="0" max="100" placeholder="Contoh: 90" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-700 font-medium text-slate-800 bg-white">
                     </div>
                 </div>
 
                 <div>
-                    <label for="inputGanjilNotes" class="block font-bold text-slate-200 mb-1">Catatan Evaluasi Semester Ganjil</label>
-                    <textarea name="ganjil_notes" id="inputGanjilNotes" rows="2" placeholder="Catatan keaktifan dan capaian siswa di semester ganjil..." class="w-full px-3 py-2 rounded-xl border border-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-normal text-white bg-[#0d1527] resize-none"></textarea>
+                    <label for="inputGanjilNotes" class="block font-bold text-slate-700 mb-1">Catatan Evaluasi Semester Ganjil</label>
+                    <textarea name="ganjil_notes" id="inputGanjilNotes" rows="2" placeholder="Catatan keaktifan dan capaian siswa di semester ganjil..." class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-700 font-normal text-slate-800 bg-white resize-none"></textarea>
                 </div>
             </div>
 
             <!-- SECTION 2: SEMESTER GENAP -->
-            <div class="bg-[#070b14]/70 p-4 rounded-xl border border-cyan-500/20 space-y-3">
-                <div class="flex items-center gap-2 pb-2 border-b border-cyan-500/15">
-                    <span class="w-2.5 h-2.5 rounded-full bg-teal-400 shadow-[0_0_8px_rgba(45,212,191,0.8)]"></span>
-                    <h4 class="font-bold text-white text-xs uppercase tracking-wider">2. Semester Genap</h4>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-200">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider">2. Semester Genap</h4>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label for="inputGenapGrade" class="block font-bold text-slate-200 mb-1">Predikat Nilai</label>
-                        <select name="genap_grade" id="inputGenapGrade" class="w-full px-3 py-2 rounded-xl border border-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-semibold text-white bg-[#0d1527]">
+                        <label for="inputGenapGrade" class="block font-bold text-slate-700 mb-1">Predikat Nilai</label>
+                        <select name="genap_grade" id="inputGenapGrade" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-700 font-semibold text-slate-800 bg-white">
                             <option value="">-- Kosongkan / Belum Dinilai --</option>
                             <option value="A">A (Sangat Baik)</option>
                             <option value="B">B (Baik)</option>
@@ -322,22 +322,22 @@
                     </div>
 
                     <div>
-                        <label for="inputGenapScore" class="block font-bold text-slate-200 mb-1">Nilai Angka (0 - 100)</label>
-                        <input type="number" name="genap_score" id="inputGenapScore" min="0" max="100" placeholder="Contoh: 92" class="w-full px-3 py-2 rounded-xl border border-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-medium text-white bg-[#0d1527]">
+                        <label for="inputGenapScore" class="block font-bold text-slate-700 mb-1">Nilai Angka (0 - 100)</label>
+                        <input type="number" name="genap_score" id="inputGenapScore" min="0" max="100" placeholder="Contoh: 92" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-700 font-medium text-slate-800 bg-white">
                     </div>
                 </div>
 
                 <div>
-                    <label for="inputGenapNotes" class="block font-bold text-slate-200 mb-1">Catatan Evaluasi Semester Genap</label>
-                    <textarea name="genap_notes" id="inputGenapNotes" rows="2" placeholder="Catatan keaktifan dan capaian siswa di semester genap..." class="w-full px-3 py-2 rounded-xl border border-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-normal text-white bg-[#0d1527] resize-none"></textarea>
+                    <label for="inputGenapNotes" class="block font-bold text-slate-700 mb-1">Catatan Evaluasi Semester Genap</label>
+                    <textarea name="genap_notes" id="inputGenapNotes" rows="2" placeholder="Catatan keaktifan dan capaian siswa di semester genap..." class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-700 font-normal text-slate-800 bg-white resize-none"></textarea>
                 </div>
             </div>
 
-            <div class="flex items-center justify-end gap-3 pt-3 border-t border-cyan-500/20">
-                <button type="button" onclick="closeGradeModal()" class="px-4 py-2.5 rounded-xl border border-cyan-500/20 text-slate-300 font-bold hover:bg-slate-800 hover:text-white transition-all">
+            <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeGradeModal()" class="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors">
                     Batal
                 </button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-extrabold transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] active:scale-95">
+                <button type="submit" class="px-5 py-2 bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold rounded-xl shadow-sm active:scale-95 transition-all">
                     Simpan Nilai
                 </button>
             </div>
