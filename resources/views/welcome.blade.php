@@ -45,6 +45,25 @@
             border: 1px solid rgba(34, 211, 238, 0.3);
             box-shadow: 0 0 18px rgba(6, 182, 212, 0.2), inset 0 0 12px rgba(6, 182, 212, 0.1);
         }
+
+        /* Hilangkan outline dan border putih default browser saat link navbar diklik atau aktif */
+        .nav-link,
+        .nav-link:focus,
+        .nav-link:focus-visible,
+        .nav-link:active,
+        #mobile-menu a,
+        #mobile-menu a:focus,
+        #mobile-menu a:focus-visible,
+        #mobile-menu a:active,
+        #main-nav a,
+        #main-nav a:focus,
+        #main-nav a:focus-visible,
+        #main-nav button:focus,
+        #main-nav button:focus-visible {
+            outline: none !important;
+            border-color: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
     </style>
 </head>
 <body class="bg-[#070b14] text-slate-100 antialiased font-sans selection:bg-cyan-500 selection:text-black overflow-x-hidden relative">
@@ -83,18 +102,18 @@
 
                 <!-- Nav Menu Tengah (Sesuai Masing-masing Section) -->
                 <div class="hidden xl:flex items-center gap-1">
-                    <a href="#hero" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 transition-all">Beranda</a>
-                    <a href="#tentang" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Tentang</a>
-                    <a href="#tujuan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Tujuan</a>
-                    <a href="#keunggulan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Keunggulan</a>
-                    <a href="#profil-lokasi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Media & Lokasi</a>
-                    <a href="#galeri" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Galeri</a>
-                    <a href="#visi-misi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Visi & Misi</a>
+                    <a href="#hero" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Beranda</a>
+                    <a href="#tentang" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Tentang</a>
+                    <a href="#tujuan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Tujuan</a>
+                    <a href="#keunggulan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Keunggulan</a>
+                    <a href="#profil-lokasi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Media & Lokasi</a>
+                    <a href="#galeri" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Galeri</a>
+                    <a href="#visi-misi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Visi & Misi</a>
                 </div>
 
                 <!-- Tombol Login Sejajar di Navbar (Glowing CTA) -->
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('login') }}" class="relative group inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-950 overflow-hidden transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(34,211,238,0.45)] hover:shadow-[0_0_30px_rgba(34,211,238,0.7)]">
+                    <a href="{{ route('login') }}" class="relative group inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-950 overflow-hidden transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(34,211,238,0.45)] hover:shadow-[0_0_30px_rgba(34,211,238,0.7)] outline-none focus:outline-none">
                         <!-- Background Glow Gradient -->
                         <span class="absolute inset-0 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 group-hover:brightness-110 transition-all"></span>
                         <span class="relative flex items-center gap-1.5">
@@ -104,7 +123,7 @@
                     </a>
 
                     <!-- Mobile Menu Hamburger -->
-                    <button type="button" class="xl:hidden p-2 rounded-lg text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 border border-slate-800 transition-colors" onclick="toggleMobileMenu()" aria-label="Buka menu navigasi">
+                    <button type="button" class="xl:hidden p-2 rounded-lg text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 border border-slate-800 transition-colors outline-none focus:outline-none" onclick="toggleMobileMenu()" aria-label="Buka menu navigasi">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                 </div>
@@ -115,13 +134,13 @@
         <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="xl:hidden hidden border-t border-cyan-500/20 bg-[#070b14]/95 backdrop-blur-2xl">
             <div class="px-4 py-3 space-y-1">
-                <a href="#hero" class="block px-3 py-2 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-500/10" onclick="closeMobileMenu()">Beranda</a>
-                <a href="#tentang" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Tentang Eksentra</a>
-                <a href="#tujuan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Tujuan Ekskul</a>
-                <a href="#keunggulan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Keunggulan</a>
-                <a href="#profil-lokasi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Media & Lokasi</a>
-                <a href="#galeri" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Galeri</a>
-                <a href="#visi-misi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Visi & Misi</a>
+                <a href="#hero" class="block px-3 py-2 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Beranda</a>
+                <a href="#tentang" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Tentang Eksentra</a>
+                <a href="#tujuan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Tujuan Ekskul</a>
+                <a href="#keunggulan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Keunggulan</a>
+                <a href="#profil-lokasi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Media & Lokasi</a>
+                <a href="#galeri" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Galeri</a>
+                <a href="#visi-misi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Visi & Misi</a>
             </div>
         </div>
     </nav>
@@ -800,8 +819,21 @@
             const navLinks = document.querySelectorAll('.nav-link');
             const nav = document.getElementById('main-nav');
 
-            const activeClass = ['text-cyan-300', 'bg-cyan-500/10', 'border', 'border-cyan-500/30'];
+            const activeClass = ['text-cyan-300', 'bg-cyan-500/10'];
             const inactiveClass = ['text-slate-300'];
+
+            // Hilangkan border & fokus saat diklik agar tidak memunculkan garis putih bawaan browser
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    this.blur();
+                });
+            });
+
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', function () {
+                    this.blur();
+                });
+            });
 
             function updateScrollSpy() {
                 const scrollPos = window.scrollY + 120;
@@ -818,10 +850,10 @@
                 navLinks.forEach(link => {
                     const href = link.getAttribute('href').replace('#', '');
                     if (href === currentId) {
-                        link.classList.remove(...inactiveClass);
+                        link.classList.remove(...inactiveClass, 'border', 'border-cyan-500/30');
                         link.classList.add(...activeClass);
                     } else {
-                        link.classList.remove(...activeClass);
+                        link.classList.remove(...activeClass, 'border', 'border-cyan-500/30');
                         link.classList.add(...inactiveClass);
                     }
                 });
