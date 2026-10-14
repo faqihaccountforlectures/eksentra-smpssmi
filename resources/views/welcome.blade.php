@@ -3,441 +3,844 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMP Science Mutiara Insani Purwakarta - Beranda Utama</title>
+    <title>Eksentra — Portal Ekstrakurikuler SMP Science Mutiara Insani</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-white-off text-navy-dark antialiased font-sans">
+    <style>
+        /* Ambient Background Canvas */
+        #glow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    <!-- FUNGSI KODE: Sticky Navbar Navigasi Utama -->
-    <nav class="bg-white-pure/90 backdrop-blur-md border-b border-navy-light/20 sticky top-0 z-50 transition-all">
+        /* Scroll Reveal Transitions */
+        .reveal { opacity: 0; transform: translateY(24px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(-30px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(30px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.92); transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal-scale.active { opacity: 1; transform: scale(1); }
+
+        /* Staggered Children Delay */
+        .stagger-items > *:nth-child(1) { transition-delay: 0.04s; }
+        .stagger-items > *:nth-child(2) { transition-delay: 0.08s; }
+        .stagger-items > *:nth-child(3) { transition-delay: 0.12s; }
+        .stagger-items > *:nth-child(4) { transition-delay: 0.16s; }
+        .stagger-items > *:nth-child(5) { transition-delay: 0.20s; }
+        .stagger-items > *:nth-child(6) { transition-delay: 0.24s; }
+        .stagger-items > *:nth-child(7) { transition-delay: 0.28s; }
+        .stagger-items > *:nth-child(8) { transition-delay: 0.32s; }
+
+        /* Neon Glow Drop Shadows */
+        .neon-shadow-cyan {
+            filter: drop-shadow(0 0 25px rgba(6, 182, 212, 0.45));
+        }
+        .neon-glow-border {
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 0 18px rgba(6, 182, 212, 0.2), inset 0 0 12px rgba(6, 182, 212, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#070b14] text-slate-100 antialiased font-sans selection:bg-cyan-500 selection:text-black overflow-x-hidden relative">
+
+    <!-- CANVAS PARTICLES: Partikel neon interaktif bergerak pelan di latar belakang -->
+    <canvas id="glow-canvas"></canvas>
+
+    <!-- FLOATING GLOW ORBS: Lingkaran cahaya neon yang melayang perlahan -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-10 left-1/4 w-[420px] h-[420px] bg-cyan-500/10 rounded-full blur-[110px] animate-float"></div>
+        <div class="absolute top-1/2 -right-20 w-[460px] h-[460px] bg-teal-500/10 rounded-full blur-[130px] animate-float-delay"></div>
+        <div class="absolute bottom-20 left-10 w-[380px] h-[380px] bg-purple-500/10 rounded-full blur-[120px] animate-float-slow"></div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- NAVBAR UTAMA: Glow in the dark, Sticky, Login Sejajar di Kanan -->
+    <!-- ============================================================== -->
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#070b14]/85 backdrop-blur-xl border-b border-cyan-500/20 shadow-[0_4px_30px_rgba(0,0,0,0.7)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <!-- Logo & Identitas Sekolah -->
+            <div class="flex justify-between h-16 sm:h-18 items-center">
+                
+                <!-- Logo & Identitas Brand EKSENTRA -->
                 <a href="#hero" class="flex items-center gap-3 group">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo SMP Science Mutiara Insani" class="w-11 h-11 object-contain drop-shadow-sm group-hover:scale-105 transition-transform">
+                    <div class="relative">
+                        <div class="absolute -inset-1 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-400 opacity-60 blur-sm group-hover:opacity-100 transition-opacity"></div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="relative w-9 h-9 sm:w-10 sm:h-10 object-contain group-hover:scale-105 transition-transform">
+                    </div>
                     <div>
-                        <h1 class="font-bold text-lg text-navy-dark leading-tight font-heading group-hover:text-navy-base transition-colors">SMP Science Mutiara Insani</h1>
-                        <p class="text-[10px] text-gray-muted font-bold uppercase tracking-widest">Purwakarta, Jawa Barat • Terakreditasi A</p>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-lg sm:text-xl text-white font-heading tracking-wide">EKSENTRA</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                        </div>
+                        <p class="text-[9px] sm:text-[10px] text-cyan-300/80 font-semibold uppercase tracking-wider hidden sm:block">SMP Science Mutiara Insani</p>
                     </div>
                 </a>
 
-                <!-- Menu Navigasi Tengah (Nav-links dengan ScrollSpy) -->
-                <div class="hidden md:flex items-center space-x-8 text-sm">
-                    <a href="#hero" class="nav-link text-navy-base font-bold border-b-2 border-navy-base pb-1 transition-all">Beranda</a>
-                    <a href="#visi-misi" class="nav-link text-gray-muted font-medium hover:text-navy-base transition-all">Visi & Misi</a>
-                    <a href="#tujuan" class="nav-link text-gray-muted font-medium hover:text-navy-base transition-all">Tujuan Sekolah</a>
-                    <a href="#keunggulan" class="nav-link text-gray-muted font-medium hover:text-navy-base transition-all">Keunggulan</a>
+                <!-- Nav Menu Tengah (Sesuai Masing-masing Section) -->
+                <div class="hidden xl:flex items-center gap-1">
+                    <a href="#hero" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 transition-all">Beranda</a>
+                    <a href="#tentang" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Tentang</a>
+                    <a href="#tujuan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Tujuan</a>
+                    <a href="#keunggulan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Keunggulan</a>
+                    <a href="#profil-lokasi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Media & Lokasi</a>
+                    <a href="#galeri" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Galeri</a>
+                    <a href="#visi-misi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all">Visi & Misi</a>
                 </div>
 
-                <!-- Tombol Portal Ekstrakurikuler (Arah ke Login) -->
-                <div>
-                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 bg-gradient-to-r from-navy-dark to-navy-base hover:from-navy-base hover:to-navy-dark text-white-off px-5 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-navy-base/20 hover:shadow-lg active:scale-95 transition-all">
-                        <span>Portal Ekstrakurikuler</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <!-- Tombol Login Sejajar di Navbar (Glowing CTA) -->
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('login') }}" class="relative group inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-950 overflow-hidden transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(34,211,238,0.45)] hover:shadow-[0_0_30px_rgba(34,211,238,0.7)]">
+                        <!-- Background Glow Gradient -->
+                        <span class="absolute inset-0 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 group-hover:brightness-110 transition-all"></span>
+                        <span class="relative flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                            <span>Masuk Portal</span>
+                        </span>
                     </a>
+
+                    <!-- Mobile Menu Hamburger -->
+                    <button type="button" class="xl:hidden p-2 rounded-lg text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 border border-slate-800 transition-colors" onclick="toggleMobileMenu()" aria-label="Buka menu navigasi">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
                 </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="xl:hidden hidden border-t border-cyan-500/20 bg-[#070b14]/95 backdrop-blur-2xl">
+            <div class="px-4 py-3 space-y-1">
+                <a href="#hero" class="block px-3 py-2 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-500/10" onclick="closeMobileMenu()">Beranda</a>
+                <a href="#tentang" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Tentang Eksentra</a>
+                <a href="#tujuan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Tujuan Ekskul</a>
+                <a href="#keunggulan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Keunggulan</a>
+                <a href="#profil-lokasi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Media & Lokasi</a>
+                <a href="#galeri" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Galeri</a>
+                <a href="#visi-misi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10" onclick="closeMobileMenu()">Visi & Misi</a>
             </div>
         </div>
     </nav>
 
-    <!-- FUNGSI KODE: Hero Banner Utama (Navy Gradient) -->
-    <section id="hero" class="scroll-mt-20 relative bg-gradient-to-br from-navy-dark via-navy-base to-[#1e3a8a] text-white-off overflow-hidden">
-        <!-- Decorative Blurred Circles & Grid -->
-        <div class="absolute -right-20 -top-20 w-96 h-96 bg-navy-light/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-navy-light/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- CONTENT WRAPPER: Di atas Canvas -->
+    <main class="relative z-10 pt-16 sm:pt-18">
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-28 text-center">
-            <!-- Badge Tahun Ajaran -->
-            <div class="inline-flex items-center gap-2 bg-navy-dark/60 border border-navy-light/30 px-4 py-1.5 rounded-full mb-6 backdrop-blur-md shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-navy-light animate-pulse"></span>
-                <span class="text-xs font-bold text-navy-light tracking-wide font-mono">Tahun Ajaran 2026/2027 • SMP Science Mutiara Insani</span>
-            </div>
+        <!-- ============================================================== -->
+        <!-- 1. HERO SECTION: Nama EKSENTRA jelas di awal beranda -->
+        <!-- ============================================================== -->
+        <section id="hero" class="scroll-mt-20 py-12 sm:py-16 lg:py-20 flex items-center relative overflow-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
 
-            <!-- Judul Utama Hero Banner -->
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-heading text-white-off mb-6 leading-tight max-w-4xl mx-auto drop-shadow-md">
-                Membentuk Generasi Cerdas, <br>
-                <span class="text-navy-light underline decoration-navy-light/40 decoration-wavy">Berakhlak Mulia & Berprestasi</span>
-            </h1>
+                <!-- Badge Selamat Datang -->
+                <div class="reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-400/30 text-cyan-300 text-xs font-bold tracking-wider mb-5 shadow-[0_0_15px_rgba(6,182,212,0.25)] backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                    <span class="font-mono tracking-widest text-[11px] uppercase">PORTAL RESMI EKSTRAKURIKULER</span>
+                </div>
 
-            <p class="text-base sm:text-lg text-white-off/90 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Selamat datang di website resmi SMP Science Mutiara Insani Purwakarta. Mengintegrasikan kurikulum sains modern, nilai-nilai religius, dan teknologi informasi dalam mewujudkan masa depan peserta didik yang gemilang.
-            </p>
+                <!-- Penegasan Nama EKSENTRA di Awal Beranda -->
+                <h1 class="reveal text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-heading tracking-tight mb-3">
+                    <span class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 neon-shadow-cyan">
+                        EKSENTRA
+                    </span>
+                </h1>
 
-            <!-- CTA Buttons -->
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="{{ route('login') }}" class="inline-flex items-center gap-2.5 bg-white-pure hover:bg-white-off text-navy-dark px-7 py-3.5 rounded-xl font-bold text-sm transition-all shadow-xl hover:-translate-y-0.5 active:scale-95">
-                    <svg class="w-5 h-5 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                    <span>Masuk Portal Siswa & Pembina</span>
-                </a>
-            </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- FUNGSI KODE: Bagian VISI & MISI SEKOLAH -->
-    <section id="visi-misi" class="scroll-mt-20 py-14 bg-white-off">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            
-            <!-- Section Header -->
-            <div class="text-center max-w-3xl mx-auto">
-                <span class="text-xs font-bold text-navy-base uppercase tracking-widest bg-navy-light/10 px-3 py-1 rounded-md border border-navy-light/30 inline-block mb-3">
-                    Pilar Utama Sekolah
-                </span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-navy-dark font-heading mb-4">Visi & Misi Sekolah</h2>
-                <p class="text-gray-muted text-sm leading-relaxed">
-                    Pedoman dan landasan utama SMP Science Mutiara Insani dalam menyelenggarakan pendidikan berkualitas untuk membentuk generasi masa depan yang tangguh.
+                <!-- Slogan & Subjudul Resmi Dokumen -->
+                <p class="reveal text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-2 font-heading tracking-wide">
+                    Satu Portal, <span class="text-cyan-400 glow-text-cyan">Beragam Potensi.</span>
                 </p>
-            </div>
+                <p class="reveal text-xs sm:text-sm font-semibold text-cyan-300/80 uppercase tracking-widest mb-5 font-mono">
+                    Portal Ekstrakurikuler SMP Science Mutiara Insani
+                </p>
 
-            <!-- KARTU VISI (Besar & Menonjol) -->
-            <div class="bg-white rounded-3xl p-8 sm:p-10 border border-navy-light/30 shadow-md shadow-navy-base/5 relative overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:border-navy-base/40 transition-all duration-300">
-                <div class="w-2 h-full absolute left-0 top-0 bottom-0 bg-gradient-to-b from-navy-base to-navy-dark"></div>
+                <!-- Deskripsi Hero -->
+                <p class="reveal text-sm sm:text-base text-slate-300/90 max-w-2xl mx-auto leading-relaxed mb-8">
+                    Eksentra merupakan portal terintegrasi yang mendukung pengelolaan kegiatan ekstrakurikuler di SMP Science Mutiara Insani. Melalui Eksentra, pengelolaan administrasi ekstrakurikuler menjadi lebih terstruktur sehingga siswa dapat mengembangkan minat, menemukan bakat, dan menggali potensi diri melalui kegiatan non-akademik.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="reveal flex flex-wrap justify-center items-center gap-3.5">
+                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2.5 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 hover:brightness-110 text-slate-950 px-6 sm:px-7 py-3 rounded-xl font-extrabold text-sm transition-all shadow-[0_0_25px_rgba(34,211,238,0.5)] hover:-translate-y-0.5 active:scale-95">
+                        <span>Masuk ke Portal</span>
+                        <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="#tentang" class="inline-flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-cyan-300 px-6 sm:px-7 py-3 rounded-xl font-bold text-sm border border-cyan-500/20 hover:border-cyan-400/40 transition-all backdrop-blur-md hover:-translate-y-0.5">
+                        <span>Tentang Eksentra</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Mini Status Highlights (Kompak & Elegan) -->
+                <div class="reveal mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto">
+                    <div class="glow-card p-3.5 rounded-2xl text-center">
+                        <div class="text-xs text-cyan-300 font-mono">PENGGUNA</div>
+                        <div class="text-sm font-bold text-white mt-0.5">Admin • Pembina • Siswa</div>
+                    </div>
+                    <div class="glow-card p-3.5 rounded-2xl text-center">
+                        <div class="text-xs text-teal-300 font-mono">STATUS DATA</div>
+                        <div class="text-sm font-bold text-white mt-0.5">Terpusat & Digital</div>
+                    </div>
+                    <div class="glow-card p-3.5 rounded-2xl text-center">
+                        <div class="text-xs text-purple-300 font-mono">AKREDITASI</div>
+                        <div class="text-sm font-bold text-white mt-0.5">Terakreditasi A</div>
+                    </div>
+                    <div class="glow-card p-3.5 rounded-2xl text-center">
+                        <div class="text-xs text-amber-300 font-mono">LOKASI</div>
+                        <div class="text-sm font-bold text-white mt-0.5">Purwakarta, Jabar</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 2. TENTANG EKSENTRA (Kompak & Glow) -->
+        <!-- ============================================================== -->
+        <section id="tentang" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 
-                <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
-                    <div class="w-16 h-16 rounded-2xl bg-navy-light/10 text-navy-base flex items-center justify-center shrink-0 border border-navy-light/30 shadow-sm group-hover:scale-110 transition-transform">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="inline-block px-3 py-1 bg-navy-dark text-white-off text-[10px] font-bold uppercase tracking-widest rounded-md mb-2 font-mono">
-                            VISI SEKOLAH
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Left: Penjelasan Konsep Eksentra -->
+                    <div class="lg:col-span-7 reveal-left">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                            <span>Mengenal Eksentra</span>
                         </div>
-                        <blockquote class="text-xl sm:text-2xl font-bold text-navy-dark font-heading leading-relaxed">
-                            "Terwujudnya peserta didik yang memiliki jatidiri yang tangguh dan kompeten yang berlandaskan nilai-nilai science untuk masa depan gemilang."
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GRID MISI SEKOLAH (7 Kartu Interaktif) -->
-            <div>
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-8 h-8 rounded-lg bg-navy-base text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-navy-dark font-heading">7 Misi Utama Sekolah</h3>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @php
-                        $misiList = [
-                            "Menciptakan profil pelajar yang berakhlak mulia dan rajin beribadah.",
-                            "Menciptakan pembelajaran yang menarik, menyenangkan dan berkarakter yang mampu memfasilitasi pelajar sesuai bakat dan minatnya.",
-                            "Mendidik dan menjadikan siswa memiliki nilai sikap dan ketrampilan dibidang science.",
-                            "Menciptakan lingkungan sekolah yang bersih, asri dan ramah anak.",
-                            "Memfasilitasi pelajar untuk dapat mengembangkan potensi dan kemampuannya secara optimal.",
-                            "Mengembangkan sekolah berwawasan global yang didasari nilai-nilai budaya dan nilai-nilai luhur bangsa.",
-                            "Melibatkan orang tua dan masyarakat dalam proses pembelajaran dan pengembangan sekolah."
-                        ];
-                    @endphp
-
-                    @foreach($misiList as $index => $misi)
-                    <div class="bg-white p-6 rounded-2xl border border-navy-light/30 shadow-sm shadow-navy-base/5 hover:shadow-lg hover:border-navy-base/40 hover:-translate-y-1 transition-all duration-300 flex items-start gap-4 group">
-                        <div class="w-9 h-9 rounded-xl bg-navy-light/10 text-navy-base font-bold font-mono text-sm flex items-center justify-center shrink-0 border border-navy-light/30 group-hover:bg-navy-base group-hover:text-white transition-colors">
-                            0{{ $index + 1 }}
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white font-heading leading-tight mb-4">
+                            Sistem Terpadu Pengelolaan <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">Kegiatan Ekstrakurikuler</span>
+                        </h2>
+                        <div class="space-y-3 text-xs sm:text-sm text-slate-300/90 leading-relaxed">
+                            <p>
+                                <strong class="text-cyan-300 font-semibold">Eksentra</strong> adalah Portal Ekstrakurikuler SMP Science Mutiara Insani yang dirancang untuk mengintegrasikan berbagai proses pengelolaan kegiatan ekstrakurikuler dalam satu sistem terpusat.
+                            </p>
+                            <p>
+                                Portal ini memfasilitasi pengelolaan data ekstrakurikuler, pendaftaran siswa, verifikasi pembayaran, hingga pencatatan nilai kegiatan. Dengan pembagian akses bagi admin, pembina, dan siswa, Eksentra membantu menciptakan pengelolaan ekstrakurikuler yang lebih terorganisasi, efektif, dan mudah diakses.
+                            </p>
+                            <p class="text-cyan-300/90 font-medium pt-1">
+                                ✦ Eksentra hadir sebagai bagian dari upaya mendukung pengembangan minat dan bakat siswa di luar kegiatan akademik.
+                            </p>
                         </div>
-                        <p class="text-xs text-navy-dark font-semibold leading-relaxed pt-1">
-                            {{ $misi }}
-                        </p>
                     </div>
-                    @endforeach
+
+                    <!-- Right: Mini Grid Peran Pengguna (Kompak) -->
+                    <div class="lg:col-span-5 reveal-right">
+                        <div class="glow-card p-5 sm:p-6 rounded-3xl space-y-3.5 border border-cyan-500/20">
+                            <h3 class="text-sm font-bold text-white font-heading flex items-center justify-between border-b border-slate-800 pb-2.5">
+                                <span>3 Hak Akses Utama</span>
+                                <span class="text-[11px] text-cyan-400 font-mono">Eksentra System</span>
+                            </h3>
+
+                            <div class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 flex items-center justify-center shrink-0 text-sm font-bold">1</div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-white">Administrator</h4>
+                                    <p class="text-[11px] text-slate-400">Pengelolaan master data, pembagian kelas, persetujuan pendaftaran, dan verifikasi.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                                <div class="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-300 flex items-center justify-center shrink-0 text-sm font-bold">2</div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-white">Pembina Ekstrakurikuler</h4>
+                                    <p class="text-[11px] text-slate-400">Pemantauan anggota aktif, jadwal kegiatan, absensi, serta penilaian berkala.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center justify-center shrink-0 text-sm font-bold">3</div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-white">Siswa / Peserta Didik</h4>
+                                    <p class="text-[11px] text-slate-400">Eksplorasi katalog ekskul di dashboard, pendaftaran, konfirmasi pembayaran & riwayat nilai.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
+        </section>
 
-        </div>
-    </section>
-
-    <!-- FUNGSI KODE: Bagian TUJUAN SEKOLAH (10 Target Pendidikan) -->
-    <section id="tujuan" class="scroll-mt-20 py-14 bg-white-pure border-t border-b border-navy-light/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            
-            <!-- Section Header -->
-            <div class="text-center max-w-3xl mx-auto">
-                <span class="text-xs font-bold text-navy-base uppercase tracking-widest bg-navy-light/10 px-3 py-1 rounded-md border border-navy-light/30 inline-block mb-3">
-                    Target & Komitmen
-                </span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-navy-dark font-heading mb-4">Tujuan Pendidikan Sekolah</h2>
-                <p class="text-gray-muted text-sm leading-relaxed">
-                    10 Tujuan strategis SMP Science Mutiara Insani untuk menghasilkan lulusan yang berintegritas dan siap menghadapi perkembangan zaman.
-                </p>
-            </div>
-
-            <!-- GRID 10 TUJUAN SEKOLAH -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @php
-                    $tujuanList = [
-                        "Merancang pembelajaran yang mengedepankan ciri khas sekolah dan daerah dalam nuansa kebhinekaan global yang harmonis.",
-                        "Merancang dan melaksanakan program-program pendidikan kreatif dan inovatif yang mencakup pembelajaran berbasis proyek, pengembangan keterampilan berpikir kritis, dan stimulasi kreativitas peserta didik.",
-                        "Meningkatkan kemampuan berbahasa inggris peserta didik melalui program-program pendidikan.",
-                        "Membentuk peserta didik yang memiliki kemampuan daya saing, berkarakter, berprestasi dan memiliki pribadi yang beriman, rajin dan taat beribadah serta saling menghargai perbedaan dan mencintai lingkungan dan bangsanya.",
-                        "Meningkatkan prestasi akademis peserta didik dan pengembangan kemampuan berpikir kritis melalui penerapan metode-metode pembelajaran yang efektif dan relevan.",
-                        "Meningkatkan tingkat keterlibatan peserta didik dalam kegiatan pembelajaran dan meningkatkan kepuasan peserta didik terhadap proses pendidikan secara keseluruhan.",
-                        "Menghasilkan lulusan yang mampu mengimplementasikan Profil Pelajar Pancasila dalam kehidupan nyata yang menguasai ilmu pengetahuan dan teknologi.",
-                        "Menjadi pemimpin bagi diri dan temannya untuk menjadi pribadi yang bernalar kritis, tangguh, percaya diri dan bangga dalam kegotong-royongan.",
-                        "Menguasai kecakapan dalam berkomunikasi sosial dan berjiwa kompetitif, kreatif dan mandiri yang tetap menjunjung budaya lokal.",
-                        "Mempunyai life skill yang mampu berdaptasi dengan perkembangan jaman."
-                    ];
-                @endphp
-
-                @foreach($tujuanList as $index => $tujuan)
-                <div class="bg-white-off p-6 rounded-2xl border border-navy-light/30 shadow-sm hover:shadow-md hover:border-navy-base/40 hover:-translate-y-1 transition-all duration-300 flex items-start gap-4 group">
-                    <div class="w-10 h-10 rounded-xl bg-navy-dark text-white-off font-bold font-mono text-xs flex items-center justify-center shrink-0 shadow-sm border border-navy-light/30 group-hover:scale-105 transition-transform">
-                        {{ sprintf("%02d", $index + 1) }}
-                    </div>
-                    <div class="pt-0.5">
-                        <h4 class="text-sm font-bold text-navy-dark font-heading mb-1 group-hover:text-navy-base transition-colors">Tujuan {{ $index + 1 }}</h4>
-                        <p class="text-xs text-gray-muted font-medium leading-relaxed">
-                            {{ $tujuan }}
-                        </p>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-        </div>
-    </section>
-
-    <!-- FUNGSI KODE: Bagian KEUNGGULAN SEKOLAH -->
-    <section id="keunggulan" class="scroll-mt-20 py-14 bg-white-off">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            
-            <div class="text-center max-w-3xl mx-auto">
-                <span class="text-xs font-bold text-navy-base uppercase tracking-widest bg-navy-light/10 px-3 py-1 rounded-md border border-navy-light/30 inline-block mb-3">
-                    Keunggulan Sekolah
-                </span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-navy-dark font-heading mb-4">Mengapa SMP Science Mutiara Insani?</h2>
-                <p class="text-gray-muted text-sm leading-relaxed">
-                    Fasilitas dan pendekatan pembelajaran terbaik yang dirancang untuk mendukung potensi peserta didik secara optimal.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Keunggulan 1 -->
-                <div class="bg-white p-7 rounded-2xl border border-navy-light/30 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center group">
-                    <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-light/10 text-navy-base flex items-center justify-center mb-5 border border-navy-light/30 group-hover:scale-110 group-hover:bg-navy-base group-hover:text-white transition-all shadow-sm">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    </div>
-                    <h3 class="font-bold text-navy-dark text-base font-heading mb-2">Kurikulum Science</h3>
-                    <p class="text-xs text-gray-muted leading-relaxed font-medium">Pembelajaran sains interaktif, praktik laboratorium, dan pengembangan daya nalar kritis.</p>
-                </div>
-
-                <!-- Keunggulan 2 -->
-                <div class="bg-white p-7 rounded-2xl border border-navy-light/30 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center group">
-                    <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 border border-emerald-200 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 16.5 5c1.747 0 3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                    </div>
-                    <h3 class="font-bold text-navy-dark text-base font-heading mb-2">Karakter & Religius</h3>
-                    <p class="text-xs text-gray-muted leading-relaxed font-medium">Penanaman akhlak mulia, pembiasaan ibadah harian, dan toleransi kebhinekaan.</p>
-                </div>
-
-                <!-- Keunggulan 3 -->
-                <div class="bg-white p-7 rounded-2xl border border-navy-light/30 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center group">
-                    <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-5 border border-amber-200 group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition-all shadow-sm">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="font-bold text-navy-dark text-base font-heading mb-2">Portal Digital</h3>
-                    <p class="text-xs text-gray-muted leading-relaxed font-medium">Integrasi teknologi informasi dalam pemantauan akademik, jadwal, dan administrasi.</p>
-                </div>
-
-                <!-- Keunggulan 4 -->
-                <div class="bg-white p-7 rounded-2xl border border-navy-light/30 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center group">
-                    <div class="w-14 h-14 mx-auto rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-5 border border-purple-200 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-sm">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                    </div>
-                    <h3 class="font-bold text-navy-dark text-base font-heading mb-2">Ekstrakurikuler & Bakat</h3>
-                    <p class="text-xs text-gray-muted leading-relaxed font-medium">Wadah penelusuran dan pembinaan bakat seni, olahraga, dan sains secara intensif.</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- FUNGSI KODE: Section Video Profil & Live Map Lokasi Sekolah -->
-    <section class="py-14 bg-white-off border-t border-navy-light/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <!-- ============================================================== -->
+        <!-- 3. TUJUAN PENGEMBANGAN EKSKUL (Kompak 3 Card) -->
+        <!-- ============================================================== -->
+        <section id="tujuan" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 
-                <!-- Card 1: Video Profil Sekolah (YouTube Embed) -->
-                <div class="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-6 border border-navy-light/30 shadow-sm shadow-navy-base/5 hover:shadow-lg hover:border-navy-base/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group min-h-[280px]">
-                    <div class="flex items-center justify-between gap-3 mb-3">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-200 shadow-sm group-hover:scale-105 transition-transform">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base text-navy-dark font-heading group-hover:text-navy-base transition-colors">Video Profil Sekolah</h4>
-                                <p class="text-xs text-gray-muted font-medium">SMP Science Mutiara Insani Purwakarta</p>
-                            </div>
-                        </div>
-                        <a href="https://youtu.be/NYeyeyumWPA?si=ncWARGMhPVnf24Wv" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 text-xs font-semibold rounded-xl border border-red-200 transition-all shrink-0 shadow-sm">
-                            <span>YouTube</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                        </a>
+                <div class="text-center max-w-2xl mx-auto mb-8 reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
+                        <span>Tujuan Pengembangan</span>
                     </div>
-
-                    <!-- YouTube Embed Iframe -->
-                    <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-inner flex-1 min-h-[170px] relative aspect-video">
-                        <iframe 
-                            src="https://www.youtube.com/embed/NYeyeyumWPA" 
-                            title="Video Profil SMP Science Mutiara Insani" 
-                            class="w-full h-full border-0 rounded-2xl" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                </div>
-
-                <!-- Card 2: Live Map Lokasi SMP Science Mutiara Insani (Samping Card CTA) -->
-                <div class="lg:col-span-6 bg-white rounded-3xl p-5 sm:p-6 border border-navy-light/30 shadow-sm shadow-navy-base/5 hover:shadow-lg hover:border-navy-base/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group min-h-[280px]">
-                    <div class="flex items-center justify-between gap-3 mb-3">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-xl bg-navy-light/10 flex items-center justify-center text-navy-base shrink-0 border border-navy-light/30 shadow-sm group-hover:scale-105 transition-transform">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base text-navy-dark font-heading group-hover:text-navy-base transition-colors">Lokasi SMP Science Mutiara Insani</h4>
-                                <p class="text-xs text-gray-muted font-medium">Munjuljaya, Purwakarta, Jawa Barat</p>
-                            </div>
-                        </div>
-                        <a href="https://www.google.com/maps/place/SMP+Science+Mutiara+Insani/@-6.5312535,107.4705822,17z/data=!3m1!4b1!4m6!3m5!1s0x2e690f71de365203:0x25ee54b1bd5ccdb1!8m2!3d-6.5312535!4d107.4731571!16s%2Fg%2F11s53ys3pp?entry=ttu&g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-navy-base/10 hover:bg-navy-base hover:text-white-pure text-navy-base text-xs font-semibold rounded-xl transition-all shrink-0 shadow-sm">
-                            <span>Google Maps</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                        </a>
-                    </div>
-
-                    <!-- Embed Live Interactive Google Maps -->
-                    <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-inner flex-1 min-h-[170px] relative">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.7840131971714!2d107.4705822!3d-6.5312535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e690f71de365203%3A0x25ee54b1bd5ccdb1!2sSMP%20Science%20Mutiara%20Insani!5e0!3m2!1sid!2sid!4v1710000000000!5m2!1sid!2sid" 
-                            class="w-full h-full border-0 transition-all duration-300 min-h-[170px]" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- FUNGSI KODE: Footer Utama Halaman Publik -->
-    <footer class="bg-navy-dark text-white-off py-12 border-t border-navy-light/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-10 border-b border-navy-light/20">
-                <!-- Kolom 1: Profil Sekolah & Logo -->
-                <div class="md:col-span-5 space-y-4">
-                    <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo SMP Science Mutiara Insani" class="w-12 h-12 object-contain drop-shadow-md">
-                        <div>
-                            <h4 class="font-bold text-lg font-heading text-white-pure">SMP Science Mutiara Insani</h4>
-                            <p class="text-xs text-white-off/80 font-medium">Terakreditasi A • Purwakarta, Jawa Barat</p>
-                        </div>
-                    </div>
-                    <p class="text-xs text-white-off/90 leading-relaxed max-w-sm">
-                        Sekolah Menengah Pertama berbasis Sains & Karakter Islami di Kabupaten Purwakarta, mencetak generasi berprestasi, berilmu, dan berakhlak mulia.
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+                        Tujuan Pengembangan <span class="text-cyan-400">Ekskul</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
+                        Mendukung pengelolaan kegiatan ekstrakurikuler secara terpusat, terstruktur, dan efisien.
                     </p>
                 </div>
 
-                <!-- Kolom 2: Detail Lokasi & Kontak -->
-                <div class="md:col-span-4 space-y-3">
-                    <h5 class="text-sm font-bold text-white-pure font-heading tracking-wide uppercase">Alamat & Lokasi</h5>
-                    <div class="space-y-2.5 text-xs text-white-off/90">
-                        <div class="flex items-start gap-2.5">
-                            <svg class="w-4 h-4 text-white-off shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            <span class="text-white-off font-medium">Munjuljaya, Kec. Purwakarta, Kabupaten Purwakarta, Jawa Barat 41117</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 stagger-items">
+                    <!-- Tujuan 1 -->
+                    <div class="glow-card p-6 rounded-2xl reveal group">
+                        <div class="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        </div>
+                        <h3 class="text-base font-bold text-white font-heading mb-2">Pengelolaan Terpusat</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Proses administrasi dapat dilakukan dengan lebih efisien, informasi kegiatan dapat dikelola secara terorganisasi, dan perkembangan siswa dapat dicatat dengan lebih baik.
+                        </p>
+                    </div>
+
+                    <!-- Tujuan 2 -->
+                    <div class="glow-card p-6 rounded-2xl reveal group">
+                        <div class="w-11 h-11 rounded-xl bg-teal-500/10 border border-teal-500/30 text-teal-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-base font-bold text-white font-heading mb-2">Penelusuran Minat & Bakat</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Menjadi sarana pendukung bagi siswa untuk mengenali minat, menemukan bakat, dan mengembangkan potensi diri melalui kegiatan non-akademik sekolah.
+                        </p>
+                    </div>
+
+                    <!-- Tujuan 3 -->
+                    <div class="glow-card p-6 rounded-2xl reveal group">
+                        <div class="w-11 h-11 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <h3 class="text-base font-bold text-white font-heading mb-2">Kualitas & Evaluasi Terukur</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Pencatatan nilai dan evaluasi oleh pembina ekskul tersimpan terstruktur sehingga mempermudah rekapitulasi prestasi siswa dan pelaporan resmi sekolah.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 4. KEUNGGULAN EKSENTRA (4 Kartu Glow) -->
+        <!-- ============================================================== -->
+        <section id="keunggulan" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-2xl mx-auto mb-8 reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
+                        <span>Poin Keunggulan</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+                        Keunggulan <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">Eksentra</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
+                        Fondasi keunggulan sistem yang dirancang untuk kelancaran kegiatan ekstrakurikuler.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-items">
+                    <!-- Keunggulan 1 -->
+                    <div class="glow-card p-5 rounded-2xl reveal group text-left">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-white font-heading mb-1.5">Pengelolaan Terpusat</h3>
+                        <p class="text-xs text-slate-300/80 leading-relaxed">
+                            Seluruh kebutuhan administrasi ekstrakurikuler terintegrasi dalam satu portal sehingga data lebih mudah dikelola dan ditelusuri.
+                        </p>
+                    </div>
+
+                    <!-- Keunggulan 2 -->
+                    <div class="glow-card p-5 rounded-2xl reveal group text-left">
+                        <div class="w-10 h-10 rounded-xl bg-teal-500/15 border border-teal-400/40 text-teal-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-white font-heading mb-1.5">Administrasi Terstruktur</h3>
+                        <p class="text-xs text-slate-300/80 leading-relaxed">
+                            Pengelolaan pendaftaran, verifikasi pembayaran, dan pencatatan nilai dilakukan melalui alur yang lebih terorganisasi.
+                        </p>
+                    </div>
+
+                    <!-- Keunggulan 3 -->
+                    <div class="glow-card p-5 rounded-2xl reveal group text-left">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-400/40 text-purple-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-white font-heading mb-1.5">Akses Sesuai Peran</h3>
+                        <p class="text-xs text-slate-300/80 leading-relaxed">
+                            Admin, pembina, dan siswa memperoleh akses fitur sesuai tanggung jawab dan kebutuhan masing-masing.
+                        </p>
+                    </div>
+
+                    <!-- Keunggulan 4 -->
+                    <div class="glow-card p-5 rounded-2xl reveal group text-left">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-white font-heading mb-1.5">Mendukung Potensi Siswa</h3>
+                        <p class="text-xs text-slate-300/80 leading-relaxed">
+                            Membantu sekolah mengelola kegiatan ekstrakurikuler yang menjadi wadah pengembangan minat, bakat, dan kemampuan siswa.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 5. PROFIL, VIDEO & LOKASI SEKOLAH (Ukuran Pas & Kompak) -->
+        <!-- ============================================================== -->
+        <section id="profil-lokasi" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-2xl mx-auto mb-8 reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
+                        <span>Mengenal Lingkungan Kami</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+                        Video Profil & <span class="text-cyan-400">Lokasi Sekolah</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
+                        SMP Science Mutiara Insani — lingkungan pendidikan untuk belajar, berkolaborasi, dan mengembangkan potensi diri.
+                    </p>
+                </div>
+
+                <!-- 2-Column Grid: Video Profil & Live Maps (Ukuran Proporsional & Rapi) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+                    
+                    <!-- Kartu Video Profil (Kompak, Height Terkontrol) -->
+                    <div class="glow-card p-4 sm:p-5 rounded-2xl reveal-left flex flex-col justify-between">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xs sm:text-sm font-bold text-white">Video Profil Sekolah</h3>
+                                    <p class="text-[11px] text-slate-400">SMP Science Mutiara Insani</p>
+                                </div>
+                            </div>
+                            <a href="https://youtu.be/NYeyeyumWPA?si=ncWARGMhPVnf24Wv" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors">
+                                <span>Buka YouTube</span>
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
                         </div>
 
-                        <div class="flex items-center gap-2.5">
-                            <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-white-off font-medium">Jam Operasional: Senin - Jum'at (Tutup pukul 14.40 WIB)</span>
-                        </div>
-
-                        <div class="flex items-center gap-2.5">
-                            <svg class="w-4 h-4 text-white-off shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m-9 9a9 9 0 019-9"/>
-                            </svg>
-                            <a href="https://smpsciencemutiarainsani.com" target="_blank" class="text-white-off font-medium hover:text-white-pure transition-colors underline decoration-white-off/40">smpsciencemutiarainsani.com</a>
+                        <!-- Iframe Video (Kompak aspect ratio, tinggi terkontrol ~220px) -->
+                        <div class="rounded-xl overflow-hidden border border-slate-700/60 shadow-inner bg-black/40 h-52 sm:h-56">
+                            <iframe
+                                src="https://www.youtube.com/embed/NYeyeyumWPA"
+                                title="Video Profil SMP Science Mutiara Insani"
+                                class="w-full h-full border-0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                            </iframe>
                         </div>
                     </div>
 
-                    <div class="pt-1 flex flex-col gap-2">
-                        <a href="https://www.google.com/maps/place/SMP+Science+Mutiara+Insani/@-6.5312535,107.4705822,17z/data=!3m1!4b1!4m6!3m5!1s0x2e690f71de365203:0x25ee54b1bd5ccdb1!8m2!3d-6.5312535!4d107.4731571!16s%2Fg%2F11s53ys3pp?entry=ttu&g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-1.5 bg-navy-base/80 hover:bg-navy-base text-white-pure text-xs font-semibold rounded-lg border border-navy-light/40 transition-all shadow-md w-fit">
-                            <svg class="w-3.5 h-3.5 text-red-400" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                            </svg>
-                            <span>Buka di Google Maps</span>
-                            <svg class="w-3 h-3 text-white-off" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    <!-- Kartu Live Google Maps (Kompak, Height Terkontrol) -->
+                    <div class="glow-card p-4 sm:p-5 rounded-2xl reveal-right flex flex-col justify-between">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xs sm:text-sm font-bold text-white">Temukan Lokasi Kami</h3>
+                                    <p class="text-[11px] text-slate-400">Munjuljaya, Purwakarta</p>
+                                </div>
+                            </div>
+                            <a href="https://www.google.com/maps/place/SMP+Science+Mutiara+Insani/@-6.5312535,107.4705822,17z/data=!3m1!4b1!4m6!3m5!1s0x2e690f71de365203:0x25ee54b1bd5ccdb1!8m2!3d-6.5312535!4d107.4731571!16s%2Fg%2F11s53ys3pp?entry=ttu&g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors">
+                                <span>Buka Maps</span>
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </div>
+
+                        <!-- Iframe Google Maps (Kompak, tinggi terkontrol ~220px) -->
+                        <div class="rounded-xl overflow-hidden border border-slate-700/60 shadow-inner bg-black/40 h-52 sm:h-56">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.7840131971714!2d107.4705822!3d-6.5312535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e690f71de365203%3A0x25ee54b1bd5ccdb1!2sSMP%20Science%20Mutiara%20Insani!5e0!3m2!1sid!2sid!4v1710000000000!5m2!1sid!2sid"
+                                class="w-full h-full border-0"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Info Sekolah Bar (Rapi & Kompak di Bawah Video/Peta) -->
+                <div class="reveal mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="glow-card p-3 rounded-xl flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-300 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                        </div>
+                        <span class="text-[11px] text-slate-300 truncate">Munjuljaya, Purwakarta, Jawa Barat 41117</span>
+                    </div>
+
+                    <div class="glow-card p-3 rounded-xl flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-teal-500/10 text-teal-300 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <span class="text-[11px] text-slate-300 truncate">Senin - Jum'at (Tutup 14.40 WIB)</span>
+                    </div>
+
+                    <div class="glow-card p-3 rounded-xl flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-300 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m-9 9a9 9 0 019-9"/></svg>
+                        </div>
+                        <a href="https://smpsciencemutiarainsani.com" target="_blank" class="text-[11px] text-cyan-300 hover:underline truncate">smpsciencemutiarainsani.com</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 6. GALERI KEGIATAN (Placeholder Rapi & Kompak) -->
+        <!-- ============================================================== -->
+        <section id="galeri" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-2xl mx-auto mb-8 reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
+                        <span>Cerita dalam Setiap Kegiatan</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+                        Galeri <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">Kegiatan</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
+                        Jelajahi berbagai momen kegiatan ekstrakurikuler yang menjadi bagian dari perjalanan siswa SMP Science Mutiara Insani.
+                    </p>
+                </div>
+
+                <!-- 8 Kompak Placeholder Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 stagger-items">
+                    @php
+                        $galeriItems = [
+                            ['label' => 'Sains & Robotik', 'cat' => 'Akademik & Riset'],
+                            ['label' => 'Pramuka & Kepemimpinan', 'cat' => 'Karakter & Disiplin'],
+                            ['label' => 'Olahraga & Futsal', 'cat' => 'Kebugaran & Sport'],
+                            ['label' => 'Seni Musik & Vokal', 'cat' => 'Kreativitas & Seni'],
+                            ['label' => 'PMR & Kemanusiaan', 'cat' => 'Sosial & Kesehatan'],
+                            ['label' => 'English Club', 'cat' => 'Bahasa & Wawasan'],
+                            ['label' => 'Tahfidz & Keislaman', 'cat' => 'Religius & Akhlak'],
+                            ['label' => 'Dokumentasi Acara', 'cat' => 'Momen Bersama'],
+                        ];
+                    @endphp
+
+                    @foreach($galeriItems as $item)
+                    <div class="glow-card p-4 rounded-2xl reveal group border border-slate-800 hover:border-cyan-400/40 transition-all flex flex-col justify-between h-36">
+                        <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cyan-400/80 font-mono">{{ $item['cat'] }}</span>
+                            <h4 class="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5 leading-snug">{{ $item['label'] }}</h4>
+                            <p class="text-[10px] text-slate-500 mt-1">Dokumentasi menyusul</p>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 7. VISI & MISI SEKOLAH (Modern Glow Card) -->
+        <!-- ============================================================== -->
+        <section id="visi-misi" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                
+                <div class="text-center max-w-2xl mx-auto reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
+                        <span>Pilar Utama Sekolah</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+                        Visi & <span class="text-cyan-400">Misi</span> Sekolah
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
+                        Pedoman dan landasan utama SMP Science Mutiara Insani menyelenggarakan pendidikan berkualitas.
+                    </p>
+                </div>
+
+                <!-- Kartu Visi (Luminous Highlight) -->
+                <div class="glow-card p-6 sm:p-8 rounded-3xl reveal border-cyan-400/30 relative overflow-hidden group">
+                    <div class="absolute -right-16 -top-16 w-56 h-56 bg-cyan-500/15 rounded-full blur-[80px]"></div>
+                    <div class="relative flex flex-col md:flex-row items-start md:items-center gap-5">
+                        <div class="w-13 h-13 rounded-2xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </div>
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded bg-cyan-950/70 border border-cyan-500/40 text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-widest mb-2">
+                                VISI SEKOLAH
+                            </span>
+                            <blockquote class="text-base sm:text-lg md:text-xl font-bold text-white font-heading leading-relaxed">
+                                "Terwujudnya peserta didik yang memiliki jatidiri yang tangguh dan kompeten yang berlandaskan nilai-nilai science untuk masa depan gemilang."
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7 Misi Sekolah (Grid Kompak) -->
+                <div>
+                    <h3 class="text-sm font-bold text-cyan-300 font-heading mb-4 reveal flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                        <span>7 Misi Utama Sekolah</span>
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 stagger-items">
+                        @php
+                            $misiList = [
+                                "Menciptakan profil pelajar yang berakhlak mulia dan rajin beribadah.",
+                                "Menciptakan pembelajaran yang menarik, menyenangkan dan berkarakter yang mampu memfasilitasi pelajar sesuai bakat dan minatnya.",
+                                "Mendidik dan menjadikan siswa memiliki nilai sikap dan ketrampilan dibidang science.",
+                                "Menciptakan lingkungan sekolah yang bersih, asri dan ramah anak.",
+                                "Memfasilitasi pelajar untuk dapat mengembangkan potensi dan kemampuannya secara optimal.",
+                                "Mengembangkan sekolah berwawasan global yang didasari nilai-nilai budaya dan nilai-nilai luhur bangsa.",
+                                "Melibatkan orang tua dan masyarakat dalam proses pembelajaran dan pengembangan sekolah."
+                            ];
+                        @endphp
+
+                        @foreach($misiList as $index => $misi)
+                        <div class="glow-card p-4 rounded-xl reveal flex items-start gap-3 border border-slate-800">
+                            <span class="w-6 h-6 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                                0{{ $index + 1 }}
+                            </span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                                {{ $misi }}
+                            </p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 8. AJAKAN MASUK KE PORTAL (Call To Action Kompak) -->
+        <!-- ============================================================== -->
+        <section class="py-12 sm:py-16 border-t border-cyan-500/10 relative overflow-hidden">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+                <div class="glow-card p-8 sm:p-10 rounded-3xl border-cyan-500/40 relative overflow-hidden">
+                    <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-[90px]"></div>
+                    <div class="relative">
+                        <span class="inline-block px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider mb-4">
+                            MASUK KE PORTAL
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white font-heading mb-3">
+                            Saatnya Jelajahi Potensimu
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-6 leading-relaxed">
+                            Mulai perjalananmu dalam mengenali minat, menemukan bakat, dan mengembangkan potensi melalui kegiatan ekstrakurikuler bersama Eksentra.
+                        </p>
+                        <a href="{{ route('login') }}" class="inline-flex items-center gap-2.5 bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 hover:brightness-110 text-slate-950 px-7 py-3.5 rounded-xl font-extrabold text-sm transition-all shadow-[0_0_25px_rgba(34,211,238,0.5)] hover:-translate-y-0.5 active:scale-95">
+                            <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                            <span>Masuk ke Portal Eksentra</span>
                         </a>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Kolom 3: Navigasi Halaman -->
-                <div class="md:col-span-3 space-y-3">
-                    <h5 class="text-sm font-bold text-white-pure font-heading tracking-wide uppercase">Navigasi</h5>
-                    <ul class="space-y-2 text-xs text-white-off/90 font-medium">
-                        <li><a href="#hero" class="hover:text-white-pure transition-colors">Beranda Utama</a></li>
-                        <li><a href="#visi-misi" class="hover:text-white-pure transition-colors">Visi & Misi</a></li>
-                        <li><a href="#tujuan" class="hover:text-white-pure transition-colors">Tujuan Sekolah</a></li>
-                        <li><a href="#keunggulan" class="hover:text-white-pure transition-colors">Keunggulan Sekolah</a></li>
-                        <li><a href="{{ route('login') }}" class="hover:text-white-pure transition-colors font-bold text-amber-300">Login Portal Sistem</a></li>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- 9. FOOTER: Identitas Eksentra & Copyright Dinamis -->
+    <!-- ============================================================== -->
+    <footer class="bg-[#05080f] text-slate-300 py-10 border-t border-slate-800 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-slate-800/80">
+                
+                <!-- Kolom 1: Nama & Deskripsi Eksentra -->
+                <div class="md:col-span-5 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-9 h-9 object-contain">
+                        <div>
+                            <h4 class="font-extrabold text-base text-white font-heading">Eksentra</h4>
+                            <p class="text-[10px] text-cyan-400 font-semibold">Portal Ekstrakurikuler SMP Science Mutiara Insani</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+                        Satu portal untuk mendukung pengelolaan kegiatan ekstrakurikuler yang terintegrasi dan terstruktur.
+                    </p>
+                </div>
+
+                <!-- Kolom 2: Info Lokasi -->
+                <div class="md:col-span-4 space-y-2">
+                    <h5 class="text-xs font-bold text-white uppercase tracking-wider font-mono">Alamat Sekolah</h5>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Munjuljaya, Kec. Purwakarta, Kabupaten Purwakarta, Jawa Barat 41117
+                    </p>
+                    <p class="text-xs text-cyan-400/90 font-medium">
+                        Jam Operasional: Senin - Jum'at (Tutup 14.40 WIB)
+                    </p>
+                </div>
+
+                <!-- Kolom 3: Tautan Navigasi -->
+                <div class="md:col-span-3 space-y-2">
+                    <h5 class="text-xs font-bold text-white uppercase tracking-wider font-mono">Navigasi</h5>
+                    <ul class="space-y-1.5 text-xs text-slate-400">
+                        <li><a href="#hero" class="hover:text-cyan-300 transition-colors">Beranda</a></li>
+                        <li><a href="#tentang" class="hover:text-cyan-300 transition-colors">Tentang Eksentra</a></li>
+                        <li><a href="#tujuan" class="hover:text-cyan-300 transition-colors">Tujuan Ekskul</a></li>
+                        <li><a href="#keunggulan" class="hover:text-cyan-300 transition-colors">Keunggulan</a></li>
+                        <li><a href="#profil-lokasi" class="hover:text-cyan-300 transition-colors">Video & Lokasi</a></li>
+                        <li><a href="{{ route('login') }}" class="text-cyan-400 font-bold hover:text-cyan-300 transition-colors">Masuk ke Portal →</a></li>
                     </ul>
                 </div>
+
             </div>
 
-            <!-- Copyright Footer (Teks Tengah) -->
-            <div class="pt-6 text-center text-xs text-white-off/80 font-medium">
-                <p>© 2026 SMP Science Mutiara Insani Purwakarta. Seluruh hak cipta dilindungi undang-undang.</p>
+            <!-- Copyright Dinamis -->
+            <div class="pt-6 text-center text-xs text-slate-500">
+                <p>© {{ date('Y') }} SMP Science Mutiara Insani. Seluruh hak cipta dilindungi.</p>
             </div>
         </div>
     </footer>
 
-    <!-- FUNGSI KODE: ScrollSpy untuk memindahkan garis bawah (active indicator) navbar sesuai section yang aktif -->
+    <!-- ============================================================== -->
+    <!-- INTERAKTIF JAVASCRIPT: Background Particles, ScrollSpy, Reveal -->
+    <!-- ============================================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            
+            // 1. Interactive Glow Particles Canvas (Kaya ada yang gerak-gerak glow in the dark)
+            const canvas = document.getElementById('glow-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let width = canvas.width = window.innerWidth;
+                let height = canvas.height = window.innerHeight;
+
+                window.addEventListener('resize', () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                });
+
+                // Buat partikel bercahaya
+                const particleCount = Math.min(Math.floor(window.innerWidth / 20), 45);
+                const particles = [];
+
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 2 + 1,
+                        vx: (Math.random() - 0.5) * 0.45,
+                        vy: (Math.random() - 0.5) * 0.45,
+                        alpha: Math.random() * 0.5 + 0.2,
+                        color: Math.random() > 0.4 ? 'rgba(34, 211, 238, ' : 'rgba(45, 212, 191, '
+                    });
+                }
+
+                function animateParticles() {
+                    ctx.clearRect(0, 0, width, height);
+
+                    // Gambar garis tipis penghubung partikel yang berdekatan
+                    for (let i = 0; i < particles.length; i++) {
+                        for (let j = i + 1; j < particles.length; j++) {
+                            const dx = particles[i].x - particles[j].x;
+                            const dy = particles[i].y - particles[j].y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < 120) {
+                                ctx.strokeStyle = `rgba(34, 211, 238, ${0.12 * (1 - dist / 120)})`;
+                                ctx.lineWidth = 0.6;
+                                ctx.beginPath();
+                                ctx.moveTo(particles[i].x, particles[i].y);
+                                ctx.lineTo(particles[j].x, particles[j].y);
+                                ctx.stroke();
+                            }
+                        }
+                    }
+
+                    // Gambar setiap partikel bercahaya
+                    particles.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        if (p.x < 0) p.x = width;
+                        if (p.x > width) p.x = 0;
+                        if (p.y < 0) p.y = height;
+                        if (p.y > height) p.y = 0;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color + p.alpha + ')';
+                        ctx.shadowBlur = 8;
+                        ctx.shadowColor = 'rgba(34, 211, 238, 0.6)';
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    });
+
+                    requestAnimationFrame(animateParticles);
+                }
+
+                animateParticles();
+            }
+
+            // 2. Intersection Observer untuk Reveal Animation
+            const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+            revealElements.forEach(el => observer.observe(el));
+
+            // 3. Navbar ScrollSpy: Sesuai Section yang Aktif
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.nav-link');
+            const nav = document.getElementById('main-nav');
 
-            const activeClasses = ['text-navy-base', 'font-bold', 'border-b-2', 'border-navy-base', 'pb-1'];
-            const inactiveClasses = ['text-gray-muted', 'font-medium'];
+            const activeClass = ['text-cyan-300', 'bg-cyan-500/10', 'border', 'border-cyan-500/30'];
+            const inactiveClass = ['text-slate-300'];
 
-            function updateActiveLink() {
-                let currentSection = 'hero';
-                const scrollPosition = window.scrollY + 85; // offset presisi sesuai tinggi sticky navbar 80px
+            function updateScrollSpy() {
+                const scrollPos = window.scrollY + 120;
+                let currentId = 'hero';
 
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.offsetHeight;
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                        currentSection = section.getAttribute('id');
+                sections.forEach(sec => {
+                    const top = sec.offsetTop;
+                    const height = sec.offsetHeight;
+                    if (scrollPos >= top && scrollPos < top + height) {
+                        currentId = sec.getAttribute('id');
                     }
                 });
 
                 navLinks.forEach(link => {
                     const href = link.getAttribute('href').replace('#', '');
-                    if (href === currentSection) {
-                        link.classList.remove(...inactiveClasses);
-                        link.classList.add(...activeClasses);
+                    if (href === currentId) {
+                        link.classList.remove(...inactiveClass);
+                        link.classList.add(...activeClass);
                     } else {
-                        link.classList.remove(...activeClasses);
-                        link.classList.add(...inactiveClasses);
+                        link.classList.remove(...activeClass);
+                        link.classList.add(...inactiveClass);
                     }
                 });
             }
 
-            window.addEventListener('scroll', updateActiveLink);
-            updateActiveLink();
+            window.addEventListener('scroll', updateScrollSpy, { passive: true });
+            updateScrollSpy();
         });
+
+        // 4. Mobile Menu Handlers
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.add('hidden');
+        }
     </script>
 
 </body>
