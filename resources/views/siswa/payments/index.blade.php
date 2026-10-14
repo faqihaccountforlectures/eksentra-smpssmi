@@ -49,38 +49,43 @@
                     </div>
                 </div>
 
-                <!-- Banner Informasi Rekening Pembayaran Resmi -->
-                <div class="bg-gradient-to-br from-navy-dark via-navy-base to-[#1e3a8a] text-white-off p-4 rounded-xl mb-5 shadow-sm border border-navy-light/30 relative overflow-hidden">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="p-1.5 bg-white-pure/10 rounded-lg text-amber-300 shrink-0">
+                <!-- Banner Informasi Rekening Pembayaran Resmi (Tema Gelap Neon Cyberpunk) -->
+                <div class="relative overflow-hidden rounded-xl p-4 mb-5 border border-cyan-500/30 bg-gradient-to-br from-[#0d1629]/95 via-[#081226]/95 to-[#050b18]/95 shadow-[0_4px_25px_rgba(0,0,0,0.6)] group/card">
+                    <!-- Ornamen Cahaya Neon -->
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-cyan-500/15 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="absolute -left-6 -bottom-6 w-20 h-20 bg-teal-500/10 rounded-full blur-xl pointer-events-none"></div>
+
+                    <div class="flex items-center gap-2 mb-3 relative z-10">
+                        <div class="p-1.5 bg-amber-500/15 border border-amber-400/40 rounded-lg text-amber-300 shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.25)]">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                             </svg>
                         </div>
-                        <h4 class="text-xs font-bold font-heading text-white-pure tracking-wide">Rekening Resmi Pembayaran</h4>
+                        <h4 class="text-xs font-black font-heading text-white tracking-wide">Rekening Resmi Pembayaran</h4>
                     </div>
                     
-                    <div class="space-y-1.5 text-xs bg-white-pure/10 backdrop-blur-md p-3 rounded-lg border border-white-pure/10">
+                    <div class="space-y-2 text-xs bg-[#070b14]/80 backdrop-blur-md p-3 rounded-lg border border-cyan-500/20 relative z-10">
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] text-white-off/80 font-medium">Bank Tujuan:</span>
-                            <span class="font-bold text-white-pure">Bank Sinarmas</span>
+                            <span class="text-[11px] text-slate-400 font-medium">Bank Tujuan:</span>
+                            <span class="font-bold text-white tracking-wide">Bank Sinarmas</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] text-white-off/80 font-medium">No. Rekening:</span>
+                            <span class="text-[11px] text-slate-400 font-medium">No. Rekening:</span>
                             <div class="flex items-center gap-1.5">
-                                <span class="font-mono font-bold text-amber-300 text-xs tracking-wider">0058091286</span>
-                                <button type="button" onclick="navigator.clipboard.writeText('0058091286'); alert('Nomor rekening Bank Sinarmas (0058091286) berhasil disalin!');" class="text-[10px] bg-white-pure/20 hover:bg-white-pure/30 text-white-pure px-1.5 py-0.5 rounded transition-all active:scale-95" title="Salin No. Rekening">
+                                <span class="font-mono font-bold text-amber-300 text-xs tracking-wider drop-shadow-[0_0_8px_rgba(245,158,11,0.35)]">0058091286</span>
+                                <button type="button" onclick="navigator.clipboard.writeText('0058091286'); alert('Nomor rekening Bank Sinarmas (0058091286) berhasil disalin!');" class="text-[10px] font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/30 px-2 py-0.5 rounded transition-all active:scale-95 shadow-[0_0_8px_rgba(6,182,212,0.2)]" title="Salin No. Rekening">
                                     Salin
                                 </button>
                             </div>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-[11px] text-white-off/80 font-medium">Atas Nama:</span>
-                            <span class="font-bold text-white-pure text-[11px]">Sarah Meiyana Putri Utami (Ms. Sarah)</span>
+                            <span class="text-[11px] text-slate-400 font-medium">Atas Nama:</span>
+                            <span class="font-bold text-slate-200 text-[11px]">Sarah Meiyana Putri Utami (Ms. Sarah)</span>
                         </div>
                     </div>
-                    <p class="text-[10px] text-white-off/80 mt-2 font-medium">
-                        💡 <b>Biaya Iuran:</b> Rp 100.000,- / ekskul per bulan.
+                    <p class="text-[10px] text-cyan-300/90 mt-2.5 font-medium relative z-10 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                        <span><b>Biaya Iuran:</b> Rp 100.000,- / ekskul per bulan.</span>
                     </p>
                 </div>
                 
@@ -161,8 +166,9 @@
                         </div>
 
                         <!-- Tombol Submit -->
-                        <button type="submit" class="w-full mt-4 py-2.5 bg-navy-dark text-white-off font-bold text-xs rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md hover:shadow-navy-base/20 active:scale-95 transition-all duration-200 border border-transparent">
-                            Kirim Bukti Pembayaran
+                        <button type="submit" class="w-full mt-4 py-2.5 bg-gradient-to-r from-cyan-400 to-teal-400 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.35)] active:scale-95 transition-all flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            <span>Kirim Bukti Pembayaran</span>
                         </button>
                     </form>
                 @endif

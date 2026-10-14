@@ -4,29 +4,41 @@
 @section('header', 'Dasbor Siswa')
 
 @section('content')
-    <!-- Kartu Sambutan Personal (Hero Banner) bertema Navy -->
-    <div class="bg-gradient-to-br from-navy-dark to-navy-base rounded-2xl p-8 text-white-off shadow-xl shadow-navy-dark/20 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden group">
-        <!-- Ornaments Background -->
-        <div class="absolute -right-10 -top-10 w-48 h-48 bg-navy-light/20 rounded-full blur-3xl group-hover:bg-navy-light/30 transition-colors duration-500"></div>
-        <div class="absolute right-0 bottom-0 opacity-10">
-            <svg class="w-48 h-48 text-navy-light transform translate-x-8 translate-y-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path></svg>
+    <!-- 1. KARTU SAMBUTAN HERO SISWA: Desain Modern, Padat, Glow in the dark -->
+    <div class="glow-card rounded-xl p-4 sm:p-5 text-white mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden border border-cyan-500/25 group">
+        <!-- Ornamen Cahaya Neon -->
+        <div class="absolute -right-10 -top-10 w-44 h-44 bg-cyan-500/10 rounded-full blur-3xl group-hover:bg-cyan-500/20 transition-colors duration-500 pointer-events-none"></div>
+        <div class="absolute right-6 bottom-0 opacity-5 pointer-events-none">
+            <svg class="w-36 h-36 text-cyan-400 transform translate-y-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path></svg>
         </div>
 
         <div class="relative z-10">
-            <h2 class="text-3xl font-bold mb-2 font-heading tracking-wide">Halo, {{ $user->studentProfile->full_name ?? $user->name }}! 👋</h2>
-            <p class="text-navy-light text-base mb-4">Selamat datang di Portal Ekstrakurikuler SMP Science Mutiara Insani.</p>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-400/30 text-cyan-300 text-[10px] font-mono font-bold tracking-wider mb-2 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span class="uppercase">PORTAL SISWA</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-black text-white font-heading tracking-tight">Halo, {{ $user->studentProfile->full_name ?? $user->name }}! 👋</h2>
+            <p class="text-xs text-slate-300/90 mt-0.5">
+                Selamat datang di Portal Ekstrakurikuler SMP Science Mutiara Insani.
+            </p>
             
             <!-- Badges Informasi Diri Siswa -->
-            <div class="flex flex-wrap gap-3">
-                <div class="bg-navy-dark/50 border border-navy-light/30 px-3.5 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm shadow-sm">
-                    <svg class="w-4 h-4 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                    <span class="font-bold text-xs text-white-off tracking-wide font-mono">NISN: {{ $user->studentProfile->nisn ?? 'Belum Diatur' }}</span>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <div class="bg-[#070b14]/80 border border-cyan-500/30 px-3 py-1 rounded-lg flex items-center gap-2 backdrop-blur-sm shadow-sm text-cyan-300">
+                    <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                    <span class="font-bold text-[11px] font-mono tracking-wider">NISN: {{ $user->studentProfile->nisn ?? 'Belum Diatur' }}</span>
                 </div>
-                <div class="bg-navy-dark/50 border border-navy-light/30 px-3.5 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm shadow-sm">
-                    <svg class="w-4 h-4 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    <span class="font-bold text-xs text-white-off tracking-wide">Kelas: {{ $className }}</span>
+                <div class="bg-[#070b14]/80 border border-cyan-500/30 px-3 py-1 rounded-lg flex items-center gap-2 backdrop-blur-sm shadow-sm text-slate-200">
+                    <svg class="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    <span class="font-bold text-[11px]">Kelas: {{ $className }}</span>
                 </div>
             </div>
+        </div>
+
+        <!-- Tanggal & Jam Sistem -->
+        <div class="relative z-10 flex items-center gap-2 bg-[#070b14]/60 border border-cyan-500/20 px-3 py-1.5 rounded-lg text-slate-300 text-xs shrink-0 font-mono">
+            <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}</span>
         </div>
     </div>
 

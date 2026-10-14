@@ -25,28 +25,9 @@
 
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h2 class="text-lg font-bold text-navy-dark font-heading tracking-wide">Pilih Kegiatan Ekstrakurikuler</h2>
-            <p class="text-xs text-gray-muted mt-0.5 tracking-wide font-bold">Daftarkan diri Anda ke kegiatan ekstrakurikuler yang sesuai dengan minat dan bakat.</p>
+            <h2 class="text-lg font-bold text-white font-heading tracking-wide">Pilih Kegiatan Ekstrakurikuler</h2>
+            <p class="text-xs text-slate-400 mt-0.5 tracking-wide font-medium">Daftarkan diri Anda ke kegiatan ekstrakurikuler yang sesuai dengan minat dan bakat.</p>
         </div>
-    </div>
-
-    <!-- Banner Informasi Pembayaran & Rekening Resmi -->
-    <div class="bg-gradient-to-r from-navy-dark via-navy-base to-[#1e3a8a] text-white-off p-4 rounded-2xl mb-6 shadow-sm border border-navy-light/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-            <div class="p-2.5 bg-white-pure/10 rounded-xl text-amber-300 border border-white-pure/10 shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            </div>
-            <div>
-                <h4 class="text-xs font-bold font-heading text-white-pure tracking-wide">Informasi Iuran Ekstrakurikuler</h4>
-                <p class="text-[11px] text-white-off/80 mt-0.5 font-medium">Biaya iuran ekstrakurikuler <b>Rp 100.000,- / ekskul</b> per bulan, dibayarkan ke Rekening <b>Bank Sinarmas <span class="font-mono text-amber-300">0058091286</span> a.n Sarah Meiyana Putri Utami (Ms. Sarah)</b>.</p>
-            </div>
-        </div>
-        <a href="{{ route('siswa.payments.index') }}" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-400 hover:bg-amber-300 text-navy-dark font-bold text-xs rounded-xl shadow-sm transition-all shrink-0 active:scale-95">
-            <span>Riwayat Pembayaran</span>
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
     </div>
 
     <!-- Grid Katalog Ekskul -->
@@ -57,18 +38,19 @@
                 $status = $registration ? $registration->status : null;
             @endphp
 
-            <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
-                <!-- Header Kartu Foto / Gradien -->
-                <div class="h-36 relative overflow-hidden text-white-off flex flex-col justify-end p-5 group/header">
+            <div class="bg-white rounded-2xl shadow-sm border border-cyan-500/25 overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-lg hover:border-cyan-400/40 transition-all duration-300">
+                <!-- Header Kartu Foto / Gradien Gelap Neon -->
+                <div class="h-36 relative overflow-hidden text-white flex flex-col justify-end p-5 group/header border-b border-cyan-500/20">
                     @if($ekskul->image)
                         <img src="{{ asset('storage/' . $ekskul->image) }}" class="absolute inset-0 w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500" alt="{{ $ekskul->name }}">
                         <!-- Overlay gradien hitam/navy agar teks nama ekskul kontras dan terbaca jelas -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-navy-dark/95 via-navy-dark/50 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#070b14]/95 via-[#070b14]/60 to-transparent"></div>
                     @else
-                        <div class="absolute inset-0 bg-gradient-to-br from-navy-dark to-navy-base"></div>
-                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-navy-light/20 rounded-full blur-xl group-hover/header:bg-navy-light/30 transition-colors duration-500"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#0c162d] via-[#09152b] to-[#070b14]"></div>
+                        <div class="absolute -right-6 -top-6 w-32 h-32 bg-cyan-500/15 rounded-full blur-2xl group-hover/header:bg-cyan-500/25 transition-colors duration-500"></div>
+                        <div class="absolute left-4 top-4 w-16 h-16 bg-teal-500/10 rounded-full blur-xl"></div>
                     @endif
-                    <h3 class="text-xl font-bold font-heading tracking-wide relative z-10 drop-shadow-md text-white-off">{{ $ekskul->name }}</h3>
+                    <h3 class="text-lg font-black font-heading tracking-wide relative z-10 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-white">{{ $ekskul->name }}</h3>
                 </div>
                 
                 <!-- Body Kartu -->
@@ -120,7 +102,7 @@
                             <form action="{{ route('extracurricular-registrations.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="extracurricular_id" value="{{ $ekskul->id }}">
-                                <button type="submit" class="w-full py-2.5 bg-navy-dark text-white-off font-bold text-xs rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md hover:shadow-navy-base/20 active:scale-95 transition-all duration-200 border border-transparent">
+                                <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-cyan-400 to-teal-400 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.35)] active:scale-95 transition-all">
                                     Daftar Ekstrakurikuler
                                 </button>
                             </form>
@@ -218,21 +200,32 @@
                             </div>
 
                             <!-- Modal Confirm Keluar Ekskul -->
-                            <div id="unenrollModal-{{ $ekskul->id }}" class="hidden fixed inset-0 z-50 bg-navy-dark/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity">
-                                <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden text-center relative whitespace-normal border border-navy-light/20 animate-[scale-in_0.2s_ease-out]">
-                                    <div class="p-6">
-                                        <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl border border-rose-100 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                            <div id="unenrollModal-{{ $ekskul->id }}" class="hidden fixed inset-0 z-[9999] bg-[#070b14]/80 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300">
+                                <div class="glow-card w-full max-w-md rounded-2xl border border-rose-500/30 overflow-hidden text-center relative p-6 sm:p-7 shadow-[0_0_50px_rgba(0,0,0,0.8),0_0_30px_rgba(244,63,94,0.18)] animate-[scale-in_0.2s_ease-out]">
+                                    <!-- Ornamen Glow Merah -->
+                                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                                    <div class="relative z-10">
+                                        <div class="w-14 h-14 bg-rose-500/15 border border-rose-500/40 text-rose-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
                                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                                         </div>
-                                        <h3 class="font-bold text-base text-navy-dark font-heading mb-1">Keluar Ekstrakurikuler?</h3>
-                                        <p class="text-xs text-gray-muted leading-relaxed mb-6">Apakah Anda yakin ingin berhenti mengikuti ekskul <b>{{ $ekskul->name }}</b>? Riwayat pembayaran Anda akan tetap tersimpan.</p>
+
+                                        <h3 class="font-extrabold text-lg sm:text-xl text-white font-heading tracking-wide mb-2">Keluar Ekstrakurikuler?</h3>
+                                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6 font-medium">
+                                            Apakah Anda yakin ingin berhenti mengikuti ekstrakurikuler <span class="font-bold text-cyan-300">{{ $ekskul->name }}</span>? Riwayat pembayaran Anda akan tetap tersimpan aman.
+                                        </p>
                                         
-                                        <form action="{{ route('extracurricular-registrations.destroy', $ekskul->id) }}" method="POST" class="flex gap-3 justify-center">
+                                        <form action="{{ route('extracurricular-registrations.destroy', $ekskul->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">
                                             @csrf
                                             @method('DELETE')
                                             
-                                            <button type="button" onclick="document.getElementById('unenrollModal-{{ $ekskul->id }}').classList.add('hidden')" class="px-5 py-2.5 bg-white-off text-navy-dark font-bold text-xs rounded-xl hover:bg-navy-light/20 border border-navy-light/30 transition-all">Batal</button>
-                                            <button type="submit" class="px-5 py-2.5 bg-rose-600 text-white font-bold text-xs rounded-xl hover:bg-rose-700 hover:shadow-lg hover:shadow-rose-600/20 active:scale-95 transition-all">Ya, Keluar</button>
+                                            <button type="button" onclick="document.getElementById('unenrollModal-{{ $ekskul->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-[#070b14] hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl border border-cyan-500/20 hover:border-cyan-400/40 transition-all active:scale-95 shadow-sm">
+                                                Batal
+                                            </button>
+                                            <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-extrabold text-xs rounded-xl shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:shadow-[0_0_30px_rgba(244,63,94,0.6)] active:scale-95 transition-all flex items-center justify-center gap-2">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                                <span>Ya, Keluar</span>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>

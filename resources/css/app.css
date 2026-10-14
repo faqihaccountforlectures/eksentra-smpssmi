@@ -93,4 +93,572 @@
         scrollbar-width: thin;
         scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.05);
     }
+
+    /* ============================================================== */
+    /* PORTAL GLOW THEME: Sistem Desain Gelap & Neon untuk Dashboard  */
+    /* ============================================================== */
+    .portal-glow-theme {
+        background-color: #070b14;
+        color: #f1f5f9;
+    }
+
+    /* Transformasi Kartu Putih ke Permukaan Kaca Gelap Bercahaya */
+    .portal-glow-theme .bg-white,
+    .portal-glow-theme .bg-white\/80,
+    .portal-glow-theme .bg-white\/90,
+    .portal-glow-theme .bg-white\/95,
+    .portal-glow-theme .bg-white\/70,
+    .portal-glow-theme .bg-white\/60,
+    .portal-glow-theme .bg-white\/50,
+    .portal-glow-theme [class*="bg-white\/"] {
+        background: linear-gradient(135deg, rgba(13, 21, 39, 0.9) 0%, rgba(9, 15, 28, 0.95) 100%) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(56, 189, 248, 0.18) !important;
+        box-shadow: 0 4px 25px -2px rgba(0, 0, 0, 0.5) !important;
+        color: #e2e8f0;
+    }
+
+    .portal-glow-theme .bg-white:hover,
+    .portal-glow-theme [class*="bg-white\/"]:hover {
+        border-color: rgba(34, 211, 238, 0.35) !important;
+        box-shadow: 0 0 25px -4px rgba(6, 182, 212, 0.18), 0 12px 35px -8px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .portal-glow-theme .bg-white-off,
+    .portal-glow-theme [class*="bg-white-off"] {
+        background-color: #070b14 !important;
+        background: #070b14 !important;
+    }
+
+    .portal-glow-theme .bg-white-pure {
+        background-color: #0d1527 !important;
+    }
+
+    /* Warna Teks Otomatis Elegan dan Berkontras Tinggi */
+    .portal-glow-theme .text-navy-dark {
+        color: #f8fafc !important;
+    }
+
+    .portal-glow-theme .text-navy-base {
+        color: #38bdf8 !important;
+    }
+
+    .portal-glow-theme .text-gray-muted {
+        color: #94a3b8 !important;
+    }
+
+    .portal-glow-theme .text-navy-light {
+        color: #7dd3fc !important;
+    }
+
+    /* Desain Tabel Padat & Rapi (Compact & High-Density) */
+    .portal-glow-theme table {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .portal-glow-theme table th {
+        padding: 0.625rem 0.85rem !important;
+        font-size: 0.6875rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        color: #38bdf8 !important;
+        background: rgba(15, 23, 42, 0.92) !important;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
+        white-space: nowrap !important;
+    }
+
+    .portal-glow-theme table td {
+        padding: 0.625rem 0.85rem !important;
+        font-size: 0.75rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        color: #cbd5e1 !important;
+    }
+
+    .portal-glow-theme table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .portal-glow-theme table tbody tr:hover {
+        background-color: rgba(6, 182, 212, 0.06) !important;
+    }
+
+    .portal-glow-theme .border-navy-light\/30,
+    .portal-glow-theme .border-navy-light\/20,
+    .portal-glow-theme .border-navy-light\/40,
+    .portal-glow-theme .border-navy-light\/50 {
+        border-color: rgba(56, 189, 248, 0.16) !important;
+    }
+
+    /* Input & Form Control Gelap Neon */
+    .portal-glow-theme input:not([type="checkbox"]):not([type="radio"]),
+    .portal-glow-theme select,
+    .portal-glow-theme textarea,
+    .portal-glow-theme [class*="bg-white-off"],
+    .portal-glow-theme input:disabled,
+    .portal-glow-theme input[disabled],
+    .portal-glow-theme select:disabled,
+    .portal-glow-theme select[disabled],
+    .portal-glow-theme .cursor-not-allowed {
+        background-color: #070b14 !important;
+        background: #070b14 !important;
+        border: 1px solid rgba(56, 189, 248, 0.25) !important;
+        color: #ffffff !important;
+        font-size: 0.75rem !important;
+        border-radius: 0.65rem !important;
+        outline: none !important;
+        transition: all 0.2s ease !important;
+    }
+
+    /* Timpa focus:bg-white agar input dan select tidak menjadi putih saat diklik */
+    .portal-glow-theme input:not([type="checkbox"]):not([type="radio"]):focus,
+    .portal-glow-theme select:focus,
+    .portal-glow-theme textarea:focus,
+    .portal-glow-theme input.focus\:bg-white:focus,
+    .portal-glow-theme select.focus\:bg-white:focus,
+    .portal-glow-theme textarea.focus\:bg-white:focus,
+    .portal-glow-theme .focus\:bg-white:focus,
+    .portal-glow-theme .focus\:bg-white-off:focus,
+    .portal-glow-theme .focus\:bg-white-pure:focus {
+        background-color: #0d1527 !important;
+        background: #0d1527 !important;
+        border-color: rgba(34, 211, 238, 0.85) !important;
+        box-shadow: 0 0 14px rgba(6, 182, 212, 0.35) !important;
+        color: #ffffff !important;
+    }
+
+    .portal-glow-theme input::placeholder,
+    .portal-glow-theme textarea::placeholder {
+        color: #64748b !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* ============================================================== */
+    /* DROPDOWN SELECT & OPTION: Teks Sangat Jelas & Kontras Tinggi   */
+    /* ============================================================== */
+    .portal-glow-theme select,
+    .portal-glow-theme select option,
+    .portal-glow-theme select optgroup {
+        color-scheme: dark !important;
+    }
+
+    .portal-glow-theme select {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        cursor: pointer;
+    }
+
+    /* Opsi Menu Dropdown saat diklik terbuka (Sangat Terang & Jelas) */
+    .portal-glow-theme select option {
+        background-color: #0d1527 !important;
+        color: #ffffff !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        padding: 8px 12px !important;
+    }
+
+    .portal-glow-theme select option:hover,
+    .portal-glow-theme select option:focus,
+    .portal-glow-theme select option:checked {
+        background-color: #0284c7 !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    .portal-glow-theme select option:disabled {
+        background-color: #070b14 !important;
+        color: #64748b !important;
+    }
+
+    .portal-glow-theme select optgroup {
+        background-color: #070b14 !important;
+        color: #38bdf8 !important;
+        font-weight: 700 !important;
+    }
+
+    /* Tombol Utama: Gradasi Neon Cyan-Teal dengan Efek Glow */
+    .portal-glow-theme .bg-navy-dark:not(aside):not(header):not(.no-glow) {
+        background: linear-gradient(135deg, #06b6d4 0%, #0d9488 100%) !important;
+        color: #020617 !important;
+        border: none !important;
+        font-weight: 700 !important;
+        box-shadow: 0 0 16px rgba(6, 182, 212, 0.35) !important;
+        transition: all 0.25s ease !important;
+    }
+
+    .portal-glow-theme .bg-navy-dark:not(aside):not(header):not(.no-glow):hover {
+        filter: brightness(1.15) !important;
+        box-shadow: 0 0 24px rgba(6, 182, 212, 0.6) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Badge & Tag Halus */
+    .portal-glow-theme .bg-navy-light\/10 {
+        background: rgba(6, 182, 212, 0.12) !important;
+        border: 1px solid rgba(6, 182, 212, 0.3) !important;
+        color: #38bdf8 !important;
+    }
+
+    /* ============================================================== */
+    /* GLOW IN THE DARK ALERTS: Notifikasi Bergaya Neon Cyberpunk     */
+    /* ============================================================== */
+    .portal-glow-theme [role="alert"],
+    .portal-glow-theme .glow-alert {
+        border-radius: 0.875rem !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.75rem !important;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+    }
+
+    /* Alert Sukses (Neon Emerald) */
+    .portal-glow-theme .bg-emerald-50,
+    .portal-glow-theme .alert-success {
+        background: linear-gradient(135deg, rgba(6, 78, 59, 0.55) 0%, rgba(7, 11, 20, 0.95) 100%) !important;
+        border: 1px solid rgba(16, 185, 129, 0.45) !important;
+        border-left: 4px solid #10b981 !important;
+        color: #a7f3d0 !important;
+        box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.3) !important;
+    }
+
+    .portal-glow-theme .bg-emerald-50 .bg-emerald-100,
+    .portal-glow-theme .bg-emerald-50 .bg-emerald-500,
+    .portal-glow-theme .alert-success .alert-icon {
+        background: rgba(16, 185, 129, 0.25) !important;
+        border: 1px solid rgba(16, 185, 129, 0.5) !important;
+        color: #34d399 !important;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    /* Alert Error / Bahaya (Neon Rose) */
+    .portal-glow-theme .bg-rose-50,
+    .portal-glow-theme .bg-red-50,
+    .portal-glow-theme .alert-danger {
+        background: linear-gradient(135deg, rgba(136, 19, 55, 0.55) 0%, rgba(7, 11, 20, 0.95) 100%) !important;
+        border: 1px solid rgba(244, 63, 94, 0.45) !important;
+        border-left: 4px solid #f43f5e !important;
+        color: #fecdd3 !important;
+        box-shadow: 0 0 25px -4px rgba(244, 63, 94, 0.3) !important;
+    }
+
+    .portal-glow-theme .bg-rose-50 .bg-rose-100,
+    .portal-glow-theme .bg-rose-50 .bg-rose-500,
+    .portal-glow-theme .bg-red-50 .bg-red-100,
+    .portal-glow-theme .alert-danger .alert-icon {
+        background: rgba(244, 63, 94, 0.25) !important;
+        border: 1px solid rgba(244, 63, 94, 0.5) !important;
+        color: #fb7185 !important;
+        box-shadow: 0 0 10px rgba(244, 63, 94, 0.35) !important;
+    }
+
+    /* Alert Peringatan (Neon Amber) */
+    .portal-glow-theme .bg-amber-50,
+    .portal-glow-theme .alert-warning {
+        background: linear-gradient(135deg, rgba(120, 53, 15, 0.55) 0%, rgba(7, 11, 20, 0.95) 100%) !important;
+        border: 1px solid rgba(245, 158, 11, 0.45) !important;
+        border-left: 4px solid #f59e0b !important;
+        color: #fde68a !important;
+        box-shadow: 0 0 25px -4px rgba(245, 158, 11, 0.3) !important;
+    }
+
+    .portal-glow-theme .bg-amber-50 .bg-amber-100,
+    .portal-glow-theme .bg-amber-50 .bg-amber-500,
+    .portal-glow-theme .alert-warning .alert-icon {
+        background: rgba(245, 158, 11, 0.25) !important;
+        border: 1px solid rgba(245, 158, 11, 0.5) !important;
+        color: #fbbf24 !important;
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.35) !important;
+    }
+
+    /* Alert Info (Neon Cyan) */
+    .portal-glow-theme .bg-blue-50,
+    .portal-glow-theme .alert-info {
+        background: linear-gradient(135deg, rgba(8, 47, 73, 0.55) 0%, rgba(7, 11, 20, 0.95) 100%) !important;
+        border: 1px solid rgba(6, 182, 212, 0.45) !important;
+        border-left: 4px solid #06b6d4 !important;
+        color: #bae6fd !important;
+        box-shadow: 0 0 25px -4px rgba(6, 182, 212, 0.3) !important;
+    }
+
+    .portal-glow-theme .bg-blue-50 .bg-blue-100,
+    .portal-glow-theme .bg-blue-50 .bg-blue-500,
+    .portal-glow-theme .alert-info .alert-icon {
+        background: rgba(6, 182, 212, 0.25) !important;
+        border: 1px solid rgba(6, 182, 212, 0.5) !important;
+        color: #38bdf8 !important;
+        box-shadow: 0 0 10px rgba(6, 182, 212, 0.35) !important;
+    }
+
+    /* Detail teks di dalam alert */
+    .portal-glow-theme [role="alert"] span,
+    .portal-glow-theme [role="alert"] p,
+    .portal-glow-theme [role="alert"] li {
+        font-size: 0.75rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Pola Alert Khusus border-l-4 pada halaman admin */
+    .portal-glow-theme .border-l-4.border-navy-base {
+        background: linear-gradient(135deg, rgba(6, 78, 59, 0.55) 0%, rgba(7, 11, 20, 0.95) 100%) !important;
+        border: 1px solid rgba(16, 185, 129, 0.45) !important;
+        border-left: 4px solid #10b981 !important;
+        color: #a7f3d0 !important;
+        box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.3) !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    .portal-glow-theme .border-l-4.border-navy-base .bg-navy-base {
+        background: rgba(16, 185, 129, 0.25) !important;
+        border: 1px solid rgba(16, 185, 129, 0.5) !important;
+        color: #34d399 !important;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    .portal-glow-theme .border-l-4.border-navy-base span {
+        color: #a7f3d0 !important;
+        font-size: 0.75rem !important;
+    }
+
+    .portal-glow-theme .border-l-4.border-emerald-500 {
+        background: linear-gradient(135deg, rgba(6, 78, 59, 0.55) 0%, rgba(7, 11, 20, 0.95) 100%) !important;
+        border: 1px solid rgba(16, 185, 129, 0.45) !important;
+        border-left: 4px solid #10b981 !important;
+        color: #a7f3d0 !important;
+        box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.3) !important;
+    }
+
+    .portal-glow-theme .border-l-4.border-emerald-500 .bg-emerald-500 {
+        background: rgba(16, 185, 129, 0.25) !important;
+        border: 1px solid rgba(16, 185, 129, 0.5) !important;
+        color: #34d399 !important;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    .portal-glow-theme .border-l-4.border-rose-500 {
+        background: linear-gradient(135deg, rgba(136, 19, 55, 0.55) 0%, rgba(7, 11, 20, 0.95) 100%) !important;
+        border: 1px solid rgba(244, 63, 94, 0.45) !important;
+        border-left: 4px solid #f43f5e !important;
+        color: #fecdd3 !important;
+        box-shadow: 0 0 25px -4px rgba(244, 63, 94, 0.3) !important;
+    }
+
+    .portal-glow-theme .border-l-4.border-rose-500 .bg-rose-500 {
+        background: rgba(244, 63, 94, 0.25) !important;
+        border: 1px solid rgba(244, 63, 94, 0.5) !important;
+        color: #fb7185 !important;
+        box-shadow: 0 0 10px rgba(244, 63, 94, 0.35) !important;
+    }
+
+    /* ============================================================== */
+    /* ANTI-FLICKER SIDEBAR: Transisi mulus tanpa bug kedip saat muat */
+    /* ============================================================== */
+    @media (min-width: 768px) {
+        html.sidebar-collapsed #mobile-sidebar {
+            margin-left: -16rem !important;
+        }
+    }
+
+    #mobile-sidebar.sidebar-ready {
+        transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* ============================================================== */
+    /* ENHANCED GLOW-IN-THE-DARK LINE BORDERS                         */
+    /* ============================================================== */
+    .portal-glow-theme aside,
+    .portal-glow-theme header,
+    .portal-glow-theme .border-cyan-500\/20 {
+        border-color: rgba(34, 211, 238, 0.3) !important;
+        box-shadow: inset 0 0 12px rgba(6, 182, 212, 0.05);
+    }
+
+    .portal-glow-theme .border-cyan-500\/25,
+    .portal-glow-theme .border-cyan-500\/30,
+    .portal-glow-theme .border-cyan-400\/30,
+    .portal-glow-theme .border-cyan-400\/40 {
+        border-color: rgba(34, 211, 238, 0.45) !important;
+        box-shadow: 0 0 12px rgba(6, 182, 212, 0.18) !important;
+    }
+
+    .portal-glow-theme hr,
+    .portal-glow-theme .divide-slate-800 > :not([hidden]) ~ :not([hidden]),
+    .portal-glow-theme .border-slate-800 {
+        border-color: rgba(34, 211, 238, 0.18) !important;
+    }
+
+    /* Kartu & Container Kaca Neon */
+    .portal-glow-theme .bg-white,
+    .portal-glow-theme [class*="bg-white/"] {
+        background: linear-gradient(135deg, rgba(13, 21, 39, 0.92) 0%, rgba(9, 15, 28, 0.96) 100%) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(34, 211, 238, 0.26) !important;
+        box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(6, 182, 212, 0.04) !important;
+        color: #e2e8f0;
+    }
+
+    .portal-glow-theme .bg-white:hover,
+    .portal-glow-theme [class*="bg-white/"]:hover {
+        border-color: rgba(34, 211, 238, 0.55) !important;
+        box-shadow: 0 0 25px -3px rgba(6, 182, 212, 0.28), 0 12px 35px -8px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(6, 182, 212, 0.08) !important;
+    }
+
+    /* Modal Backdrop & Container Gelap Neon */
+    .portal-glow-theme [role="dialog"] .bg-white {
+        background: linear-gradient(135deg, #0d1527 0%, #070b14 100%) !important;
+        border: 1px solid rgba(34, 211, 238, 0.4) !important;
+        box-shadow: 0 0 40px rgba(6, 182, 212, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.9) !important;
+    }
+
+    /* ============================================================== */
+    /* PEMBERSIH WARNA LAMA: Transformasi Biru & Putih Lama ke Neon   */
+    /* ============================================================== */
+    .portal-glow-theme .text-blue-500,
+    .portal-glow-theme .text-blue-600,
+    .portal-glow-theme .text-blue-700,
+    .portal-glow-theme .text-blue-800 {
+        color: #38bdf8 !important;
+    }
+
+    .portal-glow-theme .hover\:text-blue-600:hover,
+    .portal-glow-theme .hover\:text-blue-700:hover,
+    .portal-glow-theme .hover\:text-blue-800:hover {
+        color: #67e8f9 !important;
+    }
+
+    .portal-glow-theme .bg-blue-50,
+    .portal-glow-theme .bg-blue-50\/50,
+    .portal-glow-theme .bg-blue-100 {
+        background: rgba(6, 182, 212, 0.12) !important;
+        border-color: rgba(34, 211, 238, 0.35) !important;
+        color: #38bdf8 !important;
+    }
+
+    .portal-glow-theme .bg-blue-500,
+    .portal-glow-theme .bg-blue-600 {
+        background: linear-gradient(135deg, #06b6d4 0%, #0d9488 100%) !important;
+        color: #020617 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.45) !important;
+    }
+
+    .portal-glow-theme .border-blue-200,
+    .portal-glow-theme .border-blue-200\/80,
+    .portal-glow-theme .border-blue-300,
+    .portal-glow-theme .border-blue-400,
+    .portal-glow-theme .border-blue-500 {
+        border-color: rgba(34, 211, 238, 0.35) !important;
+    }
+
+    /* Sisa Elemen Kuning/Amber Lama */
+    .portal-glow-theme .bg-yellow-50,
+    .portal-glow-theme .bg-yellow-50\/50 {
+        background: rgba(245, 158, 11, 0.12) !important;
+        border-color: rgba(245, 158, 11, 0.35) !important;
+        color: #fde68a !important;
+    }
+    .portal-glow-theme .text-yellow-800,
+    .portal-glow-theme .text-yellow-700,
+    .portal-glow-theme .text-yellow-900 {
+        color: #fde68a !important;
+    }
+    .portal-glow-theme .border-yellow-200,
+    .portal-glow-theme .border-yellow-200\/50 {
+        border-color: rgba(245, 158, 11, 0.35) !important;
+    }
+
+    /* Sisa Elemen Abu-abu & Putih Netral Lama */
+    .portal-glow-theme .bg-gray-50,
+    .portal-glow-theme .bg-slate-50,
+    .portal-glow-theme .bg-zinc-50 {
+        background-color: rgba(13, 21, 39, 0.8) !important;
+        color: #cbd5e1 !important;
+    }
+
+    .portal-glow-theme .border-gray-200,
+    .portal-glow-theme .border-gray-300,
+    .portal-glow-theme .border-slate-200,
+    .portal-glow-theme .border-slate-300 {
+        border-color: rgba(56, 189, 248, 0.22) !important;
+    }
+
+    .portal-glow-theme .text-gray-900,
+    .portal-glow-theme .text-gray-800,
+    .portal-glow-theme .text-gray-700 {
+        color: #f8fafc !important;
+    }
+
+    .portal-glow-theme .text-gray-600,
+    .portal-glow-theme .text-gray-500 {
+        color: #94a3b8 !important;
+    }
+
+    /* Transformasi Gradien & Palet Navy Biru Lama ke Tema Gelap Neon */
+    .portal-glow-theme .from-navy-dark {
+        --tw-gradient-from: #0c162d var(--tw-gradient-from-position) !important;
+        --tw-gradient-to: rgba(12, 22, 45, 0) var(--tw-gradient-to-position) !important;
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+    }
+
+    .portal-glow-theme .to-navy-base {
+        --tw-gradient-to: #09152b var(--tw-gradient-to-position) !important;
+    }
+
+    .portal-glow-theme .via-navy-base {
+        --tw-gradient-to: rgba(9, 21, 43, 0) var(--tw-gradient-to-position) !important;
+        --tw-gradient-stops: var(--tw-gradient-from), #09152b var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+    }
+
+    .portal-glow-theme .bg-navy-base {
+        background-color: #06b6d4 !important;
+    }
+
+    .portal-glow-theme .border-navy-base {
+        border-color: rgba(34, 211, 238, 0.45) !important;
+    }
+
+    .portal-glow-theme .text-navy-base {
+        color: #38bdf8 !important;
+    }
+
+    .portal-glow-theme .text-navy-light {
+        color: #67e8f9 !important;
+    }
+
+    /* ============================================================== */
+    /* FULL-SCREEN DARK GLOW MODALS                                   */
+    /* ============================================================== */
+    div[id^="deleteModal-"],
+    div[id^="removeModal-"],
+    div[id^="rejectModal-"],
+    div[id^="unenrollModal-"],
+    #coachImportModal,
+    #studentImportModal,
+    #gradeModal {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+    }
+
+    div[id^="deleteModal-"]:not(.hidden),
+    div[id^="removeModal-"]:not(.hidden),
+    div[id^="rejectModal-"]:not(.hidden),
+    div[id^="unenrollModal-"]:not(.hidden),
+    #coachImportModal:not(.hidden),
+    #studentImportModal:not(.hidden),
+    #gradeModal:not(.hidden) {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background-color: rgba(7, 11, 20, 0.85) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+    }
 }
+

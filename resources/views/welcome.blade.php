@@ -106,9 +106,9 @@
                     <a href="#tentang" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Tentang</a>
                     <a href="#tujuan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Tujuan</a>
                     <a href="#keunggulan" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Keunggulan</a>
-                    <a href="#profil-lokasi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Media & Lokasi</a>
                     <a href="#galeri" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Galeri</a>
                     <a href="#visi-misi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Visi & Misi</a>
+                    <a href="#profil-lokasi" class="nav-link px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none focus:ring-0 transition-all">Media & Lokasi</a>
                 </div>
 
                 <!-- Tombol Login Sejajar di Navbar (Glowing CTA) -->
@@ -138,9 +138,9 @@
                 <a href="#tentang" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Tentang Eksentra</a>
                 <a href="#tujuan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Tujuan Ekskul</a>
                 <a href="#keunggulan" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Keunggulan</a>
-                <a href="#profil-lokasi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Media & Lokasi</a>
                 <a href="#galeri" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Galeri</a>
                 <a href="#visi-misi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Visi & Misi</a>
+                <a href="#profil-lokasi" class="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 outline-none focus:outline-none" onclick="closeMobileMenu()">Media & Lokasi</a>
             </div>
         </div>
     </nav>
@@ -409,7 +409,129 @@
         </section>
 
         <!-- ============================================================== -->
-        <!-- 5. PROFIL, VIDEO & LOKASI SEKOLAH (Ukuran Pas & Kompak) -->
+        <!-- 5. GALERI KEGIATAN (Placeholder Rapi & Kompak) -->
+        <!-- ============================================================== -->
+        <section id="galeri" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-2xl mx-auto mb-8 reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
+                        <span>Cerita dalam Setiap Kegiatan</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+                        Galeri <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">Kegiatan</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
+                        Jelajahi berbagai momen kegiatan ekstrakurikuler yang menjadi bagian dari perjalanan siswa SMP Science Mutiara Insani.
+                    </p>
+                </div>
+
+                <!-- 8 Kompak Placeholder Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 stagger-items">
+                    @php
+                        $galeriItems = [
+                            ['label' => 'Sains & Robotik', 'cat' => 'Akademik & Riset'],
+                            ['label' => 'Pramuka & Kepemimpinan', 'cat' => 'Karakter & Disiplin'],
+                            ['label' => 'Olahraga & Futsal', 'cat' => 'Kebugaran & Sport'],
+                            ['label' => 'Seni Musik & Vokal', 'cat' => 'Kreativitas & Seni'],
+                            ['label' => 'PMR & Kemanusiaan', 'cat' => 'Sosial & Kesehatan'],
+                            ['label' => 'English Club', 'cat' => 'Bahasa & Wawasan'],
+                            ['label' => 'Tahfidz & Keislaman', 'cat' => 'Religius & Akhlak'],
+                            ['label' => 'Dokumentasi Acara', 'cat' => 'Momen Bersama'],
+                        ];
+                    @endphp
+
+                    @foreach($galeriItems as $item)
+                    <div class="glow-card p-4 rounded-2xl reveal group border border-slate-800 hover:border-cyan-400/40 transition-all flex flex-col justify-between h-36">
+                        <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-cyan-400/80 font-mono">{{ $item['cat'] }}</span>
+                            <h4 class="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5 leading-snug">{{ $item['label'] }}</h4>
+                            <p class="text-[10px] text-slate-500 mt-1">Dokumentasi menyusul</p>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 6. VISI & MISI SEKOLAH (Modern Glow Card) -->
+        <!-- ============================================================== -->
+        <section id="visi-misi" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                
+                <div class="text-center max-w-2xl mx-auto reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
+                        <span>Pilar Utama Sekolah</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
+                        Visi & <span class="text-cyan-400">Misi</span> Sekolah
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
+                        Pedoman dan landasan utama SMP Science Mutiara Insani menyelenggarakan pendidikan berkualitas.
+                    </p>
+                </div>
+
+                <!-- Kartu Visi (Luminous Highlight) -->
+                <div class="glow-card p-6 sm:p-8 rounded-3xl reveal border-cyan-400/30 relative overflow-hidden group">
+                    <div class="absolute -right-16 -top-16 w-56 h-56 bg-cyan-500/15 rounded-full blur-[80px]"></div>
+                    <div class="relative flex flex-col md:flex-row items-start md:items-center gap-5">
+                        <div class="w-13 h-13 rounded-2xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </div>
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded bg-cyan-950/70 border border-cyan-500/40 text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-widest mb-2">
+                                VISI SEKOLAH
+                            </span>
+                            <blockquote class="text-base sm:text-lg md:text-xl font-bold text-white font-heading leading-relaxed">
+                                "Terwujudnya peserta didik yang memiliki jatidiri yang tangguh dan kompeten yang berlandaskan nilai-nilai science untuk masa depan gemilang."
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7 Misi Sekolah (Grid Kompak) -->
+                <div>
+                    <h3 class="text-sm font-bold text-cyan-300 font-heading mb-4 reveal flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                        <span>7 Misi Utama Sekolah</span>
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 stagger-items">
+                        @php
+                            $misiList = [
+                                "Menciptakan profil pelajar yang berakhlak mulia dan rajin beribadah.",
+                                "Menciptakan pembelajaran yang menarik, menyenangkan dan berkarakter yang mampu memfasilitasi pelajar sesuai bakat dan minatnya.",
+                                "Mendidik dan menjadikan siswa memiliki nilai sikap dan ketrampilan dibidang science.",
+                                "Menciptakan lingkungan sekolah yang bersih, asri dan ramah anak.",
+                                "Memfasilitasi pelajar untuk dapat mengembangkan potensi dan kemampuannya secara optimal.",
+                                "Mengembangkan sekolah berwawasan global yang didasari nilai-nilai budaya dan nilai-nilai luhur bangsa.",
+                                "Melibatkan orang tua dan masyarakat dalam proses pembelajaran dan pengembangan sekolah."
+                            ];
+                        @endphp
+
+                        @foreach($misiList as $index => $misi)
+                        <div class="glow-card p-4 rounded-xl reveal flex items-start gap-3 border border-slate-800">
+                            <span class="w-6 h-6 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                                0{{ $index + 1 }}
+                            </span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                                {{ $misi }}
+                            </p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 7. PROFIL, VIDEO & LOKASI SEKOLAH (Ukuran Pas & Kompak) -->
         <!-- ============================================================== -->
         <section id="profil-lokasi" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -519,128 +641,6 @@
         </section>
 
         <!-- ============================================================== -->
-        <!-- 6. GALERI KEGIATAN (Placeholder Rapi & Kompak) -->
-        <!-- ============================================================== -->
-        <section id="galeri" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div class="text-center max-w-2xl mx-auto mb-8 reveal">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
-                        <span>Cerita dalam Setiap Kegiatan</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
-                        Galeri <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">Kegiatan</span>
-                    </h2>
-                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
-                        Jelajahi berbagai momen kegiatan ekstrakurikuler yang menjadi bagian dari perjalanan siswa SMP Science Mutiara Insani.
-                    </p>
-                </div>
-
-                <!-- 8 Kompak Placeholder Grid -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 stagger-items">
-                    @php
-                        $galeriItems = [
-                            ['label' => 'Sains & Robotik', 'cat' => 'Akademik & Riset'],
-                            ['label' => 'Pramuka & Kepemimpinan', 'cat' => 'Karakter & Disiplin'],
-                            ['label' => 'Olahraga & Futsal', 'cat' => 'Kebugaran & Sport'],
-                            ['label' => 'Seni Musik & Vokal', 'cat' => 'Kreativitas & Seni'],
-                            ['label' => 'PMR & Kemanusiaan', 'cat' => 'Sosial & Kesehatan'],
-                            ['label' => 'English Club', 'cat' => 'Bahasa & Wawasan'],
-                            ['label' => 'Tahfidz & Keislaman', 'cat' => 'Religius & Akhlak'],
-                            ['label' => 'Dokumentasi Acara', 'cat' => 'Momen Bersama'],
-                        ];
-                    @endphp
-
-                    @foreach($galeriItems as $item)
-                    <div class="glow-card p-4 rounded-2xl reveal group border border-slate-800 hover:border-cyan-400/40 transition-all flex flex-col justify-between h-36">
-                        <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-cyan-400/80 font-mono">{{ $item['cat'] }}</span>
-                            <h4 class="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors mt-0.5 leading-snug">{{ $item['label'] }}</h4>
-                            <p class="text-[10px] text-slate-500 mt-1">Dokumentasi menyusul</p>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ============================================================== -->
-        <!-- 7. VISI & MISI SEKOLAH (Modern Glow Card) -->
-        <!-- ============================================================== -->
-        <section id="visi-misi" class="scroll-mt-20 py-10 sm:py-14 border-t border-cyan-500/10">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-                
-                <div class="text-center max-w-2xl mx-auto reveal">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-bold mb-2">
-                        <span>Pilar Utama Sekolah</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-heading">
-                        Visi & <span class="text-cyan-400">Misi</span> Sekolah
-                    </h2>
-                    <p class="text-xs sm:text-sm text-slate-400 mt-1.5">
-                        Pedoman dan landasan utama SMP Science Mutiara Insani menyelenggarakan pendidikan berkualitas.
-                    </p>
-                </div>
-
-                <!-- Kartu Visi (Luminous Highlight) -->
-                <div class="glow-card p-6 sm:p-8 rounded-3xl reveal border-cyan-400/30 relative overflow-hidden group">
-                    <div class="absolute -right-16 -top-16 w-56 h-56 bg-cyan-500/15 rounded-full blur-[80px]"></div>
-                    <div class="relative flex flex-col md:flex-row items-start md:items-center gap-5">
-                        <div class="w-13 h-13 rounded-2xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                        </div>
-                        <div>
-                            <span class="inline-block px-2.5 py-0.5 rounded bg-cyan-950/70 border border-cyan-500/40 text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-widest mb-2">
-                                VISI SEKOLAH
-                            </span>
-                            <blockquote class="text-base sm:text-lg md:text-xl font-bold text-white font-heading leading-relaxed">
-                                "Terwujudnya peserta didik yang memiliki jatidiri yang tangguh dan kompeten yang berlandaskan nilai-nilai science untuk masa depan gemilang."
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 7 Misi Sekolah (Grid Kompak) -->
-                <div>
-                    <h3 class="text-sm font-bold text-cyan-300 font-heading mb-4 reveal flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                        <span>7 Misi Utama Sekolah</span>
-                    </h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 stagger-items">
-                        @php
-                            $misiList = [
-                                "Menciptakan profil pelajar yang berakhlak mulia dan rajin beribadah.",
-                                "Menciptakan pembelajaran yang menarik, menyenangkan dan berkarakter yang mampu memfasilitasi pelajar sesuai bakat dan minatnya.",
-                                "Mendidik dan menjadikan siswa memiliki nilai sikap dan ketrampilan dibidang science.",
-                                "Menciptakan lingkungan sekolah yang bersih, asri dan ramah anak.",
-                                "Memfasilitasi pelajar untuk dapat mengembangkan potensi dan kemampuannya secara optimal.",
-                                "Mengembangkan sekolah berwawasan global yang didasari nilai-nilai budaya dan nilai-nilai luhur bangsa.",
-                                "Melibatkan orang tua dan masyarakat dalam proses pembelajaran dan pengembangan sekolah."
-                            ];
-                        @endphp
-
-                        @foreach($misiList as $index => $misi)
-                        <div class="glow-card p-4 rounded-xl reveal flex items-start gap-3 border border-slate-800">
-                            <span class="w-6 h-6 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
-                                0{{ $index + 1 }}
-                            </span>
-                            <p class="text-xs text-slate-300 leading-relaxed font-medium">
-                                {{ $misi }}
-                            </p>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ============================================================== -->
         <!-- 8. AJAKAN MASUK KE PORTAL (Call To Action Kompak) -->
         <!-- ============================================================== -->
         <section class="py-12 sm:py-16 border-t border-cyan-500/10 relative overflow-hidden">
@@ -708,6 +708,8 @@
                         <li><a href="#tentang" class="hover:text-cyan-300 transition-colors">Tentang Eksentra</a></li>
                         <li><a href="#tujuan" class="hover:text-cyan-300 transition-colors">Tujuan Ekskul</a></li>
                         <li><a href="#keunggulan" class="hover:text-cyan-300 transition-colors">Keunggulan</a></li>
+                        <li><a href="#galeri" class="hover:text-cyan-300 transition-colors">Galeri</a></li>
+                        <li><a href="#visi-misi" class="hover:text-cyan-300 transition-colors">Visi & Misi</a></li>
                         <li><a href="#profil-lokasi" class="hover:text-cyan-300 transition-colors">Video & Lokasi</a></li>
                         <li><a href="{{ route('login') }}" class="text-cyan-400 font-bold hover:text-cyan-300 transition-colors">Masuk ke Portal →</a></li>
                     </ul>

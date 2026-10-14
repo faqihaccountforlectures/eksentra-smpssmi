@@ -122,9 +122,9 @@
                                     <td class="px-7 py-4 font-medium">
                                         @if(isset($student->studentProfile->gender))
                                             @if($student->studentProfile->gender === 'laki-laki')
-                                                <span class="inline-flex items-center gap-1.5 text-gray-muted text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-blue-500 shadow-sm"></div> Laki-laki</span>
+                                                <span class="inline-flex items-center gap-1.5 text-gray-muted text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></div> Laki-laki</span>
                                             @else
-                                                <span class="inline-flex items-center gap-1.5 text-gray-muted text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-pink-500 shadow-sm"></div> Perempuan</span>
+                                                <span class="inline-flex items-center gap-1.5 text-gray-muted text-[11px] font-bold tracking-widest uppercase"><div class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div> Perempuan</span>
                                             @endif
                                         @else
                                             <span class="text-gray-muted italic">-</span>
