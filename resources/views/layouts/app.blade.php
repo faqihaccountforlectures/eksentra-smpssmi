@@ -36,152 +36,198 @@
         
         <!-- FUNGSI KODE: Sidebar navigasi utama (Light theme, putih bersih dengan aksen biru tua) -->
         <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white flex flex-col transform -translate-x-full md:static md:translate-x-0 shrink-0 shadow-none border-r border-slate-200">
-            <!-- Logo area & Identitas Brand EKSENTRA -->
-            <div class="h-16 md:h-18 flex items-center justify-between px-5 bg-white border-b border-slate-200 shrink-0">
+            <!-- Logo area & Identitas Brand EKSENTRA (Sejajar Sempurna dengan Topbar Header) -->
+            <div class="h-14 md:h-16 flex items-center justify-between px-3.5 sm:px-4 bg-white border-b border-slate-200 shrink-0">
                 <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
-                    <div class="relative">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center shadow-md">
-                            <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-6 h-6 object-contain">
-                        </div>
+                    <div class="w-8 h-8 rounded-lg bg-white border border-blue-100 shadow-xs flex items-center justify-center p-1 shrink-0 group-hover:border-blue-300 transition-colors">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-full h-full object-contain">
                     </div>
-                    <div>
+                    <div class="min-w-0">
                         <div class="flex items-center gap-1.5">
-                            <span class="font-extrabold text-sm text-blue-900 font-heading tracking-wide">EKSENTRA</span>
+                            <span class="font-black text-sm text-blue-950 font-heading tracking-tight leading-none">Eksentra</span>
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
                         </div>
-                        <p class="text-[8px] text-blue-500 font-bold uppercase tracking-wider">SMP Science Mutiara Insani</p>
+                        <p class="text-[8.5px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">SMP Science Mutiara Insani</p>
                     </div>
                 </a>
 
                 <!-- Tombol Tutup (X) khusus layar mobile -->
-                <button type="button" onclick="toggleSidebar()" class="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" aria-label="Tutup Menu">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button type="button" onclick="toggleSidebar()" class="md:hidden p-1 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" aria-label="Tutup Menu">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <!-- Menu Navigasi Padat & Rapi -->
-            <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto overflow-x-hidden thin-scrollbar-light">
+            <!-- Menu Navigasi Rapat & Ringkas (Anti-Scroll) -->
+            <nav class="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto overflow-x-hidden thin-scrollbar-light">
                 
-                <a href="/dashboard" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->is('dashboard') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->is('dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    Dasbor
+                <p class="px-2.5 pt-1 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Menu Utama</p>
+
+                <!-- Menu Dasbor -->
+                @php $isDashboardActive = request()->is('dashboard'); @endphp
+                <a href="/dashboard" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isDashboardActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isDashboardActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10-4a1 1 0 011-1h4a1 1 0 011 1v8a1 1 0 01-1 1h-4a1 1 0 01-1-1v-8z"></path></svg>
+                    </div>
+                    <span class="truncate">Dasbor</span>
                 </a>
                 
                 @if(Auth::user()->role === 'admin')
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Akademik Dasar</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Akademik Dasar</p>
 
                 <!-- Menu Tahun Ajaran -->
-                <a href="{{ route('academic-years.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('academic-years.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('academic-years.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Tahun Ajaran
+                @php $isAyActive = request()->routeIs('academic-years.*'); @endphp
+                <a href="{{ route('academic-years.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isAyActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isAyActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <span class="truncate">Tahun Ajaran</span>
                 </a>
                 
                 <!-- Menu Kelas -->
-                <a href="{{ route('classes.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('classes.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('classes.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    Kelas
+                @php $isClassesActive = request()->routeIs('classes.*'); @endphp
+                <a href="{{ route('classes.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isClassesActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isClassesActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <span class="truncate">Kelas</span>
                 </a>
 
                 <!-- Menu Pembagian Kelas -->
-                <a href="{{ route('class-enrollments.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('class-enrollments.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('class-enrollments.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    Pembagian Kelas
+                @php $isEnrollActive = request()->routeIs('class-enrollments.*'); @endphp
+                <a href="{{ route('class-enrollments.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isEnrollActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isEnrollActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <span class="truncate">Pembagian Kelas</span>
                 </a>
 
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Pengguna</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Pengguna</p>
 
                 <!-- Menu Data Pembina / Coach -->
-                <a href="{{ route('coaches.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('coaches.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('coaches.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    Data Pembina
+                @php $isCoachActive = request()->routeIs('coaches.*'); @endphp
+                <a href="{{ route('coaches.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isCoachActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isCoachActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <span class="truncate">Data Pembina</span>
                 </a>
                 
                 <!-- Menu Data Siswa -->
-                <a href="{{ route('students.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('students.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('students.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
-                    </svg>
-                    Data Siswa
+                @php $isStudentActive = request()->routeIs('students.*'); @endphp
+                <a href="{{ route('students.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isStudentActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isStudentActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
+                        </svg>
+                    </div>
+                    <span class="truncate">Data Siswa</span>
                 </a>
 
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Ekstrakurikuler & Keuangan</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Ekstrakurikuler & Keuangan</p>
 
                 <!-- Navigasi Menu Ekstrakurikuler -->
-                <a href="{{ route('extracurriculars.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('extracurriculars.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('extracurriculars.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                    Data Ekstrakurikuler
+                @php $isExtraActive = request()->routeIs('extracurriculars.*'); @endphp
+                <a href="{{ route('extracurriculars.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isExtraActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isExtraActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                    </div>
+                    <span class="truncate">Data Ekstrakurikuler</span>
                 </a>
 
                 <!-- Navigasi Menu Pendaftaran Ekstrakurikuler -->
-                <a href="{{ route('extracurricular-registrations.index') }}" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('extracurricular-registrations.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <div class="flex items-center gap-2.5 truncate">
-                        <svg class="w-4 h-4 {{ request()->routeIs('extracurricular-registrations.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                @php $isRegActive = request()->routeIs('extracurricular-registrations.*'); @endphp
+                <a href="{{ route('extracurricular-registrations.index') }}" class="flex items-center justify-between px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isRegActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isRegActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
                         <span class="truncate">Pendaftaran Ekskul</span>
                     </div>
                     @if(($pendingRegistrationsCount ?? 0) > 0)
-                        <span class="px-1.5 py-0.5 rounded-full text-[9px] font-mono font-black bg-amber-400 text-slate-900 shrink-0">
+                        <span class="px-1.5 py-0.5 rounded-full text-[9px] font-mono font-black bg-amber-400 text-slate-900 shrink-0 ml-1.5 shadow-xs">
                             {{ $pendingRegistrationsCount }}
                         </span>
                     @endif
                 </a>
 
                 <!-- Navigasi Menu Verifikasi Pembayaran -->
-                <a href="{{ route('admin.payments.index') }}" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('admin.payments.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <div class="flex items-center gap-2.5 truncate">
-                        <svg class="w-4 h-4 {{ request()->routeIs('admin.payments.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                @php $isPayActive = request()->routeIs('admin.payments.*'); @endphp
+                <a href="{{ route('admin.payments.index') }}" class="flex items-center justify-between px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isPayActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isPayActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
                         <span class="truncate">Verifikasi Pembayaran</span>
                     </div>
                     @if(($pendingPaymentsCount ?? 0) > 0)
-                        <span class="px-1.5 py-0.5 rounded-full text-[9px] font-mono font-black bg-amber-400 text-slate-900 shrink-0">
+                        <span class="px-1.5 py-0.5 rounded-full text-[9px] font-mono font-black bg-amber-400 text-slate-900 shrink-0 ml-1.5 shadow-xs">
                             {{ $pendingPaymentsCount }}
                         </span>
                     @endif
                 </a>
 
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Pengaturan Akun</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Pengaturan Akun</p>
 
                 <!-- Navigasi Menu Profil Admin -->
-                <a href="{{ route('admin.profile.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('admin.profile.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('admin.profile.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    Profil & Akun Admin
+                @php $isAdminProfActive = request()->routeIs('admin.profile.*'); @endphp
+                <a href="{{ route('admin.profile.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isAdminProfActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isAdminProfActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <span class="truncate">Profil & Akun Admin</span>
                 </a>
 
                 @elseif(Auth::user()->role === 'coach')
                 <!-- MENU KHUSUS COACH / PEMBINA -->
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Ekstrakurikuler</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Ekstrakurikuler</p>
 
-                <a href="{{ route('coach.extracurriculars.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('coach.extracurriculars.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('coach.extracurriculars.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                    Ekskul Binaan & Penilaian
+                @php $isCoachExtraActive = request()->routeIs('coach.extracurriculars.*'); @endphp
+                <a href="{{ route('coach.extracurriculars.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isCoachExtraActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isCoachExtraActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                    </div>
+                    <span class="truncate">Ekskul Binaan & Penilaian</span>
                 </a>
 
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Akun Saya</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Akun Saya</p>
 
-                <a href="{{ route('coach.profile.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('coach.profile.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('coach.profile.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    Profil Saya
+                @php $isCoachProfActive = request()->routeIs('coach.profile.*'); @endphp
+                <a href="{{ route('coach.profile.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isCoachProfActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isCoachProfActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <span class="truncate">Profil Saya</span>
                 </a>
 
                 @elseif(Auth::user()->role === 'siswa')
                 <!-- MENU KHUSUS SISWA -->
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Aktivitas Siswa</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Aktivitas Siswa</p>
 
-                <a href="{{ route('siswa.extracurriculars.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('siswa.extracurriculars.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('siswa.extracurriculars.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                    Katalog & Ekskul Saya
+                @php $isSiswaExtraActive = request()->routeIs('siswa.extracurriculars.*'); @endphp
+                <a href="{{ route('siswa.extracurriculars.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isSiswaExtraActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isSiswaExtraActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                    </div>
+                    <span class="truncate">Katalog & Ekskul Saya</span>
                 </a>
                 
-                <a href="{{ route('siswa.payments.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('siswa.payments.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('siswa.payments.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Riwayat Pembayaran
+                @php $isSiswaPayActive = request()->routeIs('siswa.payments.*'); @endphp
+                <a href="{{ route('siswa.payments.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isSiswaPayActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isSiswaPayActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <span class="truncate">Riwayat Pembayaran</span>
                 </a>
 
-                <p class="px-3 pt-3 pb-1 text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono">Akun Saya</p>
+                <p class="px-2.5 pt-2 pb-0.5 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-heading">Akun Saya</p>
 
-                <a href="{{ route('siswa.profile.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->routeIs('siswa.profile.*') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
-                    <svg class="w-4 h-4 {{ request()->routeIs('siswa.profile.*') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    Profil Saya
+                @php $isSiswaProfActive = request()->routeIs('siswa.profile.*'); @endphp
+                <a href="{{ route('siswa.profile.index') }}" class="flex items-center gap-2.5 px-2.5 py-1 rounded-lg text-xs transition-all duration-150 {{ $isSiswaProfActive ? 'bg-blue-50/80 text-blue-950 font-bold border border-blue-100/70 shadow-xs' : 'text-slate-600 hover:text-blue-950 hover:bg-blue-50/50 font-medium border border-transparent hover:border-blue-100/40 group' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isSiswaProfActive ? 'bg-blue-800 text-white shadow-xs' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-100/70 group-hover:text-blue-700' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <span class="truncate">Profil Saya</span>
                 </a>
                 @endif
             </nav>
@@ -190,17 +236,17 @@
         <!-- Area Kanan (Topbar & Konten Dinamis) -->
         <div class="flex-1 flex flex-col overflow-hidden min-w-0">
             
-            <!-- FUNGSI KODE: Topbar atas berdesain bersih & modern, background putih dengan aksen biru tua -->
-            <header class="h-14 md:h-16 bg-white border-b border-blue-100 flex items-center justify-between px-4 md:px-6 z-10 shrink-0 shadow-sm">
-                <div class="flex items-center gap-3 min-w-0">
+            <!-- FUNGSI KODE: Topbar atas berdesain bersih & modern, tinggi & garis bawah sejajar presisi dengan sidebar -->
+            <header class="h-14 md:h-16 bg-white border-b border-slate-200 flex items-center justify-between px-3.5 sm:px-4 md:px-4.5 z-10 shrink-0 shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
                     <!-- Tombol Hamburger untuk menyembunyikan/memunculkan sidebar -->
-                    <button type="button" onclick="toggleSidebar()" class="p-1.5 rounded-lg text-slate-500 hover:text-blue-800 hover:bg-blue-50 border border-slate-200 transition-all shrink-0 active:scale-95 outline-none focus:outline-none" title="Sembunyikan / Tampilkan Menu" aria-label="Toggle Menu Navigasi">
+                    <button type="button" onclick="toggleSidebar()" class="p-1.5 rounded-xl text-slate-500 hover:text-blue-800 hover:bg-blue-50 border border-slate-200 transition-all shrink-0 active:scale-95 outline-none focus:outline-none" title="Sembunyikan / Tampilkan Menu" aria-label="Toggle Menu Navigasi">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
 
-                    <h1 class="text-sm md:text-base font-extrabold text-blue-900 font-heading truncate tracking-wide flex items-center gap-2">
+                    <h1 class="text-sm md:text-base font-extrabold text-blue-950 font-heading truncate tracking-tight flex items-center gap-2">
                         @yield('header', 'Dashboard')
                     </h1>
                 </div>
