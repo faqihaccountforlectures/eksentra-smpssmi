@@ -12,7 +12,7 @@ class StudentProfile extends Model
     // Kolom-kolom yang boleh diisi sekalian (mass assignment)
     protected $fillable = [
         'user_id',
-        'nisn',
+        'nis',
         'full_name',
         'gender',
         'phone_number',

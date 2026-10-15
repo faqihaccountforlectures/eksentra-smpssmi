@@ -11,17 +11,19 @@
                 Akun siswa milik <span class="font-bold text-slate-900">{{ $student->studentProfile->full_name ?? $student->email }}</span> akan dihapus secara permanen beserta seluruh data pendaftaran dan riwayatnya. Tindakan ini tidak dapat dibatalkan.
             </p>
             
-            <form action="{{ route('students.destroy', $student->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">
+            <form action="{{ route('students.destroy', $student->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 
-                <button type="button" onclick="document.getElementById('deleteModal-{{ $student->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm">
-                    Batal
-                </button>
-                <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    <span>Ya, Hapus Data</span>
-                </button>
+                <div style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; gap: 12px !important; width: 100% !important;">
+                    <button type="button" onclick="document.getElementById('deleteModal-{{ $student->id }}').classList.add('hidden')" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm whitespace-nowrap">
+                        Batal
+                    </button>
+                    <button type="submit" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95 whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        <span>Ya, Hapus Data</span>
+                    </button>
+                </div>
             </form>
         </div>
     </div>

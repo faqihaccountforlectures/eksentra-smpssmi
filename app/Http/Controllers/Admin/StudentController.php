@@ -29,7 +29,7 @@ class StudentController extends Controller
                 $q->where('email', 'like', "%{$search}%")
                   ->orWhereHas('studentProfile', function($sp) use ($search) {
                       $sp->where('full_name', 'like', "%{$search}%")
-                        ->orWhere('nisn', 'like', "%{$search}%")
+                        ->orWhere('nis', 'like', "%{$search}%")
                         ->orWhere('parent_phone', 'like', "%{$search}%");
                   });
             });
@@ -53,9 +53,14 @@ class StudentController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData) {
-            // Bikin akun login (password kosong karena pakai SSO Google Belajar.id)
+            // Email sistem siswa diatur otomatis menggunakan format {nis}@siswa.smpsmi.com
+            $email = $validatedData['nis'] . '@siswa.smpsmi.com';
+
+            // Bikin akun login dengan password default 'siswasmpsmi'
             $user = User::create([
-                'email' => $validatedData['email'],
+                'email' => $email,
+                'password' => 'siswasmpsmi',
+                'must_change_password' => true,
                 'role' => 'siswa',
             ]);
 
@@ -63,7 +68,7 @@ class StudentController extends Controller
             StudentProfile::create([
                 'user_id' => $user->id,
                 'full_name' => $validatedData['full_name'],
-                'nisn' => $validatedData['nisn'],
+                'nis' => $validatedData['nis'],
                 'gender' => $validatedData['gender'],
                 'phone_number' => $validatedData['phone_number'],
                 'parent_phone' => $validatedData['parent_phone'],
@@ -89,16 +94,16 @@ class StudentController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData, $student) {
-            // Update email loginnya
+            // Update email sistem sesuai NIS siswa
             $student->update([
-                'email' => $validatedData['email'],
+                'email' => $validatedData['nis'] . '@siswa.smpsmi.com',
             ]);
 
             // Update profil siswanya
             if ($student->studentProfile) {
                 $student->studentProfile->update([
                     'full_name' => $validatedData['full_name'],
-                    'nisn' => $validatedData['nisn'],
+                    'nis' => $validatedData['nis'],
                     'gender' => $validatedData['gender'],
                     'phone_number' => $validatedData['phone_number'],
                     'parent_phone' => $validatedData['parent_phone'],
@@ -107,7 +112,7 @@ class StudentController extends Controller
                 StudentProfile::create([
                     'user_id' => $student->id,
                     'full_name' => $validatedData['full_name'],
-                    'nisn' => $validatedData['nisn'],
+                    'nis' => $validatedData['nis'],
                     'gender' => $validatedData['gender'],
                     'phone_number' => $validatedData['phone_number'],
                     'parent_phone' => $validatedData['parent_phone'],
@@ -131,6 +136,24 @@ class StudentController extends Controller
         $student->delete();
 
         return redirect()->back()->with('success', 'Data siswa tersebut berhasil dihapus permanen.');
+    }
+
+    /**
+     * Me-reset kata sandi akun siswa ke kata sandi default sistem ('siswasmpsmi')
+     * dan mewajibkan siswa untuk mengganti kata sandi saat login berikutnya.
+     */
+    public function resetPassword($id)
+    {
+        $student = User::where('role', 'siswa')->with('studentProfile')->findOrFail($id);
+
+        $student->update([
+            'password'             => 'siswasmpsmi',
+            'must_change_password' => true,
+        ]);
+
+        $name = $student->studentProfile->full_name ?? $student->email;
+
+        return redirect()->back()->with('success', "Kata sandi siswa {$name} berhasil di-reset ke default ('siswasmpsmi'). Siswa diwajibkan membuat kata sandi baru saat login kembali.");
     }
 
     /**
@@ -159,7 +182,7 @@ class StudentController extends Controller
             // Baris header kolom template (dilengkapi kolom Kelas opsional)
             fputcsv($handle, [
                 'Nama Lengkap',
-                'NISN',
+                'NIS',
                 'Email Akun Belajar',
                 'Jenis Kelamin',
                 'Nomor HP Siswa',
@@ -170,7 +193,7 @@ class StudentController extends Controller
             // Baris contoh data pengisian ke-1 (Gunakan ="..." agar Excel tidak mengubah angka menjadi format eksponen ilmiah)
             fputcsv($handle, [
                 'Ahmad Fauzi',
-                '="0081234567"',
+                '="12345678"',
                 'ahmad.fauzi@smp.belajar.id',
                 'Laki-laki',
                 '="081234567890"',
@@ -181,7 +204,7 @@ class StudentController extends Controller
             // Baris contoh data pengisian ke-2
             fputcsv($handle, [
                 'Siti Aisyah',
-                '="0087654321"',
+                '="12345679"',
                 'siti.aisyah@smp.belajar.id',
                 'Perempuan',
                 '="082134567891"',
@@ -250,7 +273,7 @@ class StudentController extends Controller
         $errors = [];
         $studentsToInsert = [];
         $batchEmails = [];
-        $batchNisns = [];
+        $batchNis = [];
 
         // 3. Membaca dan memvalidasi setiap baris data dari berkas CSV
         while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
@@ -263,13 +286,13 @@ class StudentController extends Controller
 
             // Pastikan baris memiliki minimal 4 kolom utama
             if (count($row) < 4) {
-                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama, NISN, Email, dan Jenis Kelamin.";
+                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama, NIS, Email, dan Jenis Kelamin.";
                 continue;
             }
 
             // Bersihkan data dari karakter ekstra tanda kutip / formula Excel (contoh: ="0812..." atau '0812...)
             $fullName    = trim($row[0] ?? '');
-            $nisn        = trim(trim($row[1] ?? ''), "=\"' \t\n\r\0\x0B");
+            $nis         = trim(trim($row[1] ?? ''), "=\"' \t\n\r\0\x0B");
             $email       = trim($row[2] ?? '');
             $genderRaw   = strtolower(trim($row[3] ?? ''));
             $phoneNumber = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
@@ -282,21 +305,21 @@ class StudentController extends Controller
                 continue;
             }
 
-            // Validasi NISN
-            if (empty($nisn) || strlen($nisn) > 20) {
-                $errors[] = "Baris ke-{$rowNumber}: NISN '{$nisn}' wajib diisi dan maksimal 20 karakter.";
+            // Validasi NIS
+            if (empty($nis) || strlen($nis) > 20) {
+                $errors[] = "Baris ke-{$rowNumber}: NIS '{$nis}' wajib diisi dan maksimal 20 karakter.";
                 continue;
             }
 
-            // Cek duplikasi NISN di dalam berkas CSV
-            if (in_array($nisn, $batchNisns)) {
-                $errors[] = "Baris ke-{$rowNumber}: NISN '{$nisn}' terdeteksi ganda di dalam berkas yang sama.";
+            // Cek duplikasi NIS di dalam berkas CSV
+            if (in_array($nis, $batchNis)) {
+                $errors[] = "Baris ke-{$rowNumber}: NIS '{$nis}' terdeteksi ganda di dalam berkas yang sama.";
                 continue;
             }
 
-            // Cek duplikasi NISN di database
-            if (StudentProfile::where('nisn', $nisn)->exists()) {
-                $errors[] = "Baris ke-{$rowNumber}: NISN '{$nisn}' sudah terdaftar di sistem.";
+            // Cek duplikasi NIS di database
+            if (StudentProfile::where('nis', $nis)->exists()) {
+                $errors[] = "Baris ke-{$rowNumber}: NIS '{$nis}' sudah terdaftar di sistem.";
                 continue;
             }
 
@@ -358,11 +381,11 @@ class StudentController extends Controller
 
             // Catat ke daftar data yang siap disimpan
             $batchEmails[] = $email;
-            $batchNisns[]  = $nisn;
+            $batchNis[]    = $nis;
 
             $studentsToInsert[] = [
                 'full_name'     => $fullName,
-                'nisn'          => $nisn,
+                'nis'           => $nis,
                 'email'         => $email,
                 'gender'        => $gender,
                 'phone_number'  => $phoneNumber ?: null,
@@ -388,17 +411,19 @@ class StudentController extends Controller
         // 4. Eksekusi penyimpanan ke basis data menggunakan Database Transaction
         DB::transaction(function () use ($studentsToInsert, $activeYear) {
             foreach ($studentsToInsert as $studentData) {
-                // Membuat akun pengguna (password null karena menggunakan Google SSO Belajar.id)
+                // Membuat akun pengguna dengan password default 'siswasmpsmi'
                 $user = User::create([
-                    'email' => $studentData['email'],
-                    'role'  => 'siswa',
+                    'email'                => $studentData['email'],
+                    'password'             => 'siswasmpsmi',
+                    'must_change_password' => true,
+                    'role'                 => 'siswa',
                 ]);
 
                 // Membuat profil siswa terkait
                 StudentProfile::create([
                     'user_id'      => $user->id,
                     'full_name'    => $studentData['full_name'],
-                    'nisn'         => $studentData['nisn'],
+                    'nis'          => $studentData['nis'],
                     'gender'       => $studentData['gender'],
                     'phone_number' => $studentData['phone_number'],
                     'parent_phone' => $studentData['parent_phone'],

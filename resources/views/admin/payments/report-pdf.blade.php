@@ -91,7 +91,7 @@
             <tr>
                 <th width="5%">No</th>
                 <th width="18%">Nama</th>
-                <th width="12%">NISN</th>
+                <th width="12%">NIS</th>
                 <th width="15%">Ekstrakurikuler</th>
                 <th width="14%">Bulan & Tahun</th>
                 <th width="11%">Status</th>
@@ -104,7 +104,7 @@
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td>{{ $payment->student->studentProfile->full_name ?? $payment->student->email ?? '-' }}</td>
-                    <td>{{ $payment->student->studentProfile->nisn ?? '-' }}</td>
+                    <td>{{ $payment->student->studentProfile->nis ?? '-' }}</td>
                     <td>{{ $payment->extracurricular->name ?? '-' }}</td>
                     <td>{{ $payment->month }} {{ $payment->year }}</td>
                     <td class="text-center">

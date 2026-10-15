@@ -53,9 +53,11 @@ class CoachController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData) {
-            // 1. Buat akun user coach
+            // 1. Buat akun user coach dengan password default 'pembinasmpsmi'
             $user = User::create([
                 'email' => $validatedData['email'],
+                'password' => 'pembinasmpsmi',
+                'must_change_password' => true,
                 'role' => 'coach',
             ]);
 
@@ -128,6 +130,24 @@ class CoachController extends Controller
     }
 
     /**
+     * Me-reset kata sandi akun pembina ke kata sandi default sistem ('pembinasmpsmi')
+     * dan mewajibkan pembina untuk mengganti kata sandi saat login berikutnya.
+     */
+    public function resetPassword($id)
+    {
+        $coach = User::where('role', 'coach')->with('coachProfile')->findOrFail($id);
+
+        $coach->update([
+            'password'             => 'pembinasmpsmi',
+            'must_change_password' => true,
+        ]);
+
+        $name = $coach->coachProfile->full_name ?? $coach->email;
+
+        return redirect()->back()->with('success', "Kata sandi pembina {$name} berhasil di-reset ke default ('pembinasmpsmi'). Pembina diwajibkan membuat kata sandi baru saat login kembali.");
+    }
+
+    /**
      * Mengunduh berkas template CSV contoh untuk impor data coach massal.
      */
     public function downloadTemplate()
@@ -144,7 +164,7 @@ class CoachController extends Controller
             // Header kolom
             fputcsv($output, [
                 'Nama Lengkap',
-                'Email Belajar.id',
+                'Username / Email (@smpsmi.com)',
                 'Jenis Kelamin',
                 'Nomor Telepon',
             ], ';');
@@ -152,14 +172,14 @@ class CoachController extends Controller
             // Baris data contoh
             fputcsv($output, [
                 'Drs. H. Ahmad Subardjo, M.Pd.',
-                'ahmad.subardjo@guru.smp.belajar.id',
+                'ahmad.subardjo@smpsmi.com',
                 'Laki-laki',
                 '081234567891',
             ], ';');
 
             fputcsv($output, [
                 'Siti Rahmawati, S.Pd.',
-                'siti.rahmawati@guru.smp.belajar.id',
+                'siti.rahmawati@smpsmi.com',
                 'Perempuan',
                 '081234567892',
             ], ';');
@@ -268,7 +288,11 @@ class CoachController extends Controller
             foreach ($coachesToInsert as $coachData) {
                 $user = User::firstOrCreate(
                     ['email' => $coachData['email']],
-                    ['role'  => 'coach']
+                    [
+                        'password'             => 'pembinasmpsmi',
+                        'must_change_password' => true,
+                        'role'                 => 'coach',
+                    ]
                 );
 
                 CoachProfile::updateOrCreate(

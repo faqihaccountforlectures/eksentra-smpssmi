@@ -4,7 +4,7 @@
 @section('header', 'Edit Data Pembina')
 
 @section('content')
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-4xl mx-auto">
         <!-- Header Page -->
         <div class="flex items-center gap-4 mb-6">
             <a href="{{ route('coaches.index') }}" class="p-2.5 bg-white rounded-xl shadow-sm border border-navy-light/30 text-gray-muted hover:text-navy-base hover:bg-navy-light/10 transition-all active:scale-95">
@@ -12,7 +12,7 @@
             </a>
             <div>
                 <h2 class="text-xl font-bold text-navy-dark font-heading tracking-wide">Ubah Profil Pembina</h2>
-                <p class="text-[13px] text-gray-muted mt-0.5 tracking-wide">Perbarui biodata atau sesuaikan email akun login pembina yang bersangkutan.</p>
+                <p class="text-[13px] text-gray-muted mt-0.5 tracking-wide">Perbarui biodata atau sesuaikan username akun login pembina yang bersangkutan.</p>
             </div>
         </div>
         
@@ -30,75 +30,64 @@
             </div>
             @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <!-- KOLOM KIRI: INFO AKUN -->
-                <div class="md:col-span-4">
-                    <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden group hover:shadow-md hover:border-navy-base/30 transition-all duration-300 p-6">
-                        <div class="mb-6">
-                            <h3 class="text-base font-bold text-navy-dark mb-1 flex items-center gap-2 tracking-wide font-heading">
-                                <svg class="w-5 h-5 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                Informasi Akun
-                            </h3>
-                            <p class="text-xs text-gray-muted leading-relaxed">Ubah email ini jika pembina menggunakan akun Google yang baru.</p>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-bold text-navy-dark mb-2 tracking-wide">Email Google <span class="text-rose-500">*</span></label>
-                            <input type="email" name="email" value="{{ old('email', $coach->email) }}" placeholder="contoh@guru.smp.belajar.id" required class="w-full bg-white-off/50 border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
-                            
-                            <div class="mt-4 bg-navy-light/10 border border-navy-light/30 rounded-xl p-3.5 flex gap-3 shadow-sm">
-                                <svg class="w-5 h-5 text-navy-base shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <p class="text-xs text-navy-base leading-relaxed font-bold">
-                                    Password tidak perlu dibuat secara manual karena sistem ini sudah mendukung otentikasi akun Google belajar sekolah.
-                                </p>
+            <div class="bg-white rounded-2xl shadow-sm border border-navy-light/30 overflow-hidden p-6 sm:p-8 flex flex-col">
+                <div class="mb-6 flex items-center gap-3 pb-5 border-b border-navy-light/20">
+                    <div class="bg-navy-light/10 p-2.5 rounded-xl text-navy-base border border-navy-light/30 shadow-sm shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-navy-dark font-heading">Biodata & Akun Pembina</h3>
+                        <p class="text-xs text-gray-muted mt-0.5">Sesuaikan nama, username, atau kontak apabila ada perubahan terbaru</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Nama Lengkap & Gelar -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Nama Lengkap & Gelar <span class="text-rose-500">*</span></label>
+                        <input type="text" name="full_name" value="{{ old('full_name', $coach->coachProfile->full_name ?? '') }}" placeholder="Contoh: Bapak Budi Santoso, S.Pd., M.Si." required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
+                    </div>
+
+                    <!-- Username / Email Pembina -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Username / Email Pembina <span class="text-rose-500">*</span></label>
+                        <input type="email" name="email" value="{{ old('email', $coach->email) }}" placeholder="namapembina@smpsmi.com" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
+                        <p class="text-[11px] text-gray-muted mt-1">Username ini digunakan pembina untuk login ke sistem.</p>
+                    </div>
+
+                    <!-- Jenis Kelamin -->
+                    <div>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Jenis Kelamin <span class="text-rose-500">*</span></label>
+                        <div class="relative">
+                            @php $currentGender = old('gender', $coach->coachProfile->gender ?? ''); @endphp
+                            <select name="gender" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 appearance-none shadow-sm font-medium cursor-pointer">
+                                <option value="" disabled {{ $currentGender ? '' : 'selected' }}>Pilih jenis kelamin...</option>
+                                <option value="laki-laki" {{ $currentGender == 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                <option value="perempuan" {{ $currentGender == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-muted">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Nomor HP / WA -->
+                    <div>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">No. WA / Telepon <span class="text-rose-500">*</span></label>
+                        <input type="text" name="phone_number" value="{{ old('phone_number', $coach->coachProfile->phone_number ?? '') }}" placeholder="Contoh: 08123456789" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium font-mono">
                     </div>
                 </div>
 
-                <!-- KOLOM KANAN: BIODATA -->
-                <div class="md:col-span-8">
-                    <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden group hover:shadow-md hover:border-navy-base/30 transition-all duration-300 p-6 flex flex-col h-full">
-                        <div class="mb-6 flex justify-between items-start">
-                            <div>
-                                <h3 class="text-base font-bold text-navy-dark mb-1 flex items-center gap-2 tracking-wide font-heading">
-                                    <svg class="w-5 h-5 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                                    Biodata Pembina
-                                </h3>
-                                <p class="text-xs text-gray-muted leading-relaxed">Sesuaikan nama atau No HP apabila ada perubahan terbaru.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-grow">
-                            <!-- Nama Lengkap -->
-                            <div class="sm:col-span-2">
-                                <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Nama Lengkap & Gelar <span class="text-rose-500">*</span></label>
-                                <input type="text" name="full_name" value="{{ old('full_name', $coach->coachProfile->full_name ?? '') }}" placeholder="Contoh: Bapak Budi Santoso, S.Pd., M.Si." required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
-                            </div>
-
-                            <!-- Jenis Kelamin -->
-                            <div>
-                                <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Jenis Kelamin <span class="text-rose-500">*</span></label>
-                                <div class="relative">
-                                    @php $currentGender = old('gender', $coach->coachProfile->gender ?? ''); @endphp
-                                    <select name="gender" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 appearance-none shadow-sm font-medium cursor-pointer">
-                                        <option value="" disabled {{ $currentGender ? '' : 'selected' }}>Pilih jenis kelamin...</option>
-                                        <option value="laki-laki" {{ $currentGender == 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                                        <option value="perempuan" {{ $currentGender == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
-                                    </select>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-muted">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- No HP -->
-                            <div>
-                                <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">No. WA / Telepon <span class="text-rose-500">*</span></label>
-                                <input type="text" name="phone_number" value="{{ old('phone_number', $coach->coachProfile->phone_number ?? '') }}" placeholder="Contoh: 08123456789" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
-                            </div>
-                        </div>
+                <!-- Bantuan Akses & Reset Password -->
+                <div class="mt-6 pt-5 border-t border-navy-light/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <p class="text-xs font-bold text-navy-dark uppercase tracking-wider">Akses Akun Pembina</p>
+                        <p class="text-[11px] text-gray-muted mt-0.5">Pembina login menggunakan username/email (@smpsmi.com). Jika pembina lupa kata sandi, admin dapat meresetnya ke kata sandi default.</p>
                     </div>
+                    <button type="button" onclick="document.getElementById('resetPasswordModal-{{ $coach->id }}').classList.remove('hidden')" class="px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold rounded-xl border border-amber-200 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 shrink-0 whitespace-nowrap">
+                        <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                        <span>Reset Password Default (pembinasmpsmi)</span>
+                    </button>
                 </div>
             </div>
 
@@ -114,4 +103,5 @@
             </div>
         </form>
     </div>
+    @include('admin.coaches.reset-password', ['coach' => $coach])
 @endsection

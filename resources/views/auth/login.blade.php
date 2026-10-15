@@ -45,7 +45,7 @@
         <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-sky-200/30 rounded-full blur-[100px] animate-float-slow"></div>
     </div>
 
-    <!-- WRAPPER UTAMA (Melebar ke Samping, Ringkas Vertikal) -->
+    <!-- WRAPPER UTAMA -->
     <div class="w-full max-w-4xl relative z-10 my-auto py-2">
 
         <!-- Top Bar Navigasi Mini -->
@@ -63,20 +63,15 @@
         <!-- CONTAINER KARTU LOGIN MELEBAR HORIZONTAL (2 Kolom Seimbang) -->
         <div class="light-login-card rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-12 transition-all">
             
-            <!-- ========================================================= -->
-            <!-- KOLOM KIRI: Logo & Identitas Brand (md:col-span-5) -->
-            <!-- ========================================================= -->
+            <!-- KOLOM KIRI: Logo & Identitas Brand -->
             <div class="md:col-span-5 p-6 sm:p-8 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 text-white border-b md:border-b-0 md:border-r border-blue-900/20 flex flex-col justify-center items-center text-center relative overflow-hidden">
-                <!-- Decorative Soft Glow -->
                 <div class="absolute -right-10 -top-10 w-44 h-44 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="relative flex flex-col items-center">
-                    <!-- Logo Sekolah -->
                     <div class="w-16 h-16 sm:w-20 sm:h-20 mb-4 relative inline-flex items-center justify-center p-2 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo SMP Science Mutiara Insani" class="relative w-full h-full object-contain">
                     </div>
 
-                    <!-- Identitas Brand EKSENTRA -->
                     <h1 class="text-3xl sm:text-4xl font-black font-heading tracking-tight mb-1 text-white">
                         EKSENTRA
                     </h1>
@@ -85,12 +80,10 @@
                 </div>
             </div>
 
-            <!-- ========================================================= -->
-            <!-- KOLOM KANAN: Form & Tab Navigasi Login (md:col-span-7) -->
-            <!-- ========================================================= -->
+            <!-- KOLOM KANAN: Form & Tab Navigasi Login -->
             <div class="md:col-span-7 p-6 sm:p-7 flex flex-col justify-center bg-white relative">
                 
-                <!-- Pesan Error Session (Jika ada error login) -->
+                <!-- Pesan Error Session -->
                 @if(session('error'))
                     <div class="bg-red-50 text-red-700 p-3 rounded-xl text-xs font-semibold mb-4 border border-red-200 flex items-center gap-2.5 text-left shadow-sm">
                         <svg class="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
@@ -98,46 +91,107 @@
                     </div>
                 @endif
 
-                <!-- TAB NAVIGASI METODE LOGIN -->
-                <div class="grid grid-cols-2 p-1 bg-slate-100 border border-slate-200 rounded-xl mb-4 text-xs font-bold">
-                    <!-- Tombol Tab 1: Siswa & Pembina -->
-                    <button type="button" id="tab-btn-user" onclick="switchLoginTab('user')" class="py-2 rounded-lg transition-all shadow-sm bg-blue-800 text-white font-bold">
-                        🎓 Siswa & Pembina
+                <!-- TAB NAVIGASI PERAN LOGIN -->
+                <div class="grid grid-cols-3 p-1 bg-slate-100 border border-slate-200 rounded-xl mb-4 text-xs font-bold gap-1">
+                    <button type="button" id="tab-btn-siswa" onclick="switchLoginTab('siswa')" class="py-2 rounded-lg transition-all shadow-sm bg-blue-800 text-white font-bold text-center">
+                        🎓 Siswa
                     </button>
-                    <!-- Tombol Tab 2: Admin -->
-                    <button type="button" id="tab-btn-admin" onclick="switchLoginTab('admin')" class="py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent">
-                        🔐 Administrator
+                    <button type="button" id="tab-btn-coach" onclick="switchLoginTab('coach')" class="py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent text-center">
+                        🏅 Pembina
+                    </button>
+                    <button type="button" id="tab-btn-admin" onclick="switchLoginTab('admin')" class="py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent text-center">
+                        🔐 Admin
                     </button>
                 </div>
 
                 <!-- ========================================================= -->
-                <!-- JALUR 1: LOGIN SISWA & PEMBINA (GOOGLE SSO) -->
+                <!-- TAB 1: LOGIN SISWA (NIS & PASSWORD) -->
                 <!-- ========================================================= -->
-                <div id="panel-user" class="space-y-3.5">
-                    <div class="p-3.5 rounded-xl bg-blue-50/80 border border-blue-200 text-left">
-                        <p class="text-xs font-bold text-blue-900 mb-1 flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Akses Siswa & Pembina
+                <div id="panel-siswa" class="space-y-3.5">
+                    <div class="p-3 rounded-xl bg-blue-50/80 border border-blue-200 text-left">
+                        <p class="text-xs font-bold text-blue-900 mb-0.5 flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path></svg>
+                            Akses Peserta Didik
                         </p>
                         <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
-                            Seluruh siswa dan pembina masuk menggunakan <strong class="text-blue-900">Akun Google belajar resmi</strong> (<code class="bg-blue-100 px-1 py-0.5 rounded text-blue-800 border border-blue-200 font-semibold font-mono">@belajar.id</code> atau email resmi terdaftar).
+                            Masuk menggunakan <strong class="text-blue-900">Nomor Induk Siswa (NIS)</strong> dan kata sandi Anda.
                         </p>
                     </div>
 
-                    <!-- Tombol Login Google Resmi -->
-                    <a href="{{ route('google.redirect') }}" class="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-blue-400 rounded-xl p-3 text-xs sm:text-sm font-bold shadow-sm hover:shadow-md active:scale-95 transition-all duration-200 group">
-                        <svg class="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                        </svg>
-                        <span>Masuk dengan Google</span>
-                    </a>
+                    <form method="POST" action="{{ route('login.post') }}" class="text-left space-y-3">
+                        @csrf
+                        <input type="hidden" name="login_type" value="siswa">
+
+                        <div>
+                            <label for="siswa_nis" class="block text-xs font-bold text-slate-700 mb-1">Nomor Induk Siswa (NIS)</label>
+                            <input type="text" name="nis" id="siswa_nis" value="{{ old('nis') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium font-mono transition-all" placeholder="Masukkan NIS siswa..." required>
+                        </div>
+                        
+                        <div>
+                            <label for="siswa_password" class="block text-xs font-bold text-slate-700 mb-1">Kata Sandi</label>
+                            <div class="relative">
+                                <input type="password" name="password" id="siswa_password" class="w-full px-3.5 py-2 pr-10 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="••••••••" required>
+                                <button type="button" onclick="togglePasswordVisibility('siswa_password', 'eye-icon-siswa')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-blue-800 focus:outline-none transition-colors" title="Lihat Password">
+                                    <svg id="eye-icon-siswa" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="text-[10px] text-slate-500 mt-1 font-medium">Kata sandi default: <code class="bg-blue-50 text-blue-900 px-1 py-0.5 rounded font-mono font-bold">siswasmpsmi</code></p>
+                        </div>
+
+                        <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-extrabold py-2.5 rounded-xl transition-all duration-200 shadow-md shadow-blue-900/20 active:scale-95 text-xs">
+                            Masuk sebagai Siswa
+                        </button>
+                    </form>
                 </div>
 
                 <!-- ========================================================= -->
-                <!-- JALUR 2: LOGIN ADMINISTRATOR (EMAIL & PASSWORD) -->
+                <!-- TAB 2: LOGIN PEMBINA (USERNAME / EMAIL & PASSWORD) -->
+                <!-- ========================================================= -->
+                <div id="panel-coach" class="hidden space-y-3.5">
+                    <div class="p-3 rounded-xl bg-indigo-50/80 border border-indigo-200 text-left">
+                        <p class="text-xs font-bold text-indigo-900 mb-0.5 flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            Akses Pembina Ekstrakurikuler
+                        </p>
+                        <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
+                            Masuk menggunakan <strong class="text-indigo-900">Username / Email</strong> (<code class="bg-indigo-100 px-1 py-0.5 rounded text-indigo-800 font-semibold font-mono">@smpsmi.com</code>) dan kata sandi Anda.
+                        </p>
+                    </div>
+
+                    <form method="POST" action="{{ route('login.post') }}" class="text-left space-y-3">
+                        @csrf
+                        <input type="hidden" name="login_type" value="coach">
+
+                        <div>
+                            <label for="coach_username" class="block text-xs font-bold text-slate-700 mb-1">Username / Email Pembina</label>
+                            <input type="text" name="username" id="coach_username" value="{{ old('username') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="namapembina@smpsmi.com" required>
+                        </div>
+                        
+                        <div>
+                            <label for="coach_password" class="block text-xs font-bold text-slate-700 mb-1">Kata Sandi</label>
+                            <div class="relative">
+                                <input type="password" name="password" id="coach_password" class="w-full px-3.5 py-2 pr-10 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="••••••••" required>
+                                <button type="button" onclick="togglePasswordVisibility('coach_password', 'eye-icon-coach')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-blue-800 focus:outline-none transition-colors" title="Lihat Password">
+                                    <svg id="eye-icon-coach" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="text-[10px] text-slate-500 mt-1 font-medium">Kata sandi default: <code class="bg-indigo-50 text-indigo-900 px-1 py-0.5 rounded font-mono font-bold">pembinasmpsmi</code></p>
+                        </div>
+
+                        <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-extrabold py-2.5 rounded-xl transition-all duration-200 shadow-md shadow-blue-900/20 active:scale-95 text-xs">
+                            Masuk sebagai Pembina
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- TAB 3: LOGIN ADMINISTRATOR (EMAIL & PASSWORD) -->
                 <!-- ========================================================= -->
                 <div id="panel-admin" class="hidden space-y-3.5">
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-left">
@@ -150,19 +204,20 @@
                         </p>
                     </div>
 
-                    <!-- Form Login Manual Administrator -->
                     <form method="POST" action="{{ route('login.post') }}" class="text-left space-y-3">
                         @csrf
+                        <input type="hidden" name="login_type" value="admin">
+
                         <div>
-                            <label for="email" class="block text-xs font-bold text-slate-700 mb-1">Email Administrator</label>
-                            <input type="email" name="email" id="email" value="{{ old('email') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="admin@smpsmi.com" required>
+                            <label for="admin_email" class="block text-xs font-bold text-slate-700 mb-1">Email Administrator</label>
+                            <input type="email" name="email" id="admin_email" value="{{ old('email') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="admin@smpsmi.com" required>
                         </div>
                         
                         <div>
-                            <label for="password" class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                            <label for="admin_password" class="block text-xs font-bold text-slate-700 mb-1">Password</label>
                             <div class="relative">
                                 <input type="password" name="password" id="admin_password" class="w-full px-3.5 py-2 pr-10 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="••••••••" required>
-                                <button type="button" onclick="toggleAdminPassword()" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-blue-800 focus:outline-none transition-colors" title="Lihat Password">
+                                <button type="button" onclick="togglePasswordVisibility('admin_password', 'eye-icon-admin')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-blue-800 focus:outline-none transition-colors" title="Lihat Password">
                                     <svg id="eye-icon-admin" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -193,7 +248,7 @@
 
     <!-- SCRIPT JAVASCRIPT: Partikel Canvas, Tab Switch & Password Toggle -->
     <script>
-        // 1. Interactive Ambient Particles Background (Soft Navy)
+        // 1. Ambient Particles Background
         const canvas = document.getElementById('glow-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
@@ -261,34 +316,31 @@
             animateParticles();
         }
 
-        // 2. Tab Switch Handler (Siswa & Pembina vs Admin)
+        // 2. Tab Switch Handler (Siswa, Coach, Admin)
         function switchLoginTab(type) {
-            const btnUser = document.getElementById('tab-btn-user');
-            const btnAdmin = document.getElementById('tab-btn-admin');
-            const panelUser = document.getElementById('panel-user');
-            const panelAdmin = document.getElementById('panel-admin');
+            const tabs = ['siswa', 'coach', 'admin'];
+            const activeClass = "py-2 rounded-lg transition-all shadow-sm bg-blue-800 text-white font-bold text-center";
+            const inactiveClass = "py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent text-center";
 
-            const activeClass = "py-2 rounded-lg transition-all shadow-sm bg-blue-800 text-white font-bold";
-            const inactiveClass = "py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent";
-
-            if (type === 'admin') {
-                btnAdmin.className = activeClass;
-                btnUser.className = inactiveClass;
-                panelAdmin.classList.remove('hidden');
-                panelUser.classList.add('hidden');
-            } else {
-                btnUser.className = activeClass;
-                btnAdmin.className = inactiveClass;
-                panelUser.classList.remove('hidden');
-                panelAdmin.classList.add('hidden');
-            }
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab-btn-' + t);
+                const panel = document.getElementById('panel-' + t);
+                if (t === type) {
+                    if (btn) btn.className = activeClass;
+                    if (panel) panel.classList.remove('hidden');
+                } else {
+                    if (btn) btn.className = inactiveClass;
+                    if (panel) panel.classList.add('hidden');
+                }
+            });
         }
 
-        // 3. Password Toggle Handler
-        function toggleAdminPassword() {
-            const input = document.getElementById('admin_password');
-            const icon = document.getElementById('eye-icon-admin');
-            
+        // 3. Password Toggle Handler Universal
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+
             if (input.type === 'password') {
                 input.type = 'text';
                 icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.038 10.038 0 014.122-.963c4.478 0 8.268 2.943 9.543 7-1.025 1.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"></path>';
@@ -298,9 +350,13 @@
             }
         }
 
-        // Buka tab admin otomatis jika ada error login manual
-        @if(session('error') || $errors->any())
-            switchLoginTab('admin');
+        // Buka tab sesuai session atau error jika ada
+        @if(session('active_tab'))
+            switchLoginTab('{{ session('active_tab') }}');
+        @elseif(old('login_type'))
+            switchLoginTab('{{ old('login_type') }}');
+        @else
+            switchLoginTab('siswa');
         @endif
     </script>
 

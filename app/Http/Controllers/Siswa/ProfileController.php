@@ -64,4 +64,39 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Informasi kontak berhasil diperbarui!');
     }
+
+    /**
+     * Memperbarui kata sandi akun siswa.
+     */
+    public function updatePassword(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'password'         => ['required', 'string', 'min:6', 'confirmed', 'different:current_password'],
+        ], [
+            'current_password.required' => 'Kata sandi saat ini wajib diisi.',
+            'password.required'         => 'Kata sandi baru wajib diisi.',
+            'password.min'              => 'Kata sandi baru minimal 6 karakter.',
+            'password.confirmed'        => 'Konfirmasi kata sandi baru tidak sesuai.',
+            'password.different'        => 'Kata sandi baru harus berbeda dari kata sandi saat ini.',
+        ]);
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Kata sandi saat ini tidak sesuai. Silakan periksa kembali.']);
+        }
+
+        if ($request->password === 'siswasmpsmi') {
+            return back()->withErrors(['password' => 'Kata sandi baru tidak boleh sama dengan kata sandi default sistem.']);
+        }
+
+        $user->update([
+            'password'             => $request->password,
+            'must_change_password' => false,
+        ]);
+
+        return back()->with('success', 'Kata sandi Anda berhasil diperbarui!');
+    }
 }

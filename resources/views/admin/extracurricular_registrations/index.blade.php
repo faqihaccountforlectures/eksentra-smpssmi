@@ -114,9 +114,9 @@
                                 </div>
                                 <div>
                                     <p class="font-bold text-navy-dark block text-sm">{{ $registration->student->studentProfile->full_name ?? $registration->student->email }}</p>
-                                    @if($registration->student->studentProfile && $registration->student->studentProfile->nisn)
+                                    @if($registration->student->studentProfile && $registration->student->studentProfile->nis)
                                         <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1 mt-0.5 tracking-wide">
-                                            <span class="bg-white-off px-2 py-0.5 rounded border border-navy-light/20 font-mono">NISN: {{ $registration->student->studentProfile->nisn }}</span>
+                                            <span class="bg-white-off px-2 py-0.5 rounded border border-navy-light/20 font-mono">NIS: {{ $registration->student->studentProfile->nis }}</span>
                                         </p>
                                     @else
                                         <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1 mt-0.5 tracking-wide">

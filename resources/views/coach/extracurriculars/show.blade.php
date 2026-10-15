@@ -177,7 +177,7 @@
                                         <div>
                                             <p class="font-bold text-slate-900 text-sm font-heading">{{ $reg->student->studentProfile->full_name ?? ($reg->student->name ?? 'Siswa') }}</p>
                                             <div class="flex items-center gap-2 mt-0.5">
-                                                <span class="text-[10px] text-slate-500 font-mono">NISN: {{ $reg->student->studentProfile->nisn ?? '-' }}</span>
+                                                <span class="text-[10px] text-slate-500 font-mono">NIS: {{ $reg->student->studentProfile->nis ?? '-' }}</span>
                                                 <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                                                     Kelas {{ $studentClassName }}
                                                 </span>

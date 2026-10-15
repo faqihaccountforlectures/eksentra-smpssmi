@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique(); // Email untuk login / notifikasi
             $table->string('phone_number')->nullable(); // Nomor WhatsApp / Telepon
             $table->string('password')->nullable(); // Nullable jika login lewat Google OAuth
+            $table->boolean('must_change_password')->default(false); // Penanda wajib ubah kata sandi default pada login pertama
             $table->string('google_id')->nullable(); // ID akun google dari Socialite
             $table->enum('role', ['admin', 'coach', 'siswa'])->default('siswa'); // Hak akses role
             $table->timestamps();

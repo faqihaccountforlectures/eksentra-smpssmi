@@ -111,15 +111,15 @@
     }
 
     /* Cards & White Surfaces — putih bersih */
-    .portal-light-theme .bg-white,
-    .portal-light-theme .bg-white-pure {
+    .portal-light-theme .bg-white:not(aside):not(header),
+    .portal-light-theme .bg-white-pure:not(aside):not(header) {
         background-color: #ffffff !important;
         border: 1px solid rgba(30, 58, 138, 0.1);
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
         color: #1e293b;
     }
 
-    .portal-light-theme .bg-white:hover {
+    .portal-light-theme .bg-white:not(aside):not(header):hover {
         border-color: rgba(37, 99, 235, 0.28);
     }
 
@@ -151,7 +151,19 @@
     .portal-light-theme [class*="from-indigo-9"] h1,
     .portal-light-theme [class*="from-indigo-9"] h2,
     .portal-light-theme [class*="from-indigo-9"] h3,
-    .portal-light-theme [class*="from-indigo-9"] h4 {
+    .portal-light-theme [class*="from-indigo-9"] h4,
+    .portal-light-theme .bg-white [class*="from-blue-9"] h1,
+    .portal-light-theme .bg-white [class*="from-blue-9"] h2,
+    .portal-light-theme .bg-white [class*="from-blue-9"] h3,
+    .portal-light-theme .bg-white [class*="from-blue-9"] h4,
+    .portal-light-theme .bg-white [class*="from-blue-9"] span.text-white,
+    .portal-light-theme .bg-white [class*="from-blue-9"] .text-white,
+    .portal-light-theme .bg-white [class*="from-indigo-9"] h1,
+    .portal-light-theme .bg-white [class*="from-indigo-9"] h2,
+    .portal-light-theme .bg-white [class*="from-indigo-9"] h3,
+    .portal-light-theme .bg-white [class*="from-indigo-9"] h4,
+    .portal-light-theme .bg-white [class*="from-indigo-9"] span.text-white,
+    .portal-light-theme .bg-white [class*="from-indigo-9"] .text-white {
         color: #ffffff !important;
     }
 
@@ -283,10 +295,9 @@
     }
 
     /* Input & Form Control — terang, bersih */
-    .portal-light-theme input:not([type="checkbox"]):not([type="radio"]),
+    .portal-light-theme input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
     .portal-light-theme select,
-    .portal-light-theme textarea,
-    .portal-light-theme [class*="bg-white-off"] {
+    .portal-light-theme textarea {
         background-color: #ffffff !important;
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
@@ -310,7 +321,7 @@
     }
 
     /* Focus state */
-    .portal-light-theme input:not([type="checkbox"]):not([type="radio"]):focus,
+    .portal-light-theme input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
     .portal-light-theme select:focus,
     .portal-light-theme textarea:focus,
     .portal-light-theme .focus\:bg-white:focus,
@@ -531,6 +542,25 @@
         transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
+    #mobile-sidebar {
+        background-color: #ffffff !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-bottom: none !important;
+        border-right: 1px solid #e2e8f0 !important;
+        box-shadow: none !important;
+    }
+
+    #mobile-sidebar:hover {
+        border-color: #e2e8f0 !important;
+        box-shadow: none !important;
+    }
+
+    #mobile-sidebar nav {
+        scrollbar-gutter: stable;
+        overflow-x: hidden !important;
+    }
+
     /* Sidebar Navigation Links: sepenuhnya statis tanpa efek bergerak / geser saat dihover */
     #mobile-sidebar nav a,
     #mobile-sidebar nav a:hover,
@@ -540,6 +570,7 @@
         translate: none !important;
         scale: none !important;
         box-shadow: none !important;
+        box-sizing: border-box !important;
         transition: background-color 0.15s ease, color 0.15s ease !important;
     }
 
@@ -551,6 +582,17 @@
         translate: none !important;
         scale: none !important;
         transition: color 0.15s ease !important;
+    }
+
+    /* Tombol Aksi Tabel: statis hanya hover warna tanpa perpindahan posisi */
+    table td a[class*="rounded-xl"],
+    table td button[class*="rounded-xl"],
+    table td .flex a,
+    table td .flex button {
+        transform: none !important;
+        translate: none !important;
+        scale: none !important;
+        box-shadow: none !important;
     }
 
     /* ============================================================== */

@@ -75,7 +75,7 @@
                 <thead>
                     <tr class="bg-white-off/50 text-gray-muted text-[10px] uppercase tracking-widest border-b border-navy-light/30">
                         <th class="px-7 py-4 font-bold w-16 text-center">No</th>
-                        <th class="px-7 py-4 font-bold">NISN</th>
+                        <th class="px-7 py-4 font-bold">NIS</th>
                         <th class="px-7 py-4 font-bold">Nama Lengkap</th>
                         <th class="px-7 py-4 font-bold">Jenis Kelamin</th>
                         <th class="px-7 py-4 font-bold text-right">Aksi</th>
@@ -86,7 +86,7 @@
                     <tr class="hover:bg-white-off/50 transition-colors">
                         <td class="px-7 py-4 text-center font-bold text-navy-light/80">{{ $index + 1 }}</td>
                         <td class="px-7 py-4">
-                            <span class="font-mono text-xs font-bold text-navy-base bg-white-off/50 border border-navy-light/20 px-2.5 py-1.5 rounded-lg">{{ $enrollment->student->studentProfile->nisn ?? '-' }}</span>
+                            <span class="font-mono text-xs font-bold text-navy-base bg-white-off/50 border border-navy-light/20 px-2.5 py-1.5 rounded-lg">{{ $enrollment->student->studentProfile->nis ?? '-' }}</span>
                         </td>
                         <td class="px-7 py-4">
                             <div class="font-bold text-navy-dark mb-0.5">{{ $enrollment->student->studentProfile->full_name ?? $enrollment->student->email }}</div>

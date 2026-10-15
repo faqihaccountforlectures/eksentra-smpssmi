@@ -21,6 +21,7 @@ class User extends Authenticatable
         'password',
         'google_id',    // Buat nyimpen ID dari Google SSO
         'role',         // Role pengguna: admin, coach, atau siswa
+        'must_change_password', // Status kewajiban ganti password default
     ];
 
     // Kolom yang disembunyiin pas datanya diambil (biar password gak bocor di respon API/JSON)
@@ -32,6 +33,7 @@ class User extends Authenticatable
     // Otomatis ngubah (casting) data password jadi bentuk hash (enkripsi) sebelum disimpen ke database
     protected $casts = [
         'password' => 'hashed',
+        'must_change_password' => 'boolean',
     ];
 
     // Relasi One-to-One: Nentuin kalo satu Akun User punya satu Profil Siswa.

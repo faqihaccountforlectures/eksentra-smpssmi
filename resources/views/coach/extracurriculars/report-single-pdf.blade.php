@@ -165,7 +165,7 @@
         <thead>
             <tr>
                 <th width="4%">No</th>
-                <th width="12%">NISN</th>
+                <th width="12%">NIS</th>
                 <th width="22%">Nama Lengkap Siswa</th>
                 <th width="8%">Kelas</th>
                 <th width="9%">Status</th>
@@ -184,7 +184,7 @@
                 @endphp
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td class="text-center">{{ $reg->student->studentProfile->nisn ?? '-' }}</td>
+                    <td class="text-center">{{ $reg->student->studentProfile->nis ?? '-' }}</td>
                     <td class="font-bold">{{ $reg->student->studentProfile->full_name ?? ($reg->student->name ?? 'Siswa') }}</td>
                     <td class="text-center font-bold">{{ $className }}</td>
                     <td class="text-center">

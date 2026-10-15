@@ -38,7 +38,7 @@
     </div>
     @endif
 
-    <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden flex flex-col group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
+    <div class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden flex flex-col hover:border-blue-300 transition-colors duration-200">
         <!-- Header Tabel & Form Filter -->
         <div class="px-7 py-5 border-b border-navy-light/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white-off/30">
             <div class="flex items-center gap-3">
@@ -61,7 +61,7 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-navy-base/60">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
-                        <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama / NISN..." class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-9 pr-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all placeholder:text-gray-muted/60 shadow-sm">
+                        <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama / NIS..." class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-9 pr-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all placeholder:text-gray-muted/60 shadow-sm">
                     </div>
                 </form>
 
@@ -85,9 +85,9 @@
                     <tr class="bg-white-off/50 text-gray-muted text-[10px] uppercase tracking-widest border-b border-navy-light/30">
                         <th class="px-7 py-4 font-bold w-16 text-center">No</th>
                         <th class="px-7 py-4 font-bold">Profil Siswa</th>
-                        <th class="px-7 py-4 font-bold">NISN</th>
+                        <th class="px-7 py-4 font-bold">NIS</th>
                         <th class="px-7 py-4 font-bold">No. Orang Tua</th>
-                        <th class="px-7 py-4 font-bold text-center">Aksi</th>
+                        <th class="px-7 py-4 font-bold text-center w-36">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm divide-y divide-white-off text-navy-base">
@@ -111,8 +111,8 @@
                             </div>
                         </td>
                         <td class="px-7 py-4 font-mono font-medium text-sm">
-                            @if($student->studentProfile && $student->studentProfile->nisn)
-                                {{ $student->studentProfile->nisn }}
+                            @if($student->studentProfile && $student->studentProfile->nis)
+                                {{ $student->studentProfile->nis }}
                             @else
                                 <span class="text-gray-muted italic text-xs">Belum diisi</span>
                             @endif
@@ -124,19 +124,27 @@
                                 <span class="text-gray-muted italic text-xs">Belum diisi</span>
                             @endif
                         </td>
-                        <td class="px-7 py-4">
+                        <td class="px-7 py-4 text-center whitespace-nowrap">
                             <div class="flex justify-center items-center gap-2">
-                                <a href="{{ route('students.edit', $student->id) }}" class="text-gray-muted hover:text-navy-base hover:bg-navy-light/10 p-2 rounded-xl transition-all duration-200" title="Edit Data">
+                                <!-- Tombol Ubah (Edit) -->
+                                <a href="{{ route('students.edit', $student->id) }}" class="text-gray-muted hover:text-navy-base transition-colors p-2 rounded-xl hover:bg-navy-light/30 border border-transparent hover:border-navy-light/50 flex items-center justify-center bg-white" title="Ubah Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </a>
 
-                                <button type="button" onclick="document.getElementById('deleteModal-{{ $student->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-rose-500 hover:bg-rose-50 p-2 rounded-xl transition-all duration-200" title="Hapus Data">
+                                <!-- Tombol Reset Password -->
+                                <button type="button" onclick="document.getElementById('resetPasswordModal-{{ $student->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-amber-600 transition-colors p-2 rounded-xl hover:bg-amber-50 border border-transparent hover:border-amber-200 flex items-center justify-center bg-white" title="Reset Password Default (siswasmpsmi)">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                                </button>
+
+                                <!-- Tombol Hapus (Delete) -->
+                                <button type="button" onclick="document.getElementById('deleteModal-{{ $student->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-rose-500 transition-colors p-2 rounded-xl hover:bg-rose-50 border border-transparent hover:border-rose-100 flex items-center justify-center bg-white" title="Hapus Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
+                            @include('admin.students.reset-password')
+                            @include('admin.students.delete')
                         </td>
                     </tr>
-                    @include('admin.students.delete')
                     @empty
                     <tr>
                         <td colspan="5" class="px-7 py-16 text-center">
@@ -216,14 +224,14 @@
                 <div class="space-y-1.5">
                     <label for="student_csv_file" class="block text-xs font-bold text-slate-700">Pilih Berkas CSV (.csv)</label>
                     <input type="file" id="student_csv_file" name="file" accept=".csv,text/csv,text/plain" required class="w-full text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-xl file:mr-4 file:py-2.5 file:px-4 file:rounded-l-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-800 hover:file:bg-blue-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-100">
-                    <p class="text-[10px] text-slate-500">Ukuran berkas maksimal 5 MB. Kolom nama, NISN, email, dan jenis kelamin wajib diisi. Kolom <b>Kelas (contoh: 7A)</b> bersifat opsional jika ingin langsung mendaftarkan siswa ke rombel kelas.</p>
+                    <p class="text-[10px] text-slate-500">Ukuran berkas maksimal 5 MB. Kolom nama, NIS, email, dan jenis kelamin wajib diisi. Kolom <b>Kelas (contoh: 7A)</b> bersifat opsional jika ingin langsung mendaftarkan siswa ke rombel kelas.</p>
                 </div>
 
                 <!-- Petunjuk Pencegahan Format Ilmiah Excel -->
                 <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2.5 text-amber-900">
                     <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <p class="text-[11px] leading-relaxed">
-                        <b>Tips Microsoft Excel:</b> Agar angka <b>NISN</b> atau <b>No. HP</b> tidak otomatis berubah menjadi format ilmiah (seperti <i>1.98E+17</i>) dan angka <i>0</i> di awal tidak hilang, awali angka dengan tanda petik satu (contoh: <code class="bg-amber-100 px-1 py-0.5 rounded text-amber-900 font-mono">'0081234567</code>).
+                        <b>Tips Microsoft Excel:</b> Agar angka <b>NIS</b> atau <b>No. HP</b> tidak otomatis berubah menjadi format ilmiah (seperti <i>1.98E+17</i>) dan angka <i>0</i> di awal tidak hilang, awali angka dengan tanda petik satu (contoh: <code class="bg-amber-100 px-1 py-0.5 rounded text-amber-900 font-mono">'12345678</code>).
                     </p>
                 </div>
 

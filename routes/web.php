@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ForcePasswordChangeController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\ExtracurricularRegistrationController;
@@ -48,8 +49,16 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->
 // Memproses proses keluar (Logout)
 Route::post('/logout', function () {
     Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
     return redirect('/');
 })->name('logout');
+
+// Rute Wajib Ganti Password Default (Khusus Siswa & Pembina)
+Route::middleware('auth')->group(function () {
+    Route::get('/force-change-password', [ForcePasswordChangeController::class, 'show'])->name('password.force_change');
+    Route::post('/force-change-password', [ForcePasswordChangeController::class, 'update'])->name('password.force_change.update');
+});
 
 // Rute Halaman Dasbor (Membutuhkan Autentikasi)
 Route::get('/dashboard', function () {
@@ -134,6 +143,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/coaches', [\App\Http\Controllers\Admin\CoachController::class, 'store'])->name('coaches.store');
     Route::get('/admin/coaches/{id}/edit', [\App\Http\Controllers\Admin\CoachController::class, 'edit'])->name('coaches.edit');
     Route::put('/admin/coaches/{id}', [\App\Http\Controllers\Admin\CoachController::class, 'update'])->name('coaches.update');
+    Route::post('/admin/coaches/{id}/reset-password', [\App\Http\Controllers\Admin\CoachController::class, 'resetPassword'])->name('coaches.reset-password');
     Route::delete('/admin/coaches/{id}', [\App\Http\Controllers\Admin\CoachController::class, 'destroy'])->name('coaches.destroy');
 
     // ==========================================
@@ -146,6 +156,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/students', [\App\Http\Controllers\Admin\StudentController::class, 'store'])->name('students.store');
     Route::get('/admin/students/{id}/edit', [\App\Http\Controllers\Admin\StudentController::class, 'edit'])->name('students.edit');
     Route::put('/admin/students/{id}', [\App\Http\Controllers\Admin\StudentController::class, 'update'])->name('students.update');
+    Route::post('/admin/students/{id}/reset-password', [\App\Http\Controllers\Admin\StudentController::class, 'resetPassword'])->name('students.reset-password');
     Route::delete('/admin/students/{id}', [\App\Http\Controllers\Admin\StudentController::class, 'destroy'])->name('students.destroy');
 
     // ==========================================
@@ -169,6 +180,7 @@ Route::middleware(['auth', 'role:coach'])->prefix('coach')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Coach\DashboardController::class, 'index'])->name('coach.dashboard');
     Route::get('/profile', [\App\Http\Controllers\Coach\ProfileController::class, 'index'])->name('coach.profile.index');
     Route::put('/profile', [\App\Http\Controllers\Coach\ProfileController::class, 'update'])->name('coach.profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\Coach\ProfileController::class, 'updatePassword'])->name('coach.profile.update-password');
     Route::get('/extracurriculars', [\App\Http\Controllers\Coach\ExtracurricularController::class, 'index'])->name('coach.extracurriculars.index');
     Route::get('/extracurriculars/{id}', [\App\Http\Controllers\Coach\ExtracurricularController::class, 'show'])->name('coach.extracurriculars.show');
     Route::get('/extracurriculars/{id}/report/pdf', [\App\Http\Controllers\Coach\ExtracurricularController::class, 'exportPdf'])->name('coach.extracurriculars.report.pdf');
@@ -181,6 +193,7 @@ Route::middleware(['auth', 'role:coach'])->prefix('coach')->group(function () {
 Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/profile', [\App\Http\Controllers\Siswa\ProfileController::class, 'index'])->name('siswa.profile.index');
     Route::put('/siswa/profile', [\App\Http\Controllers\Siswa\ProfileController::class, 'update'])->name('siswa.profile.update');
+    Route::put('/siswa/profile/password', [\App\Http\Controllers\Siswa\ProfileController::class, 'updatePassword'])->name('siswa.profile.update-password');
     Route::get('/siswa/extracurriculars', [StudentExtracurricularController::class, 'index'])->name('siswa.extracurriculars.index');
     Route::post('/siswa/extracurricular-registrations', [ExtracurricularRegistrationController::class, 'store'])->name('extracurricular-registrations.store');
     Route::delete('/siswa/extracurricular-registrations/{id}', [ExtracurricularRegistrationController::class, 'destroy'])->name('extracurricular-registrations.destroy');

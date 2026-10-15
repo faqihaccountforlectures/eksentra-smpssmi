@@ -20,13 +20,10 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Alamat email unik untuk login
-            'email' => 'required|email|unique:users,email',
-            
             'full_name' => 'required|string|max:255',
             
-            // NISN bersifat wajib dan harus belum terdaftar di tabel profil siswa
-            'nisn' => 'required|string|max:20|unique:student_profiles,nisn',
+            // NIS bersifat wajib dan harus belum terdaftar di tabel profil siswa
+            'nis' => 'required|string|max:20|unique:student_profiles,nis',
             
             'gender' => 'required|in:laki-laki,perempuan',
             'phone_number' => 'required|string|max:20',
@@ -40,12 +37,9 @@ class StoreStudentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Alamat email wajib diisi.',
-            'email.email' => 'Format alamat email tidak valid.',
-            'email.unique' => 'Alamat email tersebut sudah terdaftar pada sistem.',
             'full_name.required' => 'Nama lengkap wajib diisi.',
-            'nisn.required' => 'NISN wajib diisi.',
-            'nisn.unique' => 'NISN tersebut sudah terdaftar untuk siswa lain.',
+            'nis.required' => 'NIS wajib diisi.',
+            'nis.unique' => 'NIS tersebut sudah terdaftar untuk siswa lain.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in' => 'Pilihan jenis kelamin tidak valid.',
             'phone_number.required' => 'Nomor telepon siswa wajib diisi.',

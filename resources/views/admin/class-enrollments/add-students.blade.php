@@ -67,7 +67,7 @@
                                     <input type="checkbox" name="student_ids[]" value="{{ $student->id }}" id="student_{{ $student->id }}" class="student-checkbox w-5 h-5 rounded border-navy-light/50 text-navy-base shadow-sm focus:border-navy-base focus:ring focus:ring-navy-light/20 focus:ring-opacity-50 transition-colors" onclick="event.stopPropagation()">
                                 </td>
                                 <td class="px-7 py-4">
-                                    <span class="font-mono text-xs font-bold text-navy-base bg-white-off/50 border border-navy-light/20 px-2.5 py-1.5 rounded-lg">{{ $student->studentProfile->nisn ?? '-' }}</span>
+                                    <span class="font-mono text-xs font-bold text-navy-base bg-white-off/50 border border-navy-light/20 px-2.5 py-1.5 rounded-lg">{{ $student->studentProfile->nis ?? '-' }}</span>
                                 </td>
                                 <td class="px-7 py-4 font-bold text-navy-dark">
                                     {{ $student->studentProfile->full_name ?? $student->email }}

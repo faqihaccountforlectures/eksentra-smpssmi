@@ -15,7 +15,7 @@ return new class extends Migration
            $table->id(); // Primary Key
             // Relasi One-to-One dengan tabel users (jika user dihapus, profil ikut terhapus)
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
-            $table->string('nisn', 20)->unique(); // Nomor Induk Siswa Nasional
+            $table->string('nis', 20)->unique(); // Nomor Induk Siswa (NIS)
             $table->string('full_name', 100); // Nama lengkap siswa
             $table->enum('gender', ['laki-laki', 'perempuan']); // Jenis kelamin siswa
             $table->string('phone_number', 20)->nullable(); // Nomor telepon siswa

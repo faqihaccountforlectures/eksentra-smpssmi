@@ -98,7 +98,7 @@
                                     <th class="px-7 py-3.5 w-16 text-center">
                                         <input type="checkbox" id="selectAll" checked class="w-4 h-4 text-blue-800 bg-white border-slate-300 rounded focus:border-blue-700 focus:ring focus:ring-blue-700/20 cursor-pointer">
                                     </th>
-                                    <th class="px-7 py-3.5">NISN</th>
+                                    <th class="px-7 py-3.5">NIS</th>
                                     <th class="px-7 py-3.5">Nama Siswa</th>
                                     <th class="px-7 py-3.5">Jenis Kelamin</th>
                                 </tr>
@@ -110,7 +110,7 @@
                                         <input type="checkbox" name="student_ids[]" value="{{ $student->id }}" id="checkbox-{{ $student->id }}" checked onclick="event.stopPropagation()" class="student-checkbox w-4 h-4 text-blue-800 bg-white border-slate-300 rounded focus:border-blue-700 focus:ring focus:ring-blue-700/20 cursor-pointer">
                                     </td>
                                     <td class="px-7 py-4">
-                                        <span class="font-mono text-xs font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg">{{ $student->studentProfile->nisn ?? '-' }}</span>
+                                        <span class="font-mono text-xs font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg">{{ $student->studentProfile->nis ?? '-' }}</span>
                                     </td>
                                     <td class="px-7 py-4">
                                         <div class="font-bold text-slate-900 mb-0.5">{{ $student->studentProfile->full_name ?? $student->email }}</div>

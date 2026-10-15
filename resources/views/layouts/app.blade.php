@@ -60,7 +60,7 @@
             </div>
 
             <!-- Menu Navigasi Padat & Rapi -->
-            <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto thin-scrollbar-light">
+            <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto overflow-x-hidden thin-scrollbar-light">
                 
                 <a href="/dashboard" class="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors duration-150 {{ request()->is('dashboard') ? 'bg-blue-800 text-white font-semibold shadow-none' : 'text-slate-500 hover:text-blue-800 hover:bg-blue-50 font-medium group' }}">
                     <svg class="w-4 h-4 {{ request()->is('dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-blue-700 transition-colors' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -415,12 +415,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const modalSelectors = [
                 'div[id^="deleteModal-"]',
+                'div[id^="resetPasswordModal-"]',
                 'div[id^="removeModal-"]',
                 'div[id^="rejectModal-"]',
                 'div[id^="unenrollModal-"]',
                 '#coachImportModal',
                 '#studentImportModal',
-                '#gradeModal'
+                '#gradeModal',
+                'div[id*="Modal"]'
             ];
 
             const modals = document.querySelectorAll(modalSelectors.join(', '));

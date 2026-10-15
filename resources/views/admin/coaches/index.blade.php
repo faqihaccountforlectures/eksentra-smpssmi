@@ -39,7 +39,7 @@
     @endif
 
     {{-- FUNGSI KODE: Tabel Manajemen Data Pembina --}}
-    <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden flex flex-col group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
+    <div class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden flex flex-col hover:border-blue-300 transition-colors duration-200">
         <!-- Header Tabel & Form Filter -->
         <div class="px-7 py-5 border-b border-navy-light/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white-off/30">
             <div class="flex items-center gap-3">
@@ -85,7 +85,7 @@
                         <th class="px-7 py-4 font-bold">Profil Pembina</th>
                         <th class="px-7 py-4 font-bold">Jenis Kelamin</th>
                         <th class="px-7 py-4 font-bold">No. Telepon</th>
-                        <th class="px-7 py-4 font-bold text-center">Aksi</th>
+                        <th class="px-7 py-4 font-bold text-center w-36">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm divide-y divide-white-off text-navy-base">
@@ -121,19 +121,27 @@
                                 <span class="text-gray-muted italic text-xs">Belum diisi</span>
                             @endif
                         </td>
-                        <td class="px-7 py-4">
+                        <td class="px-7 py-4 text-center whitespace-nowrap">
                             <div class="flex justify-center items-center gap-2">
-                                <a href="{{ route('coaches.edit', $coach->id) }}" class="text-gray-muted hover:text-navy-base hover:bg-navy-light/10 p-2 rounded-xl transition-all duration-200" title="Edit Data">
+                                <!-- Tombol Ubah (Edit) -->
+                                <a href="{{ route('coaches.edit', $coach->id) }}" class="text-gray-muted hover:text-navy-base transition-colors p-2 rounded-xl hover:bg-navy-light/30 border border-transparent hover:border-navy-light/50 flex items-center justify-center bg-white" title="Ubah Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </a>
 
-                                <button type="button" onclick="document.getElementById('deleteModal-{{ $coach->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-rose-500 hover:bg-rose-50 p-2 rounded-xl transition-all duration-200" title="Hapus Data">
+                                <!-- Tombol Reset Password -->
+                                <button type="button" onclick="document.getElementById('resetPasswordModal-{{ $coach->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-amber-600 transition-colors p-2 rounded-xl hover:bg-amber-50 border border-transparent hover:border-amber-200 flex items-center justify-center bg-white" title="Reset Password Default (pembinasmpsmi)">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                                </button>
+
+                                <!-- Tombol Hapus (Delete) -->
+                                <button type="button" onclick="document.getElementById('deleteModal-{{ $coach->id }}').classList.remove('hidden')" class="text-gray-muted hover:text-rose-500 transition-colors p-2 rounded-xl hover:bg-rose-50 border border-transparent hover:border-rose-100 flex items-center justify-center bg-white" title="Hapus Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
+                            @include('admin.coaches.reset-password', ['coach' => $coach])
+                            @include('admin.coaches.delete', ['coach' => $coach])
                         </td>
                     </tr>
-                    @include('admin.coaches.delete', ['coach' => $coach])
                     @empty
                     <tr>
                         <td colspan="5" class="px-7 py-16 text-center">

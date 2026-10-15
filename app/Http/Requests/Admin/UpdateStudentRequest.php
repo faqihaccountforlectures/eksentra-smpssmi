@@ -28,13 +28,10 @@ class UpdateStudentRequest extends FormRequest
         $profileId = $student->studentProfile->id ?? null;
 
         return [
-            // Pengecualian ID akun untuk validasi keunikan email
-            'email' => 'required|email|unique:users,email,' . $userId,
-            
             'full_name' => 'required|string|max:255',
             
-            // Pengecualian ID profil untuk validasi keunikan NISN
-            'nisn' => 'required|string|max:20|unique:student_profiles,nisn,' . $profileId,
+            // Pengecualian ID profil untuk validasi keunikan NIS
+            'nis' => 'required|string|max:20|unique:student_profiles,nis,' . $profileId,
             
             'gender' => 'required|in:laki-laki,perempuan',
             'phone_number' => 'required|string|max:20',
@@ -48,12 +45,9 @@ class UpdateStudentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Alamat email wajib diisi.',
-            'email.email' => 'Format alamat email tidak valid.',
-            'email.unique' => 'Alamat email tersebut sudah digunakan oleh pengguna lain.',
             'full_name.required' => 'Nama lengkap wajib diisi.',
-            'nisn.required' => 'NISN wajib diisi.',
-            'nisn.unique' => 'NISN tersebut sudah digunakan oleh siswa lain.',
+            'nis.required' => 'NIS wajib diisi.',
+            'nis.unique' => 'NIS tersebut sudah digunakan oleh siswa lain.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in' => 'Pilihan jenis kelamin tidak valid.',
             'phone_number.required' => 'Nomor telepon siswa wajib diisi.',
