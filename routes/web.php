@@ -38,7 +38,8 @@ Route::get('/login', function () {
 })->name('login');
 
 // Memproses formulir login manual (Email & Kata Sandi)
-Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post');
+// throttle:5,1 → maksimal 5 percobaan login per menit per IP (mencegah brute-force)
+Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('login.post');
 
 // Rute Autentikasi Google (SSO)
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');

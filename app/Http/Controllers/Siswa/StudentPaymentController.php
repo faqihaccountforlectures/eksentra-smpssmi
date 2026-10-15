@@ -159,12 +159,37 @@ class StudentPaymentController extends Controller
 
         // Cek apakah siswa benar-benar anggota aktif ekskul tersebut di tahun ajaran aktif
         $storeActiveYear = AcademicYear::where('is_active', true)->first();
-        $registration = ExtracurricularRegistration::with('extracurricular')
+        $registration = ExtracurricularRegistration::with(['extracurricular', 'academicYear'])
             ->where('student_id', auth()->id())
             ->where('extracurricular_id', $request->extracurricular_id)
             ->where('status', 'approved')
             ->when($storeActiveYear, fn($q) => $q->where('academic_year_id', $storeActiveYear->id))
             ->firstOrFail();
+
+        // Validasi 3: Bulan yang dibayar harus masuk dalam rentang tagihan yang nyata
+        // Rentang: MAX(tanggal daftar siswa, awal tahun ajaran) → MIN(bulan ini, akhir tahun ajaran)
+        $yearModel  = $registration->academicYear ?? $storeActiveYear;
+        $yearStart  = $yearModel ? $yearModel->startDate() : $registration->created_at->copy()->startOfMonth();
+        $yearEnd    = $yearModel ? $yearModel->endDate()->startOfMonth() : now()->startOfMonth();
+
+        $billStart  = $registration->created_at->startOfMonth()->max($yearStart);
+        $billEnd    = now()->startOfMonth()->min($yearEnd);
+
+        // Konversi bulan/tahun yang dikirim ke Carbon untuk dibandingkan
+        $selectedDate = \Carbon\Carbon::create($selectedYear, $selectedMonthIndex, 1)->startOfMonth();
+
+        if ($selectedDate->lt($billStart)) {
+            return back()->withErrors([
+                'Bulan ' . $request->month . ' ' . $selectedYear . ' bukan termasuk tagihan Anda. Tagihan dimulai dari ' .
+                $billStart->translatedFormat('F Y') . '.'
+            ]);
+        }
+
+        if ($selectedDate->gt($billEnd)) {
+            return back()->withErrors([
+                'Bulan ' . $request->month . ' ' . $selectedYear . ' belum termasuk tagihan Anda.'
+            ]);
+        }
 
         $proofPath = null;
 
