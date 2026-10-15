@@ -531,6 +531,28 @@
         transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
+    /* Sidebar Navigation Links: sepenuhnya statis tanpa efek bergerak / geser saat dihover */
+    #mobile-sidebar nav a,
+    #mobile-sidebar nav a:hover,
+    #mobile-sidebar nav a:focus,
+    #mobile-sidebar nav a:active {
+        transform: none !important;
+        translate: none !important;
+        scale: none !important;
+        box-shadow: none !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+
+    #mobile-sidebar nav a *,
+    #mobile-sidebar nav a:hover *,
+    #mobile-sidebar nav a svg,
+    #mobile-sidebar nav a:hover svg {
+        transform: none !important;
+        translate: none !important;
+        scale: none !important;
+        transition: color 0.15s ease !important;
+    }
+
     /* ============================================================== */
     /* BORDER & DIVIDER STYLES                                         */
     /* ============================================================== */

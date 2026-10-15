@@ -12,8 +12,14 @@ class ExtracurricularRegistration extends Model
     protected $fillable = [
         'student_id',
         'extracurricular_id',
+        'academic_year_id',
         'status',
     ];
+
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+    }
 
     public function student()
     {

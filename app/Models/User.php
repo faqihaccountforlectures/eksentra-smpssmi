@@ -55,6 +55,34 @@ class User extends Authenticatable
     }
 
     /**
+     * Relasi ke data enrollment kelas siswa
+     */
+    public function classEnrollments()
+    {
+        return $this->hasMany(ClassEnrollment::class, 'student_id');
+    }
+
+    /**
+     * Helper untuk mendapatkan nama kelas siswa pada tahun ajaran tertentu
+     */
+    public function getClassNameForYear($academicYearId = null): string
+    {
+        $enrollment = $this->classEnrollments
+            ? ($academicYearId ? $this->classEnrollments->firstWhere('academic_year_id', $academicYearId) : $this->classEnrollments->first())
+            : null;
+
+        if (!$enrollment) {
+            $query = $this->classEnrollments();
+            if ($academicYearId) {
+                $query->where('academic_year_id', $academicYearId);
+            }
+            $enrollment = $query->with('classRoom')->latest('id')->first();
+        }
+
+        return $enrollment && $enrollment->classRoom ? $enrollment->classRoom->name : '-';
+    }
+
+    /**
      * FUNGSI KODE: Accessor untuk mendapatkan nama lengkap tampilan pengguna.
      * Secara cerdas memeriksa profil pengguna sesuai peran:
      * - Jika Coach: mengambil nama dari coachProfile->full_name.

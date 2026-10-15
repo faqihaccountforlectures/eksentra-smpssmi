@@ -40,8 +40,8 @@
             <div class="h-16 md:h-18 flex items-center justify-between px-5 bg-white border-b border-slate-200 shrink-0">
                 <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
                     <div class="relative">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center shadow-md group-hover:shadow-blue-300/50 transition-shadow">
-                            <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-6 h-6 object-contain group-hover:scale-105 transition-transform">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center shadow-md">
+                            <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-6 h-6 object-contain">
                         </div>
                     </div>
                     <div>
@@ -265,7 +265,7 @@
                         </div>
 
                         <!-- Avatar Inisial dengan gradient biru tua -->
-                        <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-tr from-blue-800 to-blue-600 text-white flex items-center justify-center font-black text-xs font-heading shadow-md border-2 border-blue-200 shrink-0 group-hover:scale-105 transition-transform">
+                        <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-tr from-blue-800 to-blue-600 text-white flex items-center justify-center font-black text-xs font-heading shadow-md border-2 border-blue-200 shrink-0">
                             {{ Auth::user()->initial }}
                         </div>
                     </a>

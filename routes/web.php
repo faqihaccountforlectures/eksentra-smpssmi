@@ -170,6 +170,7 @@ Route::middleware(['auth', 'role:coach'])->prefix('coach')->group(function () {
     Route::put('/profile', [\App\Http\Controllers\Coach\ProfileController::class, 'update'])->name('coach.profile.update');
     Route::get('/extracurriculars', [\App\Http\Controllers\Coach\ExtracurricularController::class, 'index'])->name('coach.extracurriculars.index');
     Route::get('/extracurriculars/{id}', [\App\Http\Controllers\Coach\ExtracurricularController::class, 'show'])->name('coach.extracurriculars.show');
+    Route::get('/extracurriculars/{id}/report/pdf', [\App\Http\Controllers\Coach\ExtracurricularController::class, 'exportPdf'])->name('coach.extracurriculars.report.pdf');
     Route::post('/extracurriculars/{id}/grade/{registration_id}', [\App\Http\Controllers\Coach\ExtracurricularController::class, 'updateGrade'])->name('coach.extracurriculars.grade');
 });
 

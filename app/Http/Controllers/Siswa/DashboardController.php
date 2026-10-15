@@ -29,9 +29,10 @@ class DashboardController extends Controller
 
         $activeYear = AcademicYear::where('is_active', true)->first();
 
-        // 3. Ambil seluruh riwayat pendaftaran ekskul siswa beserta nilai
-        $allRegistrations = ExtracurricularRegistration::with(['extracurricular.coach.coachProfile', 'grades.academicYear'])
+        // 3. Ambil pendaftaran ekskul siswa untuk tahun ajaran aktif saja
+        $allRegistrations = ExtracurricularRegistration::with(['extracurricular.coach.coachProfile', 'grades.academicYear', 'academicYear'])
             ->where('student_id', $user->id)
+            ->when($activeYear, fn($q) => $q->where('academic_year_id', $activeYear->id))
             ->get();
 
         $approvedRegistrations = $allRegistrations->where('status', 'approved');
@@ -40,7 +41,7 @@ class DashboardController extends Controller
         // 4. Cek apakah ada tagihan bulanan ekskul yang tertunggak (Belum dibayar)
         $hasUnpaidBills = false;
         $payments = Payment::where('student_id', $user->id)->get();
-        
+
         $monthsName = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
             7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
@@ -50,13 +51,19 @@ class DashboardController extends Controller
         foreach ($approvedRegistrations as $reg) {
             if (!$reg->extracurricular || $reg->extracurricular->fee <= 0) continue; // Skip ekskul gratis
 
-            $startDate = $reg->created_at->startOfMonth();
-            $iteratorDate = $startDate->copy();
-            
-            while ($iteratorDate->lte($currentDate)) {
+            // Rentang tagihan mengikuti tahun ajaran (Juli – Juni)
+            $yearModel = $reg->academicYear ?? $activeYear;
+            $yearStart = $yearModel ? $yearModel->startDate() : $reg->created_at->copy()->startOfMonth();
+            $yearEnd   = $yearModel ? $yearModel->endDate()->startOfMonth() : $currentDate->copy();
+
+            $billStart    = $reg->created_at->startOfMonth()->max($yearStart);
+            $billEnd      = $currentDate->min($yearEnd);
+            $iteratorDate = $billStart->copy();
+
+            while ($iteratorDate->lte($billEnd)) {
                 $monthStr = $monthsName[$iteratorDate->month];
-                $year = $iteratorDate->year;
-                
+                $year     = $iteratorDate->year;
+
                 $hasPaid = $payments->where('extracurricular_id', $reg->extracurricular_id)
                                     ->where('month', $monthStr)
                                     ->where('year', $year)

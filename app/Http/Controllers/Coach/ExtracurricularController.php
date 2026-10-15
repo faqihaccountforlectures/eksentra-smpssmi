@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Extracurricular;
 use App\Models\AcademicYear;
 use App\Models\ExtracurricularGrade;
+use App\Models\ClassRoom;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 class ExtracurricularController extends Controller
 {
@@ -17,16 +20,23 @@ class ExtracurricularController extends Controller
     public function index()
     {
         $coachId = Auth::id();
+        $activeYear = AcademicYear::where('is_active', true)->first() ?? AcademicYear::latest('id')->first();
         
         $extracurriculars = Extracurricular::where('coach_id', $coachId)
-            ->withCount('registrations')
+            ->withCount([
+                'registrations' => function ($q) use ($activeYear) {
+                    if ($activeYear) {
+                        $q->where('academic_year_id', $activeYear->id);
+                    }
+                }
+            ])
             ->get();
             
-        return view('coach.extracurriculars.index', compact('extracurriculars'));
+        return view('coach.extracurriculars.index', compact('extracurriculars', 'activeYear'));
     }
 
     /**
-     * Menampilkan detail spesifik ekstrakurikuler beserta daftar siswanya dan penilaian per tahun ajaran & semester.
+     * Menampilkan detail spesifik ekstrakurikuler beserta daftar siswanya dan penilaian per tahun ajaran, kelas & semester.
      *
      * @param Request $request
      * @param int $id ID ekstrakurikuler
@@ -34,10 +44,6 @@ class ExtracurricularController extends Controller
     public function show(Request $request, $id)
     {
         $coachId = Auth::id();
-        
-        $extracurricular = Extracurricular::where('coach_id', $coachId)
-            ->withCount('registrations')
-            ->findOrFail($id);
 
         // Ambil seluruh daftar tahun ajaran untuk filter
         $academicYears = AcademicYear::orderBy('year_name', 'desc')->get();
@@ -55,26 +61,132 @@ class ExtracurricularController extends Controller
 
         $selectedYearId = $selectedYear ? $selectedYear->id : null;
 
-        // Mengambil daftar pendaftaran siswa beserta nilai pada tahun ajaran yang dipilih
-        $registrations = $extracurricular->registrations()
-            ->with([
-                'student.studentProfile',
-                'grades' => function ($q) use ($selectedYearId) {
+        // Ambil data ekskul beserta hitungan pendaftar khusus di tahun ajaran yang dipilih
+        $extracurricular = Extracurricular::where('coach_id', $coachId)
+            ->withCount([
+                'registrations as selected_year_registrations_count' => function ($q) use ($selectedYearId) {
                     if ($selectedYearId) {
                         $q->where('academic_year_id', $selectedYearId);
                     }
                 }
             ])
+            ->findOrFail($id);
+
+        // Ambil seluruh daftar kelas untuk filter
+        $classes = ClassRoom::orderBy('grade_level')->orderBy('name')->get();
+        $selectedClassId = $request->query('class_id');
+
+        // Mengambil daftar pendaftaran siswa khusus pada tahun ajaran yang dipilih
+        $registrationsQuery = $extracurricular->registrations()
+            ->when($selectedYearId, function ($q) use ($selectedYearId) {
+                $q->where('academic_year_id', $selectedYearId);
+            })
+            ->with([
+                'student.studentProfile',
+                'student.classEnrollments' => function ($q) use ($selectedYearId) {
+                    if ($selectedYearId) {
+                        $q->where('academic_year_id', $selectedYearId);
+                    }
+                    $q->with('classRoom');
+                },
+                'grades' => function ($q) use ($selectedYearId) {
+                    if ($selectedYearId) {
+                        $q->where('academic_year_id', $selectedYearId);
+                    }
+                }
+            ]);
+
+        // Filter berdasarkan kelas siswa jika dipilih
+        if ($selectedClassId) {
+            $registrationsQuery->whereHas('student.classEnrollments', function ($q) use ($selectedClassId, $selectedYearId) {
+                $q->where('class_room_id', $selectedClassId);
+                if ($selectedYearId) {
+                    $q->where('academic_year_id', $selectedYearId);
+                }
+            });
+        }
+
+        $registrations = $registrationsQuery
             ->orderByRaw("FIELD(status, 'approved', 'pending', 'rejected')")
             ->paginate(10)
-            ->appends(['academic_year_id' => $selectedYearId]);
+            ->appends([
+                'academic_year_id' => $selectedYearId,
+                'class_id' => $selectedClassId,
+            ]);
             
         return view('coach.extracurriculars.show', compact(
             'extracurricular', 
             'registrations', 
             'academicYears', 
-            'selectedYear'
+            'selectedYear',
+            'classes',
+            'selectedClassId'
         ));
+    }
+
+    /**
+     * Cetak PDF Laporan Penilaian untuk Ekstrakurikuler ini.
+     */
+    public function exportPdf(Request $request, $id)
+    {
+        $coachId = Auth::id();
+        $extracurricular = Extracurricular::where('coach_id', $coachId)->findOrFail($id);
+
+        $selectedYearId = $request->query('academic_year_id');
+        if ($selectedYearId) {
+            $selectedYear = AcademicYear::find($selectedYearId);
+        } else {
+            $selectedYear = AcademicYear::where('is_active', true)->first() ?? AcademicYear::latest('id')->first();
+        }
+        $selectedYearId = $selectedYear?->id;
+
+        $selectedClassId = $request->query('class_id');
+        $selectedClass = $selectedClassId ? ClassRoom::find($selectedClassId) : null;
+
+        $query = $extracurricular->registrations()
+            ->when($selectedYearId, function ($q) use ($selectedYearId) {
+                $q->where('academic_year_id', $selectedYearId);
+            })
+            ->with([
+                'student.studentProfile',
+                'student.classEnrollments' => function ($q) use ($selectedYearId) {
+                    if ($selectedYearId) {
+                        $q->where('academic_year_id', $selectedYearId);
+                    }
+                    $q->with('classRoom');
+                },
+                'grades' => function ($q) use ($selectedYearId) {
+                    if ($selectedYearId) {
+                        $q->where('academic_year_id', $selectedYearId);
+                    }
+                }
+            ]);
+
+        if ($selectedClassId) {
+            $query->whereHas('student.classEnrollments', function ($q) use ($selectedClassId, $selectedYearId) {
+                $q->where('class_room_id', $selectedClassId);
+                if ($selectedYearId) {
+                    $q->where('academic_year_id', $selectedYearId);
+                }
+            });
+        }
+
+        $registrations = $query->orderByRaw("FIELD(status, 'approved', 'pending', 'rejected')")->get();
+        $coachUser = Auth::user();
+
+        $pdf = Pdf::loadView('coach.extracurriculars.report-single-pdf', [
+            'extracurricular' => $extracurricular,
+            'registrations'   => $registrations,
+            'selectedYear'    => $selectedYear,
+            'selectedClass'   => $selectedClass,
+            'coachUser'       => $coachUser,
+            'printDate'       => now()->translatedFormat('d F Y'),
+        ]);
+
+        $pdf->setPaper('A4', 'landscape');
+
+        $safeName = Str::slug($extracurricular->name);
+        return $pdf->download('laporan-nilai-' . $safeName . '-' . now()->format('Ymd') . '.pdf');
     }
 
     /**

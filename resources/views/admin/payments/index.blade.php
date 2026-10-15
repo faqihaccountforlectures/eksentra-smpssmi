@@ -121,7 +121,7 @@
                     <select name="year" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-4 pr-9 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none cursor-pointer shadow-sm" onchange="this.form.submit()">
                         <option value="">Semua Tahun</option>
                         @foreach($yearsList as $y)
-                            <option value="{{ $y }}" {{ (string)($yearFilter ?? '') === (string)$y ? 'selected' : '' }}>Tahun {{ $y }}</option>
+                            <option value="{{ $y }}" {{ ($yearFilter ?? '') === $y ? 'selected' : '' }}>T.A. {{ $y }}</option>
                         @endforeach
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-navy-base">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\ExtracurricularRegistration;
+use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 
 class ExtracurricularRegistrationController extends Controller
@@ -14,9 +15,9 @@ class ExtracurricularRegistrationController extends Controller
      */
     public function index()
     {
-        // Mengambil data pendaftaran dipaginasi (10 per halaman) beserta relasi siswa (dan profilnya) serta data ekstrakurikulernya
+        // Mengambil data pendaftaran dipaginasi (10 per halaman) beserta relasi siswa (dan profilnya), tahun ajaran serta data ekstrakurikulernya
         // Diurutkan berdasarkan tanggal daftar terbaru (created_at)
-        $registrations = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular', 'grades.academicYear'])
+        $registrations = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular', 'academicYear', 'grades.academicYear'])
             ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -70,7 +71,7 @@ class ExtracurricularRegistrationController extends Controller
 
     /**
      * Memproses pendaftaran ekstrakurikuler oleh siswa.
-     * Siswa memilih ekskul dari katalog, lalu datanya disimpan ke tabel registrasi.
+     * Siswa memilih ekskul dari katalog, lalu datanya disimpan ke tabel registrasi untuk tahun ajaran yang sedang aktif.
      */
     public function store(Request $request)
     {
@@ -78,24 +79,32 @@ class ExtracurricularRegistrationController extends Controller
             'extracurricular_id' => 'required|exists:extracurriculars,id'
         ]);
 
-        // Mencegah pendaftaran ganda jika statusnya masih pending atau sudah approved
+        // Cek tahun ajaran aktif saat ini
+        $activeYear = AcademicYear::where('is_active', true)->first();
+        if (!$activeYear) {
+            return back()->with('error', 'Pendaftaran ekstrakurikuler saat ini belum dapat dilakukan karena belum ada tahun ajaran yang aktif.');
+        }
+
+        // Mencegah pendaftaran ganda pada tahun ajaran aktif jika statusnya masih pending atau sudah approved
         $existingRegistration = ExtracurricularRegistration::where('student_id', auth()->id())
             ->where('extracurricular_id', $request->extracurricular_id)
+            ->where('academic_year_id', $activeYear->id)
             ->whereIn('status', ['pending', 'approved'])
             ->first();
 
         if ($existingRegistration) {
-            return back()->with('error', 'Anda sudah mendaftar di ekstrakurikuler ini.');
+            return back()->with('error', 'Anda sudah mendaftar di ekstrakurikuler ini untuk tahun ajaran ' . $activeYear->year_name . '.');
         }
 
-        // Simpan pendaftaran baru (Otomatis statusnya pending karena default database/sistem)
+        // Simpan pendaftaran baru untuk tahun ajaran aktif
         ExtracurricularRegistration::create([
             'student_id' => auth()->id(),
             'extracurricular_id' => $request->extracurricular_id,
+            'academic_year_id' => $activeYear->id,
             'status' => 'pending'
         ]);
 
-        return back()->with('success', 'Pendaftaran berhasil! Silakan tunggu persetujuan dari Admin.');
+        return back()->with('success', 'Pendaftaran berhasil untuk Tahun Ajaran ' . $activeYear->year_name . '! Silakan tunggu persetujuan dari Admin.');
     }
 
     /**
@@ -103,8 +112,13 @@ class ExtracurricularRegistrationController extends Controller
      */
     public function destroy($id)
     {
+        $activeYear = AcademicYear::where('is_active', true)->first();
+
         $registration = ExtracurricularRegistration::where('extracurricular_id', $id)
             ->where('student_id', auth()->id())
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->firstOrFail();
 
         $registration->delete();

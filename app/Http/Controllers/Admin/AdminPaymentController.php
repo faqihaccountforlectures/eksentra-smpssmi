@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\Payment;
 use App\Models\ExtracurricularRegistration;
 use Illuminate\Http\Request;
@@ -26,16 +27,18 @@ class AdminPaymentController extends Controller
         $realPayments = Payment::with(['student.studentProfile', 'extracurricular', 'verifier'])
             ->get();
 
-        // 2. Ambil semua registrasi yang disetujui untuk membuat tagihan "Belum Lunas"
-        $approvedRegistrations = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular'])
+        // 2. Ambil semua registrasi yang disetujui untuk tahun ajaran aktif (untuk tagihan "Belum Lunas")
+        $activeYear = AcademicYear::where('is_active', true)->first();
+        $approvedRegistrations = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular', 'academicYear'])
             ->where('status', 'approved')
+            ->when($activeYear, fn($q) => $q->where('academic_year_id', $activeYear->id))
             ->get();
 
         $monthsName = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
             7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
         ];
-        
+
         $unpaidBills = collect();
         $currentDate = now()->startOfMonth();
 
@@ -45,14 +48,23 @@ class AdminPaymentController extends Controller
                 continue;
             }
 
-            $startDate = $reg->created_at->startOfMonth();
-            $iteratorDate = $startDate->copy();
-            
-            while ($iteratorDate->lte($currentDate)) {
+            // Tentukan rentang tagihan berdasarkan tahun ajaran (Juli – Juni)
+            $yearModel = $reg->academicYear ?? $activeYear;
+            $yearStart = $yearModel ? $yearModel->startDate() : $reg->created_at->copy()->startOfMonth();
+            $yearEnd   = $yearModel ? $yearModel->endDate()->startOfMonth() : $currentDate->copy();
+
+            // Mulai dari yang lebih akhir: tanggal daftar vs awal tahun ajaran
+            $billStart = $reg->created_at->startOfMonth()->max($yearStart);
+            // Selesai di yang lebih awal: bulan ini vs akhir tahun ajaran
+            $billEnd   = $currentDate->min($yearEnd);
+
+            $iteratorDate = $billStart->copy();
+
+            while ($iteratorDate->lte($billEnd)) {
                 $monthIndex = $iteratorDate->month;
-                $year = $iteratorDate->year;
-                $monthStr = $monthsName[$monthIndex];
-                
+                $year       = $iteratorDate->year;
+                $monthStr   = $monthsName[$monthIndex];
+
                 // Cek apakah ada pembayaran
                 $hasPaid = $realPayments->where('student_id', $reg->student_id)
                                     ->where('extracurricular_id', $reg->extracurricular_id)
@@ -63,21 +75,21 @@ class AdminPaymentController extends Controller
 
                 if (!$hasPaid) {
                     $dummyPayment = new Payment([
-                        'student_id' => $reg->student_id,
+                        'student_id'         => $reg->student_id,
                         'extracurricular_id' => $reg->extracurricular_id,
-                        'month' => $monthStr,
-                        'year' => $year,
-                        'total_amount' => $reg->extracurricular->fee,
-                        'payment_status' => 'unpaid'
+                        'month'              => $monthStr,
+                        'year'               => $year,
+                        'total_amount'       => $reg->extracurricular->fee,
+                        'payment_status'     => 'unpaid'
                     ]);
-                    
+
                     $dummyPayment->setRelation('extracurricular', $reg->extracurricular);
                     $dummyPayment->setRelation('student', $reg->student);
-                    $dummyPayment->created_at = $iteratorDate->copy(); // Sorting
-                    
+                    $dummyPayment->created_at = $iteratorDate->copy();
+
                     $unpaidBills->push($dummyPayment);
                 }
-                
+
                 $iteratorDate->addMonth();
             }
         }
@@ -85,13 +97,20 @@ class AdminPaymentController extends Controller
         // 3. Gabungkan pembayaran riil dan tagihan virtual
         $allTransactions = $unpaidBills->concat($realPayments);
 
-        // 4. Proses Filter Bulan & Tahun
+        // 4. Proses Filter Bulan & Tahun Ajaran
         if ($monthFilter) {
             $allTransactions = $allTransactions->where('month', $monthFilter);
         }
 
-        if ($yearFilter) {
-            $allTransactions = $allTransactions->where('year', (int)$yearFilter);
+        if ($yearFilter && str_contains($yearFilter, '/')) {
+            // yearFilter = "2026/2027" → Juli 2026 s/d Juni 2027
+            [$fyStart, $fyEnd] = explode('/', $yearFilter);
+            $fyMonthsInStartYear = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            $fyMonthsInEndYear   = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'];
+            $allTransactions = $allTransactions->filter(function ($p) use ($fyStart, $fyEnd, $fyMonthsInStartYear, $fyMonthsInEndYear) {
+                return (in_array($p->month, $fyMonthsInStartYear) && (int)$p->year === (int)$fyStart)
+                    || (in_array($p->month, $fyMonthsInEndYear)   && (int)$p->year === (int)$fyEnd);
+            });
         }
 
         // 5. Proses Filter Status
@@ -124,29 +143,30 @@ class AdminPaymentController extends Controller
         })->values();
 
         // 8. Manual Pagination & Counts
-        $totalCount = $allTransactions->count();
-        $pendingCount = $allTransactions->where('payment_status', 'pending')->count();
+        $totalCount    = $allTransactions->count();
+        $pendingCount  = $allTransactions->where('payment_status', 'pending')->count();
         $verifiedCount = $allTransactions->where('payment_status', 'verified')->count();
-        $unpaidCount = $allTransactions->where('payment_status', 'unpaid')->count();
+        $unpaidCount   = $allTransactions->where('payment_status', 'unpaid')->count();
         $rejectedCount = $allTransactions->where('payment_status', 'rejected')->count();
 
         $perPage = 10;
-        $page = $request->query('page', 1);
+        $page    = $request->query('page', 1);
         $paginatedItems = $allTransactions->slice(($page - 1) * $perPage, $perPage);
         $payments = new LengthAwarePaginator(
-            $paginatedItems, 
-            $allTransactions->count(), 
-            $perPage, 
-            $page, 
+            $paginatedItems,
+            $allTransactions->count(),
+            $perPage,
+            $page,
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
         $monthsList = array_values($monthsName);
-        $yearsList = range(now()->year - 2, now()->year + 1);
+        // Gunakan tahun-tahun kalender yang relevan dari data pembayaran yang ada
+        $yearsList = AcademicYear::orderBy('year_name')->pluck('year_name')->toArray();
 
         return view('admin.payments.index', compact(
-            'payments', 
-            'search', 
+            'payments',
+            'search',
             'statusFilter',
             'monthFilter',
             'yearFilter',
@@ -206,29 +226,37 @@ class AdminPaymentController extends Controller
         $realPayments = Payment::with(['student.studentProfile', 'extracurricular', 'verifier'])
             ->get();
 
-        $approvedRegistrations = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular'])
+        $activeYearPdf = AcademicYear::where('is_active', true)->first();
+        $approvedRegistrations = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular', 'academicYear'])
             ->where('status', 'approved')
+            ->when($activeYearPdf, fn($q) => $q->where('academic_year_id', $activeYearPdf->id))
             ->get();
 
         $monthsName = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
             7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
         ];
-        
+
         $unpaidBills = collect();
         $currentDate = now()->startOfMonth();
 
         foreach ($approvedRegistrations as $reg) {
             if ($reg->extracurricular->fee <= 0) continue;
 
-            $startDate = $reg->created_at->startOfMonth();
-            $iteratorDate = $startDate->copy();
-            
-            while ($iteratorDate->lte($currentDate)) {
+            // Tentukan rentang tagihan berdasarkan tahun ajaran (Juli – Juni)
+            $yearModel = $reg->academicYear ?? $activeYearPdf;
+            $yearStart = $yearModel ? $yearModel->startDate() : $reg->created_at->copy()->startOfMonth();
+            $yearEnd   = $yearModel ? $yearModel->endDate()->startOfMonth() : $currentDate->copy();
+
+            $billStart    = $reg->created_at->startOfMonth()->max($yearStart);
+            $billEnd      = $currentDate->min($yearEnd);
+            $iteratorDate = $billStart->copy();
+
+            while ($iteratorDate->lte($billEnd)) {
                 $monthIndex = $iteratorDate->month;
-                $year = $iteratorDate->year;
-                $monthStr = $monthsName[$monthIndex];
-                
+                $year       = $iteratorDate->year;
+                $monthStr   = $monthsName[$monthIndex];
+
                 $hasPaid = $realPayments->where('student_id', $reg->student_id)
                                     ->where('extracurricular_id', $reg->extracurricular_id)
                                     ->where('month', $monthStr)
@@ -238,16 +266,16 @@ class AdminPaymentController extends Controller
 
                 if (!$hasPaid) {
                     $dummyPayment = new Payment([
-                        'student_id' => $reg->student_id,
+                        'student_id'         => $reg->student_id,
                         'extracurricular_id' => $reg->extracurricular_id,
-                        'month' => $monthStr,
-                        'year' => $year,
-                        'total_amount' => $reg->extracurricular->fee,
-                        'payment_status' => 'unpaid'
+                        'month'              => $monthStr,
+                        'year'               => $year,
+                        'total_amount'       => $reg->extracurricular->fee,
+                        'payment_status'     => 'unpaid'
                     ]);
                     $dummyPayment->setRelation('extracurricular', $reg->extracurricular);
                     $dummyPayment->setRelation('student', $reg->student);
-                    $dummyPayment->created_at = $iteratorDate->copy(); 
+                    $dummyPayment->created_at = $iteratorDate->copy();
                     $unpaidBills->push($dummyPayment);
                 }
                 $iteratorDate->addMonth();
@@ -260,8 +288,14 @@ class AdminPaymentController extends Controller
             $allTransactions = $allTransactions->where('month', $monthFilter);
         }
 
-        if ($yearFilter) {
-            $allTransactions = $allTransactions->where('year', (int)$yearFilter);
+        if ($yearFilter && str_contains($yearFilter, '/')) {
+            [$fyStart, $fyEnd] = explode('/', $yearFilter);
+            $fyMonthsInStartYear = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            $fyMonthsInEndYear   = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'];
+            $allTransactions = $allTransactions->filter(function ($p) use ($fyStart, $fyEnd, $fyMonthsInStartYear, $fyMonthsInEndYear) {
+                return (in_array($p->month, $fyMonthsInStartYear) && (int)$p->year === (int)$fyStart)
+                    || (in_array($p->month, $fyMonthsInEndYear)   && (int)$p->year === (int)$fyEnd);
+            });
         }
 
         if ($statusFilter) {

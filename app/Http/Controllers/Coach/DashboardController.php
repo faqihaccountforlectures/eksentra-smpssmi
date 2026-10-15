@@ -28,8 +28,11 @@ class DashboardController extends Controller
         // 1. Ekstrakurikuler yang dibina oleh coach ini
         $myExtracurriculars = Extracurricular::where('coach_id', $coachId)
             ->withCount([
-                'registrations as approved_count' => function ($q) {
+                'registrations as approved_count' => function ($q) use ($activeYear) {
                     $q->where('status', 'approved');
+                    if ($activeYear) {
+                        $q->where('academic_year_id', $activeYear->id);
+                    }
                 },
                 'registrations as graded_count' => function ($q) use ($activeYear) {
                     $q->where('status', 'approved')
@@ -38,9 +41,15 @@ class DashboardController extends Controller
                               $g->where('academic_year_id', $activeYear->id);
                           }
                       });
+                    if ($activeYear) {
+                        $q->where('academic_year_id', $activeYear->id);
+                    }
                 },
-                'registrations as pending_count' => function ($q) {
+                'registrations as pending_count' => function ($q) use ($activeYear) {
                     $q->where('status', 'pending');
+                    if ($activeYear) {
+                        $q->where('academic_year_id', $activeYear->id);
+                    }
                 },
             ])
             ->get();
@@ -51,10 +60,16 @@ class DashboardController extends Controller
         $totalExtracurriculars = $myExtracurriculars->count();
         $totalMembers = ExtracurricularRegistration::whereIn('extracurricular_id', $ekskulIds)
             ->where('status', 'approved')
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->count();
 
         $totalGraded = ExtracurricularRegistration::whereIn('extracurricular_id', $ekskulIds)
             ->where('status', 'approved')
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->whereHas('grades', function ($g) use ($activeYear) {
                 if ($activeYear) {
                     $g->where('academic_year_id', $activeYear->id);
@@ -64,11 +79,17 @@ class DashboardController extends Controller
 
         $totalPending = ExtracurricularRegistration::whereIn('extracurricular_id', $ekskulIds)
             ->where('status', 'pending')
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->count();
 
         // 3. Siswa terbaru yang bergabung
         $recentMembers = ExtracurricularRegistration::whereIn('extracurricular_id', $ekskulIds)
             ->where('status', 'approved')
+            ->when($activeYear, function ($q) use ($activeYear) {
+                $q->where('academic_year_id', $activeYear->id);
+            })
             ->with(['student.studentProfile', 'extracurricular', 'grades.academicYear'])
             ->orderBy('updated_at', 'desc')
             ->take(5)

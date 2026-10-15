@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\Payment;
 use App\Models\ExtracurricularRegistration;
 use Illuminate\Http\Request;
@@ -23,20 +24,24 @@ class StudentPaymentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $activeYear = AcademicYear::where('is_active', true)->first();
+
         // Ambil daftar ekskul yang disetujui untuk ditampilkan pada opsi pilihan form "Bayar"
-        $approvedRegistrations = ExtracurricularRegistration::with('extracurricular')
+        $approvedRegistrations = ExtracurricularRegistration::with(['extracurricular', 'academicYear'])
             ->where('student_id', auth()->id())
             ->where('status', 'approved')
+            ->when($activeYear, fn($q) => $q->where('academic_year_id', $activeYear->id))
             ->get();
 
         // LOGIKA TAGIHAN (BELUM LUNAS)
-        // Kita buat tagihan virtual untuk setiap bulan terhitung sejak tanggal pendaftaran siswa disetujui (atau dibuat)
-        // hingga bulan saat ini, jika belum ada data pembayarannya.
+        // Tagihan dihitung per bulan (tiap tanggal 1) dalam rentang:
+        //   Mulai : yang lebih akhir antara tanggal daftar siswa ATAU awal tahun ajaran (1 Juli)
+        //   Selesai: yang lebih awal antara bulan ini ATAU akhir tahun ajaran (30 Juni)
         $monthsName = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
             7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
         ];
-        
+
         $unpaidBills = collect();
         $currentDate = now()->startOfMonth();
 
@@ -46,17 +51,23 @@ class StudentPaymentController extends Controller
                 continue;
             }
 
-            // Mulai tagihan dari bulan di mana siswa mendaftar ekskul tersebut
-            $startDate = $reg->created_at->startOfMonth();
-            
-            // Loop dari bulan mulai sampai bulan ini
-            $iteratorDate = $startDate->copy();
-            
-            while ($iteratorDate->lte($currentDate)) {
+            // Tentukan rentang tagihan berdasarkan tahun ajaran (Juli – Juni)
+            $yearModel   = $reg->academicYear ?? $activeYear;
+            $yearStart   = $yearModel ? $yearModel->startDate() : $reg->created_at->copy()->startOfMonth();
+            $yearEnd     = $yearModel ? $yearModel->endDate()->startOfMonth() : $currentDate->copy();
+
+            // Tagihan mulai dari yang lebih akhir: tanggal daftar vs awal tahun ajaran
+            $billStart   = $reg->created_at->startOfMonth()->max($yearStart);
+            // Tagihan berakhir di yang lebih awal: bulan ini vs akhir tahun ajaran
+            $billEnd     = $currentDate->min($yearEnd);
+
+            $iteratorDate = $billStart->copy();
+
+            while ($iteratorDate->lte($billEnd)) {
                 $monthIndex = $iteratorDate->month;
-                $year = $iteratorDate->year;
-                $monthStr = $monthsName[$monthIndex];
-                
+                $year       = $iteratorDate->year;
+                $monthStr   = $monthsName[$monthIndex];
+
                 // Cek apakah ekskul ini sudah dibayar untuk bulan dan tahun tersebut (pending atau verified)
                 $hasPaid = $payments->where('extracurricular_id', $reg->extracurricular_id)
                                     ->where('month', $monthStr)
@@ -68,19 +79,19 @@ class StudentPaymentController extends Controller
                     // Buat objek dummy payment berstatus "unpaid"
                     $dummyPayment = new Payment([
                         'extracurricular_id' => $reg->extracurricular_id,
-                        'month' => $monthStr,
-                        'year' => $year,
-                        'total_amount' => $reg->extracurricular->fee,
-                        'payment_status' => 'unpaid'
+                        'month'              => $monthStr,
+                        'year'               => $year,
+                        'total_amount'       => $reg->extracurricular->fee,
+                        'payment_status'     => 'unpaid'
                     ]);
-                    
+
                     // Set relasi ekskul secara manual agar view tidak error saat memanggil nama ekskul
                     $dummyPayment->setRelation('extracurricular', $reg->extracurricular);
-                    $dummyPayment->created_at = $iteratorDate->copy(); // Untuk sorting agar bulan terlama di bawah (atau sesuaikan)
-                    
+                    $dummyPayment->created_at = $iteratorDate->copy();
+
                     $unpaidBills->push($dummyPayment);
                 }
-                
+
                 // Lanjut ke bulan berikutnya
                 $iteratorDate->addMonth();
             }
@@ -146,11 +157,13 @@ class StudentPaymentController extends Controller
             return back()->withErrors(['Anda sudah memiliki riwayat pembayaran untuk bulan tersebut yang sedang diproses atau telah diverifikasi.']);
         }
 
-        // Cek apakah siswa benar-benar anggota aktif ekskul tersebut, sekalian ambil nominal biayanya
+        // Cek apakah siswa benar-benar anggota aktif ekskul tersebut di tahun ajaran aktif
+        $storeActiveYear = AcademicYear::where('is_active', true)->first();
         $registration = ExtracurricularRegistration::with('extracurricular')
             ->where('student_id', auth()->id())
             ->where('extracurricular_id', $request->extracurricular_id)
             ->where('status', 'approved')
+            ->when($storeActiveYear, fn($q) => $q->where('academic_year_id', $storeActiveYear->id))
             ->firstOrFail();
 
         $proofPath = null;

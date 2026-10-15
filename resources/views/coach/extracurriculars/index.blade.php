@@ -37,7 +37,7 @@
         <!-- Grid Daftar Ekstrakurikuler -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($extracurriculars as $ekskul)
-            <div class="bg-white rounded-2xl border border-navy-light/30 shadow-sm shadow-navy-base/5 overflow-hidden hover:shadow-lg hover:border-navy-base/40 hover:-translate-y-1 transition-all duration-300 flex flex-col group">
+            <div class="bg-white rounded-2xl border border-navy-light/30 shadow-sm shadow-navy-base/5 overflow-hidden hover:shadow-md hover:border-navy-base/40 transition-colors duration-200 flex flex-col group">
                 <!-- Foto/Ilustrasi Ekstrakurikuler -->
                 <div class="h-44 bg-navy-light/10 relative overflow-hidden">
                     @if($ekskul->image)
