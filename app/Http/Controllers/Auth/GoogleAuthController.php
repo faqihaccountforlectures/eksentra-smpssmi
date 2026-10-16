@@ -24,16 +24,10 @@ class GoogleAuthController extends Controller
             // Menggunakan stateless() untuk menghindari InvalidStateException (mismatch session state pada OAuth redirect)
             $googleUser = Socialite::driver('google')->stateless()->user();
 
-            // Cari user di database berdasarkan google_id atau email
-            $user = User::where('google_id', $googleUser->getId())
-                        ->orWhere('email', $googleUser->getEmail())
-                        ->first();
+            // Cari user di database berdasarkan email
+            $user = User::where('email', $googleUser->getEmail())->first();
             
             if ($user) {
-                // Jika user ditemukan (sudah didaftarkan oleh admin)
-                // Update google_id untuk berjaga-jaga jika login pertama kali pakai Google
-                $user->update(['google_id' => $googleUser->getId()]);
-                
                 // Daftarkan sesi login
                 Auth::login($user);
 

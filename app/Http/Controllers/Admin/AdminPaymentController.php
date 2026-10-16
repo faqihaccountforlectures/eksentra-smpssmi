@@ -23,8 +23,8 @@ class AdminPaymentController extends Controller
         $endDate = $request->query('end_date');
         $search = $request->query('search');
 
-        // 1. Ambil semua data pembayaran riil dari seluruh siswa
-        $realPayments = Payment::with(['student.studentProfile', 'extracurricular', 'verifier'])
+        // 1. Ambil semua data pembayaran riil dari seluruh siswa (termasuk pendaftaran yang sudah keluar/soft-deleted)
+        $realPayments = Payment::with(['registration' => fn($q) => $q->withTrashed()->with(['student.studentProfile', 'extracurricular']), 'verifier'])
             ->get();
 
         // 2. Ambil semua registrasi yang disetujui untuk tahun ajaran aktif (untuk tagihan "Belum Lunas")
@@ -66,8 +66,7 @@ class AdminPaymentController extends Controller
                 $monthStr   = $monthsName[$monthIndex];
 
                 // Cek apakah ada pembayaran
-                $hasPaid = $realPayments->where('student_id', $reg->student_id)
-                                    ->where('extracurricular_id', $reg->extracurricular_id)
+                $hasPaid = $realPayments->where('registration_id', $reg->id)
                                     ->where('month', $monthStr)
                                     ->where('year', $year)
                                     ->whereIn('payment_status', ['pending', 'verified'])
@@ -75,16 +74,14 @@ class AdminPaymentController extends Controller
 
                 if (!$hasPaid) {
                     $dummyPayment = new Payment([
-                        'student_id'         => $reg->student_id,
-                        'extracurricular_id' => $reg->extracurricular_id,
+                        'registration_id'    => $reg->id,
                         'month'              => $monthStr,
                         'year'               => $year,
                         'total_amount'       => $reg->extracurricular->fee,
                         'payment_status'     => 'unpaid'
                     ]);
 
-                    $dummyPayment->setRelation('extracurricular', $reg->extracurricular);
-                    $dummyPayment->setRelation('student', $reg->student);
+                    $dummyPayment->setRelation('registration', $reg);
                     $dummyPayment->created_at = $iteratorDate->copy();
 
                     $unpaidBills->push($dummyPayment);
@@ -223,8 +220,8 @@ class AdminPaymentController extends Controller
         $endDate = $request->query('end_date');
         $search = $request->query('search');
 
-        // Gunakan logika yang sama dengan index() untuk mengambil data
-        $realPayments = Payment::with(['student.studentProfile', 'extracurricular', 'verifier'])
+        // Gunakan logika yang sama dengan index() untuk mengambil data (termasuk pendaftaran yang sudah keluar/soft-deleted)
+        $realPayments = Payment::with(['registration' => fn($q) => $q->withTrashed()->with(['student.studentProfile', 'extracurricular']), 'verifier'])
             ->get();
 
         $activeYearPdf = AcademicYear::where('is_active', true)->first();
@@ -258,8 +255,7 @@ class AdminPaymentController extends Controller
                 $year       = $iteratorDate->year;
                 $monthStr   = $monthsName[$monthIndex];
 
-                $hasPaid = $realPayments->where('student_id', $reg->student_id)
-                                    ->where('extracurricular_id', $reg->extracurricular_id)
+                $hasPaid = $realPayments->where('registration_id', $reg->id)
                                     ->where('month', $monthStr)
                                     ->where('year', $year)
                                     ->whereIn('payment_status', ['pending', 'verified'])
@@ -267,15 +263,13 @@ class AdminPaymentController extends Controller
 
                 if (!$hasPaid) {
                     $dummyPayment = new Payment([
-                        'student_id'         => $reg->student_id,
-                        'extracurricular_id' => $reg->extracurricular_id,
+                        'registration_id'    => $reg->id,
                         'month'              => $monthStr,
                         'year'               => $year,
                         'total_amount'       => $reg->extracurricular->fee,
                         'payment_status'     => 'unpaid'
                     ]);
-                    $dummyPayment->setRelation('extracurricular', $reg->extracurricular);
-                    $dummyPayment->setRelation('student', $reg->student);
+                    $dummyPayment->setRelation('registration', $reg);
                     $dummyPayment->created_at = $iteratorDate->copy();
                     $unpaidBills->push($dummyPayment);
                 }

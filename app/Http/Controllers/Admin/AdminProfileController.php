@@ -24,7 +24,7 @@ class AdminProfileController extends Controller
     }
 
     /**
-     * Memproses pembaruan data profil admin (Nama Lengkap, Email/Username, Nomor HP).
+     * Memproses pembaruan data profil admin (Email/Username).
      */
     public function updateProfile(Request $request)
     {
@@ -34,23 +34,19 @@ class AdminProfileController extends Controller
         // Validasi input data profil
         // Email / username harus unik kecuali untuk user itu sendiri
         $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'required|string|max:255|unique:users,email,' . $user->id,
-            'phone_number' => 'nullable|string|max:20',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
         ], [
-            'name.required'  => 'Nama lengkap wajib diisi.',
             'email.required' => 'Email / username wajib diisi.',
+            'email.email'    => 'Format email tidak valid.',
             'email.unique'   => 'Email / username ini sudah digunakan oleh akun lain.',
         ]);
 
         // Simpan perubahan profil ke database
         $user->update([
-            'name'         => $request->name,
-            'email'        => $request->email,
-            'phone_number' => $request->phone_number,
+            'email' => $request->email,
         ]);
 
-        return back()->with('success', 'Profil akun admin berhasil diperbarui.');
+        return back()->with('success', 'Email akun admin berhasil diperbarui.');
     }
 
     /**

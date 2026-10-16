@@ -18,15 +18,17 @@ class StudentPaymentController extends Controller
      */
     public function index()
     {
-        // Ambil riwayat pembayaran khusus siswa yang login (berdasarkan id)
-        $payments = Payment::with(['extracurricular', 'verifier'])
-            ->where('student_id', auth()->id())
+        // Ambil riwayat pembayaran khusus siswa yang login (termasuk pendaftaran yang sudah keluar/soft-deleted)
+        $payments = Payment::with(['registration' => fn($q) => $q->withTrashed()->with('extracurricular'), 'verifier'])
+            ->whereHas('registration', function ($q) {
+                $q->withTrashed()->where('student_id', auth()->id());
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
         $activeYear = AcademicYear::where('is_active', true)->first();
 
-        // Ambil daftar ekskul yang disetujui untuk ditampilkan pada opsi pilihan form "Bayar"
+        // Ambil daftar ekskul yang disetujui (aktif) untuk ditampilkan pada opsi pilihan form "Bayar"
         $approvedRegistrations = ExtracurricularRegistration::with(['extracurricular', 'academicYear'])
             ->where('student_id', auth()->id())
             ->where('status', 'approved')
@@ -69,7 +71,7 @@ class StudentPaymentController extends Controller
                 $monthStr   = $monthsName[$monthIndex];
 
                 // Cek apakah ekskul ini sudah dibayar untuk bulan dan tahun tersebut (pending atau verified)
-                $hasPaid = $payments->where('extracurricular_id', $reg->extracurricular_id)
+                $hasPaid = $payments->where('registration_id', $reg->id)
                                     ->where('month', $monthStr)
                                     ->where('year', $year)
                                     ->whereIn('payment_status', ['pending', 'verified'])
@@ -78,15 +80,15 @@ class StudentPaymentController extends Controller
                 if (!$hasPaid) {
                     // Buat objek dummy payment berstatus "unpaid"
                     $dummyPayment = new Payment([
-                        'extracurricular_id' => $reg->extracurricular_id,
+                        'registration_id'    => $reg->id,
                         'month'              => $monthStr,
                         'year'               => $year,
                         'total_amount'       => $reg->extracurricular->fee,
                         'payment_status'     => 'unpaid'
                     ]);
 
-                    // Set relasi ekskul secara manual agar view tidak error saat memanggil nama ekskul
-                    $dummyPayment->setRelation('extracurricular', $reg->extracurricular);
+                    // Set relasi registrasi secara manual agar view tidak error saat memanggil nama ekskul
+                    $dummyPayment->setRelation('registration', $reg);
                     $dummyPayment->created_at = $iteratorDate->copy();
 
                     $unpaidBills->push($dummyPayment);
@@ -122,12 +124,28 @@ class StudentPaymentController extends Controller
     {
         // Validasi input form: jika metode transfer, bukti bayar (foto) wajib diunggah.
         $request->validate([
-            'extracurricular_id' => 'required|exists:extracurriculars,id',
+            'registration_id' => 'nullable|exists:extracurricular_registrations,id',
+            'extracurricular_id' => 'nullable|exists:extracurriculars,id',
             'month' => 'required|string',
             'year' => 'required|integer',
             'payment_method' => 'required|in:transfer,cash',
             'proof_of_payment' => 'required_if:payment_method,transfer|image|mimes:jpeg,png,jpg|max:2048'
         ]);
+
+        // Cek apakah siswa benar-benar anggota aktif ekskul tersebut di tahun ajaran aktif
+        $storeActiveYear = AcademicYear::where('is_active', true)->first();
+        $regQuery = ExtracurricularRegistration::with(['extracurricular', 'academicYear'])
+            ->where('student_id', auth()->id())
+            ->where('status', 'approved');
+
+        if ($request->filled('registration_id')) {
+            $regQuery->where('id', $request->registration_id);
+        } else {
+            $regQuery->where('extracurricular_id', $request->extracurricular_id)
+                     ->when($storeActiveYear, fn($q) => $q->where('academic_year_id', $storeActiveYear->id));
+        }
+
+        $registration = $regQuery->firstOrFail();
 
         // Validasi 1: Cegah pembayaran untuk bulan di masa depan
         $monthsMap = [
@@ -146,8 +164,7 @@ class StudentPaymentController extends Controller
         }
 
         // Validasi 2: Cegah duplikasi pembayaran (jika sudah ada riwayat pending atau verified)
-        $existingPayment = Payment::where('student_id', auth()->id())
-            ->where('extracurricular_id', $request->extracurricular_id)
+        $existingPayment = Payment::where('registration_id', $registration->id)
             ->where('month', $request->month)
             ->where('year', $request->year)
             ->whereIn('payment_status', ['pending', 'verified'])
@@ -156,15 +173,6 @@ class StudentPaymentController extends Controller
         if ($existingPayment) {
             return back()->withErrors(['Anda sudah memiliki riwayat pembayaran untuk bulan tersebut yang sedang diproses atau telah diverifikasi.']);
         }
-
-        // Cek apakah siswa benar-benar anggota aktif ekskul tersebut di tahun ajaran aktif
-        $storeActiveYear = AcademicYear::where('is_active', true)->first();
-        $registration = ExtracurricularRegistration::with(['extracurricular', 'academicYear'])
-            ->where('student_id', auth()->id())
-            ->where('extracurricular_id', $request->extracurricular_id)
-            ->where('status', 'approved')
-            ->when($storeActiveYear, fn($q) => $q->where('academic_year_id', $storeActiveYear->id))
-            ->firstOrFail();
 
         // Validasi 3: Bulan yang dibayar harus masuk dalam rentang tagihan yang nyata
         // Rentang: MAX(tanggal daftar siswa, awal tahun ajaran) → MIN(bulan ini, akhir tahun ajaran)
@@ -200,8 +208,7 @@ class StudentPaymentController extends Controller
 
         // Masukkan data pembayaran ke tabel 'payments', default status = 'pending'
         Payment::create([
-            'student_id' => auth()->id(),
-            'extracurricular_id' => $request->extracurricular_id,
+            'registration_id' => $registration->id,
             'month' => $request->month,
             'year' => $request->year,
             'total_amount' => $registration->extracurricular->fee,

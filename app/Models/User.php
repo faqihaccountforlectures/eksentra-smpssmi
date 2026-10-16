@@ -15,11 +15,8 @@ class User extends Authenticatable
 
     // Kolom-kolom di database yang boleh diisi secara massal (misal pake metode create atau update)
     protected $fillable = [
-        'name',         // Nama Lengkap Pengguna (Admin/Pengguna Sistem)
         'email',        // Email / Username untuk Login
-        'phone_number', // Nomor Telepon / WhatsApp
         'password',
-        'google_id',    // Buat nyimpen ID dari Google SSO
         'role',         // Role pengguna: admin, coach, atau siswa
         'must_change_password', // Status kewajiban ganti password default
     ];
@@ -89,7 +86,8 @@ class User extends Authenticatable
      * Secara cerdas memeriksa profil pengguna sesuai peran:
      * - Jika Coach: mengambil nama dari coachProfile->full_name.
      * - Jika Siswa: mengambil nama dari studentProfile->full_name.
-     * - Jika Admin atau profil belum ada: menggunakan kolom 'name' atau potongan awal email.
+     * - Jika Admin: menggunakan 'Administrator'.
+     * - Fallback: menggunakan potongan awal email.
      */
     public function getDisplayNameAttribute(): string
     {
@@ -107,7 +105,11 @@ class User extends Authenticatable
             }
         }
 
-        return !empty($this->name) ? $this->name : explode('@', $this->email)[0];
+        if ($this->role === 'admin') {
+            return 'Administrator';
+        }
+
+        return explode('@', $this->email)[0];
     }
 
     /**

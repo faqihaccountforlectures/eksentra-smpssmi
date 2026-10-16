@@ -172,10 +172,10 @@
                                 <td class="py-4 px-5">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm font-heading">
-                                            {{ substr($reg->student->studentProfile->full_name ?? ($reg->student->name ?? 'S'), 0, 1) }}
+                                            {{ substr($reg->student->studentProfile->full_name ?? ($reg->student->display_name ?? 'S'), 0, 1) }}
                                         </div>
                                         <div>
-                                            <p class="font-bold text-slate-900 text-sm font-heading">{{ $reg->student->studentProfile->full_name ?? ($reg->student->name ?? 'Siswa') }}</p>
+                                            <p class="font-bold text-slate-900 text-sm font-heading">{{ $reg->student->studentProfile->full_name ?? ($reg->student->display_name ?? 'Siswa') }}</p>
                                             <div class="flex items-center gap-2 mt-0.5">
                                                 <span class="text-[10px] text-slate-500 font-mono">NIS: {{ $reg->student->studentProfile->nis ?? '-' }}</span>
                                                 <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
@@ -244,7 +244,7 @@
                                         <button type="button" 
                                             onclick="openGradeModal(
                                                 {{ $reg->id }}, 
-                                                '{{ addslashes($reg->student->studentProfile->full_name ?? ($reg->student->name ?? 'Siswa')) }}',
+                                                '{{ addslashes($reg->student->studentProfile->full_name ?? ($reg->student->display_name ?? 'Siswa')) }}',
                                                 '{{ $selectedYear->year_name ?? '-' }}',
                                                 '{{ $gradeGanjil->grade ?? '' }}',
                                                 '{{ $gradeGanjil->score ?? '' }}',

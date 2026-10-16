@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ExtracurricularRegistration extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'student_id',
@@ -37,5 +38,13 @@ class ExtracurricularRegistration extends Model
     public function grades()
     {
         return $this->hasMany(ExtracurricularGrade::class, 'registration_id');
+    }
+
+    /**
+     * Relasi ke riwayat transaksi pembayaran iuran
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'registration_id');
     }
 }

@@ -43,7 +43,7 @@ class DashboardController extends Controller
         $chartData = $extracurriculars->pluck('registrations_count');
 
         // 7. Ambil 5 setoran pembayaran terbaru
-        $recentPayments = Payment::with(['student.studentProfile', 'extracurricular'])
+        $recentPayments = Payment::with(['registration' => fn($q) => $q->withTrashed()->with(['student.studentProfile', 'extracurricular'])])
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();

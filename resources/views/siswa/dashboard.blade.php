@@ -17,7 +17,7 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
                 <span class="uppercase">PORTAL SISWA</span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-black text-white font-heading tracking-tight">Halo, {{ $user->studentProfile->full_name ?? $user->name }}! 👋</h2>
+            <h2 class="text-xl sm:text-2xl font-black text-white font-heading tracking-tight">Halo, {{ $user->studentProfile->full_name ?? $user->display_name }}! 👋</h2>
             <p class="text-xs text-blue-100 mt-1.5">
                 Selamat datang di Portal Ekstrakurikuler SMPS Science Mutiara Insani.
             </p>

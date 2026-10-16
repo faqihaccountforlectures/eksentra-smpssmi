@@ -98,10 +98,10 @@
                         <div>
                             <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Ekstrakurikuler <span class="text-rose-500">*</span></label>
                             <div class="relative">
-                                <select name="extracurricular_id" class="w-full bg-white-off/50 border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl pl-4 pr-9 py-2.5 focus:bg-white focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none shadow-sm cursor-pointer" required>
+                                <select name="registration_id" class="w-full bg-white-off/50 border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl pl-4 pr-9 py-2.5 focus:bg-white focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none shadow-sm cursor-pointer" required>
                                     <option value="" disabled selected>Pilih Ekstrakurikuler</option>
                                     @foreach($approvedRegistrations as $reg)
-                                        <option value="{{ $reg->extracurricular_id }}">{{ $reg->extracurricular->name }} (Rp {{ number_format($reg->extracurricular->fee, 0, ',', '.') }})</option>
+                                        <option value="{{ $reg->id }}">{{ $reg->extracurricular->name }} (Rp {{ number_format($reg->extracurricular->fee, 0, ',', '.') }})</option>
                                     @endforeach
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-navy-base">

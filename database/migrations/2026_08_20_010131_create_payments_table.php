@@ -14,11 +14,8 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
 
-            // Siswa yang membayar
-            $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
-            
-            // Ekskul yang dibayar
-            $table->foreignId('extracurricular_id')->constrained('extracurriculars')->onDelete('cascade');
+            // Relasi ke pendaftaran ekstrakurikuler siswa
+            $table->foreignId('registration_id')->constrained('extracurricular_registrations')->onDelete('restrict');
             
             // Bulan dan Tahun Pembayaran
             $table->string('month', 20);

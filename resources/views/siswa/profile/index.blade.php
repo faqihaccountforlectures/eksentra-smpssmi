@@ -38,10 +38,10 @@
             <!-- Kiri: Avatar + Nama + Peran -->
             <div class="relative z-10 flex items-center gap-4 text-center sm:text-left">
                 <div class="w-16 h-16 rounded-2xl bg-white text-blue-900 flex items-center justify-center font-bold text-2xl font-heading shadow-md shrink-0 border-2 border-white/20">
-                    {{ substr($profile->full_name ?? ($user->name ?? 'S'), 0, 1) }}
+                    {{ substr($profile->full_name ?? ($user->display_name ?? 'S'), 0, 1) }}
                 </div>
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-bold font-heading !text-white text-white" style="color: #ffffff !important;">{{ $profile->full_name ?? $user->name }}</h2>
+                    <h2 class="text-xl sm:text-2xl font-bold font-heading !text-white text-white" style="color: #ffffff !important;">{{ $profile->full_name ?? $user->display_name }}</h2>
                     <span class="inline-flex items-center gap-1.5 mt-1 px-3 py-1 bg-blue-900/80 border border-blue-700/60 text-blue-200 text-xs font-semibold rounded-lg shadow-sm">
                         <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
                         Siswa SMPS Science Mutiara Insani
@@ -73,7 +73,7 @@
                 <!-- Nama Lengkap Siswa -->
                 <div>
                     <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nama Lengkap Siswa</label>
-                    <input type="text" value="{{ $profile->full_name ?? ($user->name ?? '-') }}" disabled class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold rounded-xl px-4 py-2.5 text-xs cursor-not-allowed">
+                    <input type="text" value="{{ $profile->full_name ?? '-' }}" disabled class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold rounded-xl px-4 py-2.5 text-xs cursor-not-allowed">
                 </div>
 
                 <!-- Nomor Induk Siswa (NIS) -->

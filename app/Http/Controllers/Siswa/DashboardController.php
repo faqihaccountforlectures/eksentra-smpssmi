@@ -40,7 +40,9 @@ class DashboardController extends Controller
 
         // 4. Cek apakah ada tagihan bulanan ekskul yang tertunggak (Belum dibayar)
         $hasUnpaidBills = false;
-        $payments = Payment::where('student_id', $user->id)->get();
+        $payments = Payment::whereHas('registration', function ($q) use ($user) {
+            $q->withTrashed()->where('student_id', $user->id);
+        })->get();
 
         $monthsName = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
@@ -64,7 +66,7 @@ class DashboardController extends Controller
                 $monthStr = $monthsName[$iteratorDate->month];
                 $year     = $iteratorDate->year;
 
-                $hasPaid = $payments->where('extracurricular_id', $reg->extracurricular_id)
+                $hasPaid = $payments->where('registration_id', $reg->id)
                                     ->where('month', $monthStr)
                                     ->where('year', $year)
                                     ->whereIn('payment_status', ['pending', 'verified'])
@@ -78,9 +80,11 @@ class DashboardController extends Controller
             }
         }
 
-        // 5. Pembayaran terbaru
-        $recentPayments = Payment::where('student_id', $user->id)
-            ->with('extracurricular')
+        // 5. Pembayaran terbaru (termasuk ekskul yang pendaftarannya sudah keluar/soft-deleted)
+        $recentPayments = Payment::whereHas('registration', function ($q) use ($user) {
+                $q->withTrashed()->where('student_id', $user->id);
+            })
+            ->with(['registration' => fn($q) => $q->withTrashed()->with('extracurricular')])
             ->orderBy('created_at', 'desc')
             ->take(4)
             ->get();

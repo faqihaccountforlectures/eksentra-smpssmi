@@ -131,8 +131,9 @@ class ExtracurricularRegistrationController extends Controller
             })
             ->firstOrFail();
 
+        // Menggunakan Soft Delete sehingga status keikutsertaan non-aktif, namun riwayat pembayaran tetap tersimpan aman
         $registration->delete();
 
-        return back()->with('success', 'Kamu telah berhasil keluar dari ekstrakurikuler tersebut.');
+        return back()->with('success', 'Kamu telah berhasil keluar dari ekstrakurikuler tersebut. Riwayat pembayaran yang telah lunas tetap tersimpan aman.');
     }
 }

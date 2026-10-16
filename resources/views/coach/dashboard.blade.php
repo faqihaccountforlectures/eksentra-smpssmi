@@ -184,10 +184,10 @@
                         <div class="py-3 flex items-center justify-between gap-3">
                             <div class="flex items-center gap-2.5 min-w-0">
                                 <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-bold text-xs shrink-0 font-heading border border-blue-200">
-                                    {{ substr($member->student->studentProfile->full_name ?? ($member->student->name ?? 'S'), 0, 1) }}
+                                    {{ substr($member->student->studentProfile->full_name ?? ($member->student->display_name ?? 'S'), 0, 1) }}
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="font-bold text-slate-800 truncate">{{ $member->student->studentProfile->full_name ?? $member->student->name }}</p>
+                                    <p class="font-bold text-slate-800 truncate">{{ $member->student->studentProfile->full_name ?? $member->student->display_name }}</p>
                                     <p class="text-[10px] text-slate-500 truncate">{{ $member->extracurricular->name }}</p>
                                 </div>
                             </div>
@@ -223,10 +223,10 @@
             <div class="bg-white rounded-2xl p-6 border border-blue-100 shadow-sm relative overflow-hidden">
                 <div class="flex items-center gap-3 mb-4 relative z-10">
                     <div class="w-10 h-10 rounded-full bg-blue-800 text-white flex items-center justify-center font-extrabold font-heading text-base shrink-0 shadow-sm">
-                        {{ substr($user->coachProfile->full_name ?? ($user->name ?? 'G'), 0, 1) }}
+                        {{ substr($user->coachProfile->full_name ?? ($user->display_name ?? 'P'), 0, 1) }}
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h4 class="font-extrabold text-slate-900 text-sm truncate font-heading">{{ $user->coachProfile->full_name ?? $user->name }}</h4>
+                        <h4 class="font-extrabold text-slate-900 text-sm truncate font-heading">{{ $user->coachProfile->full_name ?? $user->display_name }}</h4>
                         <p class="text-[11px] text-slate-500 truncate">{{ $user->email }}</p>
                     </div>
                 </div>

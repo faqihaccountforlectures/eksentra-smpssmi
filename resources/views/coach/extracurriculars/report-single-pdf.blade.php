@@ -137,7 +137,7 @@
         <tr>
             <td><strong>Pembina / Coach</strong></td>
             <td>:</td>
-            <td>{{ $coachUser->display_name ?? $coachUser->name }}</td>
+            <td>{{ $coachUser->display_name ?? $coachUser->email }}</td>
             <td><strong>Filter Kelas</strong></td>
             <td>:</td>
             <td>{{ $selectedClass ? $selectedClass->name . ' (Tingkat ' . $selectedClass->grade_level . ')' : 'Semua Kelas' }}</td>
@@ -185,7 +185,7 @@
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td class="text-center">{{ $reg->student->studentProfile->nis ?? '-' }}</td>
-                    <td class="font-bold">{{ $reg->student->studentProfile->full_name ?? ($reg->student->name ?? 'Siswa') }}</td>
+                    <td class="font-bold">{{ $reg->student->studentProfile->full_name ?? ($reg->student->display_name ?? 'Siswa') }}</td>
                     <td class="text-center font-bold">{{ $className }}</td>
                     <td class="text-center">
                         @if($reg->status === 'approved')
@@ -262,7 +262,7 @@
                 Bekasi, {{ $printDate }}<br>
                 <strong>Pembina Ekstrakurikuler {{ $extracurricular->name }}</strong>
                 <div class="sign-space"></div>
-                <strong><u>{{ $coachUser->display_name ?? $coachUser->name }}</u></strong><br>
+                <strong><u>{{ $coachUser->display_name ?? $coachUser->email }}</u></strong><br>
                 ID Pembina: {{ str_pad($coachUser->id, 5, '0', STR_PAD_LEFT) }}
             </td>
         </tr>
