@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id(); // Primary Key: id (BIGINT UNSIGNED)
-            $table->string('email')->unique(); // Email untuk login / notifikasi
+            $table->string('username')->unique(); // Username untuk login
             $table->string('password')->nullable(); // Nullable jika login lewat Google OAuth
             $table->boolean('must_change_password')->default(false); // Penanda wajib ubah kata sandi default pada login pertama
             $table->enum('role', ['admin', 'coach', 'siswa'])->default('siswa'); // Hak akses role

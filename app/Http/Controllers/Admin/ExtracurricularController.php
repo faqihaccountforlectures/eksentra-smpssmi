@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Extracurricular;
 use App\Models\User;
+use App\Models\CoachProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,8 +27,11 @@ class ExtracurricularController extends Controller
      */
     public function create()
     {
-        // Ambil data user yang memiliki role coach untuk dimasukkan ke pilihan dropdown pembina/coach
-        $coaches = User::where('role', 'coach')->with('coachProfile')->get();
+        // Ambil data user yang memiliki role coach untuk dimasukkan ke pilihan dropdown pembina/coach, diurutkan A-Z
+        $coaches = User::where('role', 'coach')
+            ->with('coachProfile')
+            ->orderBy(CoachProfile::select('full_name')->whereColumn('coach_profiles.user_id', 'users.id'), 'asc')
+            ->get();
         
         return view('admin.extracurriculars.create', compact('coaches'));
     }
@@ -71,7 +75,10 @@ class ExtracurricularController extends Controller
     public function edit(string $id)
     {
         $extracurricular = Extracurricular::findOrFail($id);
-        $coaches = User::where('role', 'coach')->with('coachProfile')->get();
+        $coaches = User::where('role', 'coach')
+            ->with('coachProfile')
+            ->orderBy(CoachProfile::select('full_name')->whereColumn('coach_profiles.user_id', 'users.id'), 'asc')
+            ->get();
         
         return view('admin.extracurriculars.edit', compact('extracurricular', 'coaches'));
     }

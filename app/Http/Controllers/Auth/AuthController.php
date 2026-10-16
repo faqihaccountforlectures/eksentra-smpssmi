@@ -79,27 +79,25 @@ class AuthController extends Controller
         }
 
         // ==========================================
-        // 2. LOGIN PEMBINA (USERNAME / EMAIL & PASSWORD)
+        // 2. LOGIN PEMBINA (USERNAME & PASSWORD)
         // ==========================================
         if ($loginType === 'coach') {
             $request->validate([
                 'username' => ['required', 'string'],
                 'password' => ['required', 'string'],
             ], [
-                'username.required' => 'Username atau email pembina wajib diisi.',
+                'username.required' => 'Username pembina wajib diisi.',
                 'password.required' => 'Kata sandi wajib diisi.',
             ]);
 
             $username = trim($request->username);
+            $cleanUsername = str_contains($username, '@') ? explode('@', $username)[0] : $username;
 
-            // Mendukung login dengan email penuh (misal: nama@smpsmi.com) atau username awal saja
+            // Mendukung login dengan username murni atau jika pembina mengetikkan domain
             $user = User::where('role', 'coach')
-                ->where(function ($q) use ($username) {
-                    $q->where('email', $username)
-                      ->orWhere('email', $username . '@smpsmi.com');
-                    if (!str_contains($username, '@')) {
-                        $q->orWhere('email', 'like', $username . '@%');
-                    }
+                ->where(function ($q) use ($username, $cleanUsername) {
+                    $q->where('username', $username)
+                      ->orWhere('username', $cleanUsername);
                 })
                 ->first();
 
@@ -119,33 +117,36 @@ class AuthController extends Controller
         }
 
         // ==========================================
-        // 3. LOGIN ADMINISTRATOR (EMAIL & PASSWORD)
+        // 3. LOGIN ADMINISTRATOR (USERNAME & PASSWORD)
         // ==========================================
+        $usernameInput = trim($request->input('username') ?? $request->input('email') ?? '');
+
         $request->validate([
-            'email'    => ['required', 'string'],
             'password' => ['required', 'string'],
         ], [
-            'email.required'    => 'Email administrator wajib diisi.',
             'password.required' => 'Kata sandi wajib diisi.',
         ]);
 
-        $credentials = [
-            'email'    => trim($request->email),
-            'password' => $request->password,
-        ];
+        if (empty($usernameInput)) {
+            return back()->withInput()->with('error', 'Username administrator wajib diisi.')->with('active_tab', 'admin');
+        }
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            if (Auth::user()->role !== 'admin') {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-                return back()->withInput()->with('error', 'Akun ini bukan Administrator. Silakan masuk melalui tab Siswa atau Pembina.')->with('active_tab', 'admin');
-            }
+        // Mendukung username murni atau format email admin
+        $cleanUsername = str_contains($usernameInput, '@') ? explode('@', $usernameInput)[0] : $usernameInput;
 
+        $user = User::where('role', 'admin')
+            ->where(function ($q) use ($usernameInput, $cleanUsername) {
+                $q->where('username', $usernameInput)
+                  ->orWhere('username', $cleanUsername);
+            })
+            ->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
 
-        return back()->withInput()->with('error', 'Email atau kata sandi administrator salah. Silakan coba lagi.')->with('active_tab', 'admin');
+        return back()->withInput()->with('error', 'Username atau kata sandi administrator salah. Silakan coba lagi.')->with('active_tab', 'admin');
     }
 }

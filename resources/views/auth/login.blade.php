@@ -157,7 +157,7 @@
                             Akses Pembina Ekstrakurikuler
                         </p>
                         <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
-                            Masuk menggunakan <strong class="text-indigo-900">Username / Email</strong> (<code class="bg-indigo-100 px-1 py-0.5 rounded text-indigo-800 font-semibold font-mono">@smpsmi.com</code>) dan kata sandi Anda.
+                            Masuk menggunakan <strong class="text-indigo-900">Username</strong> dan kata sandi Anda.
                         </p>
                     </div>
 
@@ -166,8 +166,8 @@
                         <input type="hidden" name="login_type" value="coach">
 
                         <div>
-                            <label for="coach_username" class="block text-xs font-bold text-slate-700 mb-1">Username / Email Pembina</label>
-                            <input type="text" name="username" id="coach_username" value="{{ old('username') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="namapembina@smpsmi.com" required>
+                            <label for="coach_username" class="block text-xs font-bold text-slate-700 mb-1">Username Pembina</label>
+                            <input type="text" name="username" id="coach_username" value="{{ old('username') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="Contoh: ahmadfaqih" required>
                         </div>
                         
                         <div>
@@ -191,7 +191,7 @@
                 </div>
 
                 <!-- ========================================================= -->
-                <!-- TAB 3: LOGIN ADMINISTRATOR (EMAIL & PASSWORD) -->
+                <!-- TAB 3: LOGIN ADMINISTRATOR (USERNAME & PASSWORD) -->
                 <!-- ========================================================= -->
                 <div id="panel-admin" class="hidden space-y-3.5">
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-left">
@@ -200,7 +200,7 @@
                             Akses Staf Administrator
                         </p>
                         <p class="text-[11px] text-slate-500 leading-relaxed font-medium">
-                            Masukkan email resmi admin dan password Anda untuk mengelola portal.
+                            Masukkan username admin dan password Anda untuk mengelola portal.
                         </p>
                     </div>
 
@@ -209,8 +209,8 @@
                         <input type="hidden" name="login_type" value="admin">
 
                         <div>
-                            <label for="admin_email" class="block text-xs font-bold text-slate-700 mb-1">Email Administrator</label>
-                            <input type="email" name="email" id="admin_email" value="{{ old('email') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="admin@smpsmi.com" required>
+                            <label for="admin_username" class="block text-xs font-bold text-slate-700 mb-1">Username Administrator</label>
+                            <input type="text" name="username" id="admin_username" value="{{ old('username') }}" class="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 text-xs font-medium transition-all" placeholder="admin" required>
                         </div>
                         
                         <div>

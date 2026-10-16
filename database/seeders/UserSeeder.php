@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         // Buat Akun Admin Default dari file .env (dengan fallback aman)
         User::create([
-            'email' => env('ADMIN_DEFAULT_EMAIL', 'admin@smpsmi.com'),
+            'username' => env('ADMIN_DEFAULT_USERNAME', 'admin'),
             'password' => Hash::make(env('ADMIN_DEFAULT_PASSWORD', 'password123')),
             'role' => 'admin'
         ]);

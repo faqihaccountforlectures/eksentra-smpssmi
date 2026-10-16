@@ -15,7 +15,7 @@ class User extends Authenticatable
 
     // Kolom-kolom di database yang boleh diisi secara massal (misal pake metode create atau update)
     protected $fillable = [
-        'email',        // Email / Username untuk Login
+        'username',     // Username untuk Login
         'password',
         'role',         // Role pengguna: admin, coach, atau siswa
         'must_change_password', // Status kewajiban ganti password default
@@ -87,7 +87,7 @@ class User extends Authenticatable
      * - Jika Coach: mengambil nama dari coachProfile->full_name.
      * - Jika Siswa: mengambil nama dari studentProfile->full_name.
      * - Jika Admin: menggunakan 'Administrator'.
-     * - Fallback: menggunakan potongan awal email.
+     * - Fallback: menggunakan username.
      */
     public function getDisplayNameAttribute(): string
     {
@@ -109,7 +109,23 @@ class User extends Authenticatable
             return 'Administrator';
         }
 
-        return explode('@', $this->email)[0];
+        return $this->username ?? 'Pengguna';
+    }
+
+    /**
+     * Accessor backward-compatibility jika ada bagian kode yang masih memanggil $user->email.
+     */
+    public function getEmailAttribute(): ?string
+    {
+        return $this->attributes['username'] ?? null;
+    }
+
+    /**
+     * Mutator backward-compatibility jika ada bagian kode yang masih set $user->email.
+     */
+    public function setEmailAttribute($value): void
+    {
+        $this->attributes['username'] = $value;
     }
 
     /**

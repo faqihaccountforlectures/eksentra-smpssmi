@@ -20,8 +20,8 @@ class StoreCoachRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Alamat email diwajibkan, berformat email, dan harus belum pernah didaftarkan di tabel users
-            'email' => 'required|email|unique:users,email',
+            // Username pembina diwajibkan dan harus unik di tabel users
+            'username' => 'required|string|max:100|unique:users,username',
             
             // Nama lengkap diwajibkan dengan batas maksimal 255 karakter
             'full_name' => 'required|string|max:255',
@@ -40,9 +40,8 @@ class StoreCoachRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Alamat email wajib diisi.',
-            'email.email' => 'Format alamat email tidak valid.',
-            'email.unique' => 'Alamat email tersebut sudah terdaftar pada sistem. Silakan gunakan alamat email lain.',
+            'username.required' => 'Username pembina wajib diisi.',
+            'username.unique' => 'Username tersebut sudah terdaftar pada sistem. Silakan gunakan username lain.',
             'full_name.required' => 'Nama lengkap pembina wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in' => 'Pilihan jenis kelamin tidak valid.',

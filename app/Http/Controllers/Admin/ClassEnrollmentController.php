@@ -9,6 +9,7 @@ use App\Models\ClassRoom;
 use App\Models\ClassEnrollment;
 use App\Models\AcademicYear;
 use App\Models\User;
+use App\Models\StudentProfile;
 use Illuminate\Support\Facades\DB;
 
 class ClassEnrollmentController extends Controller
@@ -43,7 +44,8 @@ class ClassEnrollmentController extends Controller
         $enrollments = ClassEnrollment::with('student.studentProfile')
             ->where('class_room_id', $classId)
             ->where('academic_year_id', $activeYear->id)
-            ->get();
+            ->get()
+            ->sortBy(fn($e) => strtolower($e->student->studentProfile->full_name ?? ''));
 
         return view('admin.class-enrollments.show', compact('classRoom', 'enrollments', 'activeYear'));
     }
@@ -64,6 +66,7 @@ class ClassEnrollmentController extends Controller
         $availableStudents = User::with('studentProfile')
             ->where('role', 'siswa')
             ->whereNotIn('id', $enrolledStudentIds)
+            ->orderBy(StudentProfile::select('full_name')->whereColumn('student_profiles.user_id', 'users.id'), 'asc')
             ->get();
 
         return view('admin.class-enrollments.add-students', compact('classRoom', 'availableStudents', 'activeYear'));

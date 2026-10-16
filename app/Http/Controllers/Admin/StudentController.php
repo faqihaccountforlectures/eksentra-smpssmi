@@ -33,7 +33,7 @@ class StudentController extends Controller
 
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('email', 'like', "%{$search}%")
+                $q->where('username', 'like', "%{$search}%")
                   ->orWhereHas('studentProfile', function($sp) use ($search) {
                       $sp->where('full_name', 'like', "%{$search}%")
                         ->orWhere('nis', 'like', "%{$search}%")
@@ -42,7 +42,9 @@ class StudentController extends Controller
             });
         }
 
-        $students = $query->latest()->paginate(10)->appends($request->all());
+        $students = $query->orderBy(StudentProfile::select('full_name')->whereColumn('student_profiles.user_id', 'users.id'), 'asc')
+            ->paginate(10)
+            ->appends($request->all());
 
         return view('admin.students.index', compact('students', 'search'));
     }
@@ -60,12 +62,9 @@ class StudentController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData) {
-            // Email sistem siswa diatur otomatis menggunakan format {nis}@siswa.smpsmi.com
-            $email = $validatedData['nis'] . '@siswa.smpsmi.com';
-
-            // Bikin akun login dengan password default 'siswasmpsmi'
+            // Akun login siswa menggunakan username berupa NIS dengan password default 'siswasmpsmi'
             $user = User::create([
-                'email' => $email,
+                'username' => $validatedData['nis'],
                 'password' => 'siswasmpsmi',
                 'must_change_password' => true,
                 'role' => 'siswa',
@@ -101,9 +100,9 @@ class StudentController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData, $student) {
-            // Update email sistem sesuai NIS siswa
+            // Update username sistem sesuai NIS siswa
             $student->update([
-                'email' => $validatedData['nis'] . '@siswa.smpsmi.com',
+                'username' => $validatedData['nis'],
             ]);
 
             // Update profil siswanya
@@ -158,7 +157,7 @@ class StudentController extends Controller
             'must_change_password' => true,
         ]);
 
-        $name = $student->studentProfile->full_name ?? $student->email;
+        $name = $student->studentProfile->full_name ?? $student->username;
 
         return redirect()->back()->with('success', "Kata sandi siswa {$name} berhasil di-reset ke default ('siswasmpsmi'). Siswa diwajibkan membuat kata sandi baru saat login kembali.");
     }
@@ -331,19 +330,16 @@ class StudentController extends Controller
             $fullName    = trim($row[0] ?? '');
             $nis         = trim(trim($row[1] ?? ''), "=\"' \t\n\r\0\x0B");
 
-            // Deteksi format: apakah kolom ke-2 adalah email lama atau langsung jenis kelamin
+            // Deteksi format: apakah kolom ke-2 adalah username/email lama atau langsung jenis kelamin
             $col2 = trim($row[2] ?? '');
-            $hasEmailColumn = str_contains($col2, '@') && filter_var($col2, FILTER_VALIDATE_EMAIL);
+            $hasOldEmailColumn = str_contains($col2, '@') && filter_var($col2, FILTER_VALIDATE_EMAIL);
 
-            if ($hasEmailColumn) {
-                $email       = strtolower($col2);
+            if ($hasOldEmailColumn) {
                 $genderRaw   = strtolower(trim($row[3] ?? ''));
                 $phoneNumber = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
                 $parentPhone = trim(trim($row[5] ?? ''), "=\"' \t\n\r\0\x0B");
                 $className   = trim(trim($row[6] ?? ''), "=\"' \t\n\r\0\x0B");
             } else {
-                // Email sistem dibuat otomatis berbasis NIS {nis}@siswa.smpsmi.com
-                $email       = $nis . '@siswa.smpsmi.com';
                 $genderRaw   = strtolower($col2);
                 $phoneNumber = trim(trim($row[3] ?? ''), "=\"' \t\n\r\0\x0B");
                 $parentPhone = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
@@ -368,21 +364,15 @@ class StudentController extends Controller
                 continue;
             }
 
-            // Cek duplikasi NIS di database
+            // Cek duplikasi NIS di database profil siswa
             if (StudentProfile::where('nis', $nis)->exists()) {
-                $errors[] = "Baris ke-{$rowNumber}: NIS '{$nis}' sudah terdaftar di sistem.";
+                $errors[] = "Baris ke-{$rowNumber}: NIS '{$nis}' sudah terdaftar di profil siswa.";
                 continue;
             }
 
-            // Cek duplikasi Email di dalam berkas CSV
-            if (in_array($email, $batchEmails)) {
-                $errors[] = "Baris ke-{$rowNumber}: NIS/Email '{$email}' terdeteksi ganda di dalam berkas yang sama.";
-                continue;
-            }
-
-            // Cek duplikasi Email di database
-            if (User::where('email', $email)->exists()) {
-                $errors[] = "Baris ke-{$rowNumber}: Akun untuk NIS '{$nis}' sudah terdaftar di sistem.";
+            // Cek duplikasi Username di database users
+            if (User::where('username', $nis)->exists()) {
+                $errors[] = "Baris ke-{$rowNumber}: Akun dengan username NIS '{$nis}' sudah terdaftar di sistem.";
                 continue;
             }
 
@@ -392,7 +382,7 @@ class StudentController extends Controller
             } elseif (in_array($genderRaw, ['p', 'perempuan', 'wanita'])) {
                 $gender = 'perempuan';
             } else {
-                $errors[] = "Baris ke-{$rowNumber}: Jenis kelamin '{$row[3]}' tidak valid. Gunakan 'Laki-laki' atau 'Perempuan'.";
+                $errors[] = "Baris ke-{$rowNumber}: Jenis kelamin '{$genderRaw}' tidak valid. Gunakan 'Laki-laki' atau 'Perempuan'.";
                 continue;
             }
 
@@ -425,13 +415,11 @@ class StudentController extends Controller
             }
 
             // Catat ke daftar data yang siap disimpan
-            $batchEmails[] = $email;
-            $batchNis[]    = $nis;
+            $batchNis[] = $nis;
 
             $studentsToInsert[] = [
                 'full_name'     => $fullName,
                 'nis'           => $nis,
-                'email'         => $email,
                 'gender'        => $gender,
                 'phone_number'  => $phoneNumber ?: null,
                 'parent_phone'  => $parentPhone ?: null,
@@ -454,9 +442,9 @@ class StudentController extends Controller
         // 4. Eksekusi penyimpanan ke basis data menggunakan Database Transaction
         DB::transaction(function () use ($studentsToInsert, $activeYear) {
             foreach ($studentsToInsert as $studentData) {
-                // Membuat akun pengguna dengan password default 'siswasmpsmi'
+                // Membuat akun pengguna siswa dengan username NIS
                 $user = User::create([
-                    'email'                => $studentData['email'],
+                    'username'             => $studentData['nis'],
                     'password'             => 'siswasmpsmi',
                     'must_change_password' => true,
                     'role'                 => 'siswa',

@@ -66,7 +66,7 @@
                                 @if($user->role === 'siswa')
                                     NIS: <strong class="text-blue-900">{{ $user->studentProfile->nis ?? '-' }}</strong>
                                 @else
-                                    Email: <strong class="text-blue-900">{{ $user->email }}</strong>
+                                    Username: <strong class="text-blue-900">{{ $user->username }}</strong>
                                 @endif
                             </p>
                         </div>

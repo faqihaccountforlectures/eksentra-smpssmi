@@ -31,7 +31,7 @@ class CoachController extends Controller
 
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->where('email', 'like', "%{$search}%")
+                $q->where('username', 'like', "%{$search}%")
                   ->orWhereHas('coachProfile', function($cp) use ($search) {
                       $cp->where('full_name', 'like', "%{$search}%")
                         ->orWhere('phone_number', 'like', "%{$search}%");
@@ -39,7 +39,9 @@ class CoachController extends Controller
             });
         }
 
-        $coaches = $query->latest()->paginate(10)->appends($request->all());
+        $coaches = $query->orderBy(CoachProfile::select('full_name')->whereColumn('coach_profiles.user_id', 'users.id'), 'asc')
+            ->paginate(10)
+            ->appends($request->all());
 
         return view('admin.coaches.index', compact('coaches', 'search'));
     }
@@ -62,7 +64,7 @@ class CoachController extends Controller
         DB::transaction(function () use ($validatedData) {
             // 1. Buat akun user coach dengan password default 'pembinasmpsmi'
             $user = User::create([
-                'email' => $validatedData['email'],
+                'username' => $validatedData['username'],
                 'password' => 'pembinasmpsmi',
                 'must_change_password' => true,
                 'role' => 'coach',
@@ -99,7 +101,7 @@ class CoachController extends Controller
 
         DB::transaction(function () use ($validatedData, $coach) {
             $coach->update([
-                'email' => $validatedData['email'],
+                'username' => $validatedData['username'],
             ]);
 
             $profile = $coach->coachProfile;
@@ -149,7 +151,7 @@ class CoachController extends Controller
             'must_change_password' => true,
         ]);
 
-        $name = $coach->coachProfile->full_name ?? $coach->email;
+        $name = $coach->coachProfile->full_name ?? $coach->username;
 
         return redirect()->back()->with('success', "Kata sandi pembina {$name} berhasil di-reset ke default ('pembinasmpsmi'). Pembina diwajibkan membuat kata sandi baru saat login kembali.");
     }
@@ -166,7 +168,7 @@ class CoachController extends Controller
         // Header Kolom
         $headers = [
             'A1' => 'Nama Lengkap & Gelar',
-            'B1' => 'Username / Email Pembina',
+            'B1' => 'Username Pembina',
             'C1' => 'Jenis Kelamin',
             'D1' => 'No. Telepon',
         ];
@@ -177,8 +179,8 @@ class CoachController extends Controller
 
         // Contoh Data
         $sampleData = [
-            ['Drs. H. Ahmad Subardjo, M.Pd.', 'ahmad.subardjo@smpsmi.com', 'Laki-laki', '081234567891'],
-            ['Siti Rahmawati, S.Pd.', 'siti.rahmawati@smpsmi.com', 'Perempuan', '081234567892'],
+            ['Drs. H. Ahmad Subardjo, M.Pd.', 'ahmadsubardjo', 'Laki-laki', '081234567891'],
+            ['Siti Rahmawati, S.Pd.', 'sitirahmawati', 'Perempuan', '081234567892'],
         ];
 
         $rowIdx = 2;
@@ -283,21 +285,18 @@ class CoachController extends Controller
 
             // Pastikan baris memiliki minimal 3 kolom utama
             if (count($row) < 3) {
-                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama Lengkap, Username/Email, dan Jenis Kelamin.";
+                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama Lengkap, Username, dan Jenis Kelamin.";
                 continue;
             }
 
             $fullName    = trim((string)($row[0] ?? ''));
-            $emailRaw    = trim((string)($row[1] ?? ''));
+            $usernameRaw = trim((string)($row[1] ?? ''));
             $genderRaw   = strtolower(trim((string)($row[2] ?? '')));
             $phoneNumber = trim(trim((string)($row[3] ?? '')), "=\"' \t\n\r\0\x0B");
 
-            // Format email / username: jika hanya nama pengguna tanpa @, tambahkan domain sekolah @smpsmi.com
-            if (!empty($emailRaw) && !str_contains($emailRaw, '@')) {
-                $email = strtolower($emailRaw) . '@smpsmi.com';
-            } else {
-                $email = strtolower($emailRaw);
-            }
+            // Format username: jika user menulis email (misal: ahmad@smpsmi.com), ambil username depannya
+            $username = str_contains($usernameRaw, '@') ? explode('@', $usernameRaw)[0] : $usernameRaw;
+            $username = strtolower(trim($username));
 
             // Validasi Nama Lengkap
             if (empty($fullName) || strlen($fullName) > 100) {
@@ -305,22 +304,22 @@ class CoachController extends Controller
                 continue;
             }
 
-            // Validasi Format Email
-            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "Baris ke-{$rowNumber}: Format email/username '{$emailRaw}' tidak valid.";
+            // Validasi Username
+            if (empty($username) || strlen($username) > 100) {
+                $errors[] = "Baris ke-{$rowNumber}: Username pembina '{$usernameRaw}' tidak valid (maksimal 100 karakter).";
                 continue;
             }
 
             // Validasi duplikasi di file yang sama
-            if (in_array($email, $batchEmails)) {
-                $errors[] = "Baris ke-{$rowNumber}: Email/Username '{$emailRaw}' terdeteksi ganda di dalam berkas yang sama.";
+            if (in_array($username, $batchEmails)) {
+                $errors[] = "Baris ke-{$rowNumber}: Username '{$usernameRaw}' terdeteksi ganda di dalam berkas yang sama.";
                 continue;
             }
 
-            // Cek apakah email digunakan oleh role lain
-            $existingNonCoach = User::where('email', $email)->where('role', '!=', 'coach')->first();
+            // Cek apakah username digunakan oleh role lain
+            $existingNonCoach = User::where('username', $username)->where('role', '!=', 'coach')->first();
             if ($existingNonCoach) {
-                $errors[] = "Baris ke-{$rowNumber}: Email '{$email}' sudah terdaftar untuk pengguna dengan peran {$existingNonCoach->role}.";
+                $errors[] = "Baris ke-{$rowNumber}: Username '{$username}' sudah terdaftar untuk pengguna dengan peran {$existingNonCoach->role}.";
                 continue;
             }
 
@@ -334,11 +333,11 @@ class CoachController extends Controller
                 continue;
             }
 
-            $batchEmails[] = $email;
+            $batchEmails[] = $username;
 
             $coachesToInsert[] = [
                 'full_name'    => $fullName,
-                'email'        => $email,
+                'username'     => $username,
                 'gender'       => $gender,
                 'phone_number' => $phoneNumber ?: null,
             ];
@@ -360,7 +359,7 @@ class CoachController extends Controller
         DB::transaction(function () use ($coachesToInsert) {
             foreach ($coachesToInsert as $coachData) {
                 $user = User::firstOrCreate(
-                    ['email' => $coachData['email']],
+                    ['username' => $coachData['username']],
                     [
                         'password'             => 'pembinasmpsmi',
                         'must_change_password' => true,

@@ -8,7 +8,7 @@
 
             <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Reset Kata Sandi Pembina?</h3>
             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 font-medium">
-                Kata sandi untuk akun pembina <span class="font-bold text-slate-900">{{ $coach->coachProfile->full_name ?? $coach->name }}</span> ({{ $coach->email }}) akan dikembalikan ke kata sandi default sistem:
+                Kata sandi untuk akun pembina <span class="font-bold text-slate-900">{{ $coach->coachProfile->full_name ?? $coach->username }}</span> ({{ $coach->username }}) akan dikembalikan ke kata sandi default sistem:
             </p>
 
             <div class="mb-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl font-mono text-sm font-bold shadow-inner">

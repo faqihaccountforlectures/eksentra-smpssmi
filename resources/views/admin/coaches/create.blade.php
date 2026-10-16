@@ -48,11 +48,11 @@
                         <input type="text" name="full_name" value="{{ old('full_name') }}" placeholder="Contoh: Budi Santoso, S.Pd., M.Si." required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
                     </div>
 
-                    <!-- Username / Email Pembina -->
+                    <!-- Username Pembina -->
                     <div class="sm:col-span-2">
-                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Username / Email Pembina <span class="text-rose-500">*</span></label>
-                        <input type="email" name="email" value="{{ old('email') }}" placeholder="namapembina@smpsmi.com" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
-                        <p class="text-[11px] text-gray-muted mt-1">Username ini digunakan pembina untuk login ke sistem (format: <code class="font-bold text-navy-base">namapembina@smpsmi.com</code>).</p>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Username Pembina <span class="text-rose-500">*</span></label>
+                        <input type="text" name="username" value="{{ old('username') }}" placeholder="Contoh: ahmadfaqih" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
+                        <p class="text-[11px] text-gray-muted mt-1">Username ini digunakan pembina untuk login ke sistem.</p>
                     </div>
 
                     <!-- Jenis Kelamin -->

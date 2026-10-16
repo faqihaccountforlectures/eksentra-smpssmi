@@ -134,7 +134,7 @@ class AdminPaymentController extends Controller
         if ($search) {
             $searchLower = strtolower($search);
             $allTransactions = $allTransactions->filter(function($payment) use ($searchLower) {
-                $studentName = strtolower($payment->student->studentProfile->full_name ?? $payment->student->email ?? '');
+                $studentName = strtolower($payment->student->studentProfile->full_name ?? $payment->student->username ?? '');
                 return str_contains($studentName, $searchLower);
             });
         }
@@ -308,7 +308,7 @@ class AdminPaymentController extends Controller
         if ($search) {
             $searchLower = strtolower($search);
             $allTransactions = $allTransactions->filter(function($payment) use ($searchLower) {
-                $studentName = strtolower($payment->student->studentProfile->full_name ?? $payment->student->email ?? '');
+                $studentName = strtolower($payment->student->studentProfile->full_name ?? $payment->student->username ?? '');
                 return str_contains($studentName, $searchLower);
             });
         }

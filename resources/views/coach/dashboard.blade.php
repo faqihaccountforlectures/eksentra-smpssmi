@@ -227,7 +227,7 @@
                     </div>
                     <div class="min-w-0 flex-1">
                         <h4 class="font-extrabold text-slate-900 text-sm truncate font-heading">{{ $user->coachProfile->full_name ?? $user->display_name }}</h4>
-                        <p class="text-[11px] text-slate-500 truncate">{{ $user->email }}</p>
+                        <p class="text-[11px] text-slate-500 truncate">{{ $user->username }}</p>
                     </div>
                 </div>
 

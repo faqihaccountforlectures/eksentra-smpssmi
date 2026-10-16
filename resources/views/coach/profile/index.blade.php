@@ -78,7 +78,7 @@
                 <!-- Username Login -->
                 <div>
                     <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Username Login</label>
-                    <input type="text" value="{{ $user->email }}" disabled class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold font-mono rounded-xl px-4 py-2.5 text-xs cursor-not-allowed">
+                    <input type="text" value="{{ $user->username }}" disabled class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold font-mono rounded-xl px-4 py-2.5 text-xs cursor-not-allowed">
                 </div>
 
                 <!-- Jenis Kelamin -->

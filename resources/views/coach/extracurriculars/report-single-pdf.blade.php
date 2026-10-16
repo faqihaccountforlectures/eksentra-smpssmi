@@ -137,7 +137,7 @@
         <tr>
             <td><strong>Pembina / Coach</strong></td>
             <td>:</td>
-            <td>{{ $coachUser->display_name ?? $coachUser->email }}</td>
+            <td>{{ $coachUser->display_name ?? $coachUser->username }}</td>
             <td><strong>Filter Kelas</strong></td>
             <td>:</td>
             <td>{{ $selectedClass ? $selectedClass->name . ' (Tingkat ' . $selectedClass->grade_level . ')' : 'Semua Kelas' }}</td>
@@ -262,7 +262,7 @@
                 Bekasi, {{ $printDate }}<br>
                 <strong>Pembina Ekstrakurikuler {{ $extracurricular->name }}</strong>
                 <div class="sign-space"></div>
-                <strong><u>{{ $coachUser->display_name ?? $coachUser->email }}</u></strong><br>
+                <strong><u>{{ $coachUser->display_name ?? $coachUser->username }}</u></strong><br>
                 ID Pembina: {{ str_pad($coachUser->id, 5, '0', STR_PAD_LEFT) }}
             </td>
         </tr>

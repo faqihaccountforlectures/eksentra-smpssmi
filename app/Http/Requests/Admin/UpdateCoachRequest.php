@@ -23,7 +23,7 @@ class UpdateCoachRequest extends FormRequest
         $userId = $this->route('id');
 
         return [
-            'email' => 'required|email|unique:users,email,' . $userId,
+            'username' => 'required|string|max:100|unique:users,username,' . $userId,
             'full_name' => 'required|string|max:255',
             'gender' => 'required|in:laki-laki,perempuan',
             'phone_number' => 'required|string|max:20',
@@ -36,9 +36,8 @@ class UpdateCoachRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'Alamat email wajib diisi.',
-            'email.email' => 'Format alamat email tidak valid.',
-            'email.unique' => 'Alamat email tersebut sudah digunakan oleh pengguna lain.',
+            'username.required' => 'Username pembina wajib diisi.',
+            'username.unique' => 'Username tersebut sudah digunakan oleh pengguna lain.',
             'full_name.required' => 'Nama lengkap pembina wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in' => 'Pilihan jenis kelamin tidak valid.',

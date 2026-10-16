@@ -61,7 +61,7 @@
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-navy-dark font-heading">{{ $user->display_name }}</h3>
-                        <p class="text-xs text-gray-muted font-medium mt-0.5">{{ $user->email }}</p>
+                        <p class="text-xs text-gray-muted font-medium mt-0.5">{{ $user->username }}</p>
                         <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider mt-1 flex items-center gap-1">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             Akun Aktif
@@ -74,18 +74,18 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Input: Email Login Admin -->
+                    <!-- Input: Username Login Admin -->
                     <div>
-                        <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Email Resmi Admin <span class="text-rose-500">*</span></label>
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="admin@smpsmi.com" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm" required>
-                        <p class="text-[10px] text-gray-muted mt-1">Gunakan alamat email ini untuk masuk / login ke dalam portal ekstrakurikuler.</p>
+                        <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Username Admin <span class="text-rose-500">*</span></label>
+                        <input type="text" name="username" value="{{ old('username', $user->username) }}" placeholder="admin" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm" required>
+                        <p class="text-[10px] text-gray-muted mt-1">Gunakan username ini untuk masuk / login ke dalam portal ekstrakurikuler.</p>
                     </div>
 
                     <!-- Tombol Simpan Perubahan Profil -->
                     <div class="pt-3 border-t border-navy-light/20 flex justify-end">
                         <button type="submit" class="px-5 py-2.5 bg-navy-dark text-white-off font-bold text-xs rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md active:scale-95 transition-all flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            <span>Simpan Perubahan Email</span>
+                            <span>Simpan Perubahan Username</span>
                         </button>
                     </div>
                 </form>

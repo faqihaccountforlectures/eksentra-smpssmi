@@ -8,7 +8,7 @@
 
             <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Hapus Data Pembina?</h3>
             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
-                Akun pembina milik <span class="font-bold text-slate-900">{{ $coach->coachProfile->full_name ?? $coach->email }}</span> akan dihapus secara permanen beserta data profil dan penugasannya. Tindakan ini tidak dapat dibatalkan.
+                Akun pembina milik <span class="font-bold text-slate-900">{{ $coach->coachProfile->full_name ?? $coach->username }}</span> akan dihapus secara permanen beserta data profil dan penugasannya. Tindakan ini tidak dapat dibatalkan.
             </p>
             
             <form action="{{ route('coaches.destroy', $coach->id) }}" method="POST">
