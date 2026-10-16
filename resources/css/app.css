@@ -710,4 +710,377 @@
     #gradeModal p {
         color: #475569 !important;
     }
+
+    /* ============================================================== */
+    /* ADMIN COMPACT: Ukuran lebih ringkas untuk portal admin          */
+    /* Mengurangi padding card, ukuran tombol, font, dan ikon          */
+    /* ============================================================== */
+
+    /* --- Padding utama konten admin --- */
+    .admin-compact {
+        padding: 0.75rem !important;
+    }
+    @media (min-width: 640px) {
+        .admin-compact {
+            padding: 1rem !important;
+        }
+    }
+    @media (min-width: 768px) {
+        .admin-compact {
+            padding: 1.25rem !important;
+        }
+    }
+
+    /* --- Card / Panel: kurangi padding & border-radius --- */
+    .admin-compact .rounded-2xl {
+        border-radius: 0.75rem !important;
+    }
+    .admin-compact .rounded-xl {
+        border-radius: 0.625rem !important;
+    }
+
+    /* Card padding umum: p-5, p-6, p-7 → lebih kecil */
+    .admin-compact > .bg-white,
+    .admin-compact > div > .bg-white,
+    .admin-compact .bg-white.rounded-2xl,
+    .admin-compact .bg-white.rounded-xl {
+        /* padding dikurangi via anak-anaknya */
+    }
+
+    /* Header card / toolbar area: px-7 py-5 → px-4 py-3 */
+    .admin-compact [class*="px-7"][class*="py-5"],
+    .admin-compact [class*="px-7"][class*="py-4"] {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: 0.625rem !important;
+        padding-bottom: 0.625rem !important;
+    }
+
+    /* Hero card padding: p-5 sm:p-6 → p-3.5 sm:p-4 */
+    .admin-compact > [class*="bg-gradient"] {
+        padding: 0.875rem !important;
+    }
+    @media (min-width: 640px) {
+        .admin-compact > [class*="bg-gradient"] {
+            padding: 1rem !important;
+        }
+    }
+
+    /* Card dengan p-5 langsung */
+    .admin-compact .bg-white[class*="p-5"],
+    .admin-compact .bg-white[class*="p-4"] {
+        padding: 0.75rem !important;
+    }
+    @media (min-width: 640px) {
+        .admin-compact .bg-white[class*="p-5"],
+        .admin-compact .bg-white[class*="sm:p-5"] {
+            padding: 0.875rem !important;
+        }
+    }
+
+    /* Grid gap: gap-5, gap-4 → gap-3 */
+    .admin-compact .grid[class*="gap-5"] {
+        gap: 0.75rem !important;
+    }
+    .admin-compact .grid[class*="gap-4"] {
+        gap: 0.625rem !important;
+    }
+
+    /* Margin-bottom: mb-5, mb-6 → mb-3.5 */
+    .admin-compact [class*="mb-5"] {
+        margin-bottom: 0.75rem !important;
+    }
+    .admin-compact [class*="mb-6"] {
+        margin-bottom: 0.875rem !important;
+    }
+
+    /* --- Font sizes: perkecil secara proporsional --- */
+
+    /* Judul utama hero / kartu sambutan */
+    .admin-compact h2.text-xl,
+    .admin-compact h2[class*="text-xl"],
+    .admin-compact h2[class*="sm:text-2xl"] {
+        font-size: 1rem !important;
+    }
+
+    /* Angka statistik besar: text-2xl, text-3xl → text-lg / text-xl */
+    .admin-compact h3.text-2xl,
+    .admin-compact h3[class*="text-2xl"],
+    .admin-compact [class*="text-2xl"].font-black,
+    .admin-compact [class*="text-2xl"].font-bold {
+        font-size: 1.125rem !important;
+    }
+
+    .admin-compact p[class*="text-2xl"],
+    .admin-compact p[class*="text-3xl"],
+    .admin-compact [class*="sm:text-3xl"] {
+        font-size: 1.25rem !important;
+    }
+
+    /* Heading kartu: text-base → text-sm */
+    .admin-compact h2.text-base,
+    .admin-compact h2[class*="text-base"],
+    .admin-compact h3.text-base,
+    .admin-compact h3[class*="text-base"],
+    .admin-compact .text-base.font-bold {
+        font-size: 0.8125rem !important;
+    }
+
+    /* Body text: text-sm → text-xs */
+    .admin-compact .text-sm:not(thead):not(th):not(select):not(input) {
+        font-size: 0.6875rem !important;
+    }
+
+    /* Label kecil: text-[11px] → text-[10px] */
+    .admin-compact [class*="text-\\[11px\\]"] {
+        font-size: 10px !important;
+    }
+
+    /* Sub-label: text-[10px] → text-[9px] */
+    .admin-compact [class*="text-\\[10px\\]"] {
+        font-size: 9px !important;
+    }
+
+    /* Text xs font-size tetap */
+    .admin-compact .text-xs {
+        font-size: 0.6875rem !important;
+    }
+
+    /* --- Tombol / Button: perkecil padding & font --- */
+
+    /* Tombol utama (primary action): px-5 py-2.5 → px-3.5 py-1.5 */
+    .admin-compact a[class*="py-2\\.5"][class*="px-5"],
+    .admin-compact button[class*="py-2\\.5"][class*="px-5"],
+    .admin-compact a[class*="py-2\\.5"][class*="px-4"],
+    .admin-compact button[class*="py-2\\.5"][class*="px-4"] {
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.6875rem !important;
+    }
+
+    /* Tombol kecil: px-3 py-1.5 → px-2.5 py-1 */
+    .admin-compact a[class*="py-1\\.5"][class*="px-3"],
+    .admin-compact button[class*="py-1\\.5"][class*="px-3"] {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.625rem !important;
+    }
+
+    /* Tombol ikon aksi tabel: p-2 → p-1.5 */
+    .admin-compact td a[class*="p-2"],
+    .admin-compact td button[class*="p-2"] {
+        padding: 0.3rem !important;
+    }
+
+    /* Tombol dalam modal: px-6 py-2.5 → px-4 py-1.5 */
+    .admin-compact div[id*="Modal"] button[class*="py-2\\.5"],
+    .admin-compact div[id*="Modal"] a[class*="py-2\\.5"] {
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.6875rem !important;
+    }
+
+    /* Input field: py-2.5 → py-1.5 */
+    .admin-compact input[class*="py-2\\.5"],
+    .admin-compact select[class*="py-2\\.5"] {
+        padding-top: 0.375rem !important;
+        padding-bottom: 0.375rem !important;
+    }
+
+    /* --- Ikon container: perkecil --- */
+
+    /* Ikon statistik besar: w-12 h-12 → w-9 h-9 */
+    .admin-compact [class*="w-12"][class*="h-12"] {
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+    }
+    .admin-compact [class*="w-12"][class*="h-12"] svg {
+        width: 1.125rem !important;
+        height: 1.125rem !important;
+    }
+
+    /* Ikon medium: w-11 h-11 → w-8 h-8 */
+    .admin-compact [class*="w-11"][class*="h-11"] {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+    .admin-compact [class*="w-11"][class*="h-11"] svg {
+        width: 1rem !important;
+        height: 1rem !important;
+    }
+
+    /* Ikon header card: w-10 h-10 → w-8 h-8 */
+    .admin-compact [class*="w-10"][class*="h-10"]:not(canvas):not(svg) {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+
+    /* Avatar di tabel: w-10 h-10 → w-8 h-8, w-9 h-9 → w-7 h-7 */
+    .admin-compact td [class*="w-10"][class*="h-10"] {
+        width: 1.75rem !important;
+        height: 1.75rem !important;
+        font-size: 0.6875rem !important;
+    }
+    .admin-compact td [class*="w-9"][class*="h-9"] {
+        width: 1.625rem !important;
+        height: 1.625rem !important;
+        font-size: 0.625rem !important;
+    }
+
+    /* Ikon header section: p-2.5 → p-1.5 */
+    .admin-compact [class*="p-2\\.5"][class*="rounded-xl"][class*="border"] {
+        padding: 0.375rem !important;
+    }
+    .admin-compact [class*="p-2\\.5"][class*="rounded-xl"][class*="border"] svg {
+        width: 1rem !important;
+        height: 1rem !important;
+    }
+
+    /* SVG ikon di tombol: w-5 h-5 → w-4 h-4 (di dalam admin cards) */
+    .admin-compact .bg-white svg.w-5 {
+        width: 1rem !important;
+        height: 1rem !important;
+    }
+    .admin-compact .bg-white svg.w-6 {
+        width: 1.125rem !important;
+        height: 1.125rem !important;
+    }
+
+    /* --- Tabel: perkecil padding sel --- */
+    .admin-compact table th {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.5625rem !important;
+    }
+    .admin-compact table td {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.6875rem !important;
+    }
+
+    /* Gambar ekskul di tabel: w-12 h-12 → w-9 h-9 */
+    .admin-compact table td img[class*="w-12"] {
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+    }
+
+    /* Footer tabel: px-7 py-4 → px-4 py-2.5 */
+    .admin-compact [class*="border-t"][class*="px-7"][class*="py-4"] {
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    /* --- Alert: perkecil --- */
+    .admin-compact [role="alert"],
+    .admin-compact .bg-emerald-50[class*="rounded-xl"],
+    .admin-compact .bg-rose-50[class*="rounded-xl"] {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.6875rem !important;
+    }
+    .admin-compact [role="alert"] svg,
+    .admin-compact .bg-emerald-50 svg.w-5,
+    .admin-compact .bg-rose-50 svg.w-5 {
+        width: 0.875rem !important;
+        height: 0.875rem !important;
+    }
+
+    /* --- Badge status: sedikit lebih kecil --- */
+    .admin-compact [class*="px-3"][class*="py-1\\.5"][class*="rounded-lg"][class*="tracking-wider"] {
+        padding: 0.2rem 0.5rem !important;
+        font-size: 9px !important;
+    }
+
+    /* --- Dashboard: ornamen SVG besar --- */
+    .admin-compact svg[class*="w-36"] {
+        width: 6rem !important;
+        height: 6rem !important;
+    }
+
+    /* --- Modal: perkecil padding --- */
+    .admin-compact div[id*="Modal"] > div {
+        max-width: 26rem !important;
+    }
+    .admin-compact div[id*="Modal"] [class*="p-6"],
+    .admin-compact div[id*="Modal"] [class*="p-7"],
+    .admin-compact div[id*="Modal"] [class*="sm:p-7"] {
+        padding: 1rem !important;
+    }
+    .admin-compact div[id*="Modal"] [class*="px-6"][class*="py-5"] {
+        padding: 0.75rem 1rem !important;
+    }
+    .admin-compact div[id*="Modal"] h3 {
+        font-size: 0.9375rem !important;
+    }
+    .admin-compact div[id*="Modal"] [class*="w-14"][class*="h-14"] {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
+    }
+    .admin-compact div[id*="Modal"] [class*="w-14"][class*="h-14"] svg {
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+    }
+
+    /* --- Form: perkecil spacing --- */
+    .admin-compact form[class*="space-y-4"] {
+        gap: 0.75rem !important;
+    }
+    .admin-compact form [class*="space-y-4"] > * + * {
+        margin-top: 0.625rem !important;
+    }
+    .admin-compact label {
+        font-size: 0.6875rem !important;
+    }
+
+    /* --- Dashboard hero: kecilkan elemen dekoratif --- */
+    .admin-compact [class*="bg-gradient-to-r"][class*="from-blue-950"] {
+        padding: 0.875rem 1rem !important;
+    }
+    .admin-compact [class*="bg-gradient-to-r"][class*="from-blue-950"] h2 {
+        font-size: 1rem !important;
+    }
+    .admin-compact [class*="bg-gradient-to-r"][class*="from-blue-950"] p {
+        font-size: 0.6875rem !important;
+    }
+
+    /* --- Dashboard: Ringkasan keuangan --- */
+    .admin-compact [class*="bg-blue-900\\/80"][class*="px-3\\.5"][class*="py-2"] {
+        padding: 0.375rem 0.625rem !important;
+        font-size: 0.6875rem !important;
+    }
+
+    /* Chart area min-height */
+    .admin-compact [class*="min-h-\\[260px\\]"] {
+        min-height: 200px !important;
+    }
+
+    /* Transaction list items compact */
+    .admin-compact [class*="space-y-2\\.5"] > div[class*="p-2\\.5"] {
+        padding: 0.375rem 0.5rem !important;
+    }
+    .admin-compact [class*="space-y-2\\.5"] {
+        gap: 0.375rem !important;
+    }
+
+    /* --- Empty state area --- */
+    .admin-compact td[class*="py-16"] {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+    .admin-compact [class*="py-16"] svg[class*="w-10"] {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+
+    /* Profile page card inner padding */
+    .admin-compact [class*="p-6"][class*="space-y-"],
+    .admin-compact [class*="p-7"][class*="space-y-"] {
+        padding: 1rem !important;
+    }
+
+    /* Statistik inline flex gap */
+    .admin-compact .flex[class*="gap-4"] {
+        gap: 0.625rem !important;
+    }
+    .admin-compact .flex[class*="gap-3"] {
+        gap: 0.5rem !important;
+    }
+
+    /* Pagination wrapper compact */
+    .admin-compact .pagination-wrapper {
+        font-size: 0.6875rem !important;
+    }
 }

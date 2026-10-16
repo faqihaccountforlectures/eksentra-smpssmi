@@ -330,7 +330,7 @@
             </header>
 
             <!-- Area Konten Dinamis (Tampilan Rapi & Padat) -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-3.5 sm:p-5 md:p-6 thin-scrollbar-light relative z-10">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-3.5 sm:p-5 md:p-6 thin-scrollbar-light relative z-10 {{ Auth::check() && Auth::user()->role === 'admin' ? 'admin-compact' : '' }}">
                 @yield('content')
             </main>
 
