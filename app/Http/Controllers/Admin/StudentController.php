@@ -13,6 +13,13 @@ use App\Http\Requests\Admin\StoreStudentRequest;
 use App\Http\Requests\Admin\UpdateStudentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class StudentController extends Controller
 {
@@ -157,63 +164,89 @@ class StudentController extends Controller
     }
 
     /**
-     * Mengunduh berkas template CSV resmi untuk mempermudah admin
-     * dalam menyiapkan data siswa yang akan diimpor secara massal.
-     * Menggunakan tanda BOM UTF-8 agar berkas langsung terbaca rapi saat dibuka di Microsoft Excel.
+     * Mengunduh berkas template Excel (.xlsx) untuk impor data siswa massal.
      */
     public function downloadTemplate()
     {
-        $fileName = 'template_data_siswa.csv';
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Siswa');
 
+        // Header Kolom
         $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
-            'Pragma' => 'no-cache',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires' => '0',
+            'A1' => 'Nama Lengkap',
+            'B1' => 'NIS',
+            'C1' => 'Jenis Kelamin',
+            'D1' => 'Nomor HP Siswa',
+            'E1' => 'Nomor HP Orang Tua',
+            'F1' => 'Kelas (Opsional)',
         ];
 
-        return response()->stream(function () {
-            $handle = fopen('php://output', 'w');
+        foreach ($headers as $cell => $value) {
+            $sheet->setCellValue($cell, $value);
+        }
 
-            // Menyisipkan BOM UTF-8 agar Microsoft Excel mengenali karakter khusus dan format teks dengan benar
-            fputs($handle, "\xEF\xBB\xBF");
+        // Contoh Data
+        $sampleData = [
+            ['Ahmad Fauzi', '12345678', 'Laki-laki', '081234567890', '081298765432', '7A'],
+            ['Siti Aisyah', '12345679', 'Perempuan', '082134567891', '082198765433', '7B'],
+        ];
 
-            // Baris header kolom template (dilengkapi kolom Kelas opsional)
-            fputcsv($handle, [
-                'Nama Lengkap',
-                'NIS',
-                'Email Akun Belajar',
-                'Jenis Kelamin',
-                'Nomor HP Siswa',
-                'Nomor HP Orang Tua',
-                'Kelas (Opsional)',
-            ]);
+        $rowIdx = 2;
+        foreach ($sampleData as $row) {
+            $sheet->setCellValue('A' . $rowIdx, $row[0]);
+            $sheet->setCellValueExplicit('B' . $rowIdx, $row[1], DataType::TYPE_STRING);
+            $sheet->setCellValue('C' . $rowIdx, $row[2]);
+            $sheet->setCellValueExplicit('D' . $rowIdx, $row[3], DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit('E' . $rowIdx, $row[4], DataType::TYPE_STRING);
+            $sheet->setCellValue('F' . $rowIdx, $row[5]);
+            $rowIdx++;
+        }
 
-            // Baris contoh data pengisian ke-1 (Gunakan ="..." agar Excel tidak mengubah angka menjadi format eksponen ilmiah)
-            fputcsv($handle, [
-                'Ahmad Fauzi',
-                '="12345678"',
-                'ahmad.fauzi@smp.belajar.id',
-                'Laki-laki',
-                '="081234567890"',
-                '="081298765432"',
-                '7A',
-            ]);
+        // Format kolom NIS dan Nomor HP sebagai Text (@) agar angka tidak berubah jadi ilmiah di Excel
+        $sheet->getStyle('B2:B500')->getNumberFormat()->setFormatCode('@');
+        $sheet->getStyle('D2:D500')->getNumberFormat()->setFormatCode('@');
+        $sheet->getStyle('E2:E500')->getNumberFormat()->setFormatCode('@');
 
-            // Baris contoh data pengisian ke-2
-            fputcsv($handle, [
-                'Siti Aisyah',
-                '="12345679"',
-                'siti.aisyah@smp.belajar.id',
-                'Perempuan',
-                '="082134567891"',
-                '="082198765433"',
-                '7B',
-            ]);
+        // Styling Header (Warna Navy, Font Putih Tebal, Center)
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+                'size' => 11,
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '1E3A8A'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['rgb' => 'CBD5E1'],
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
+        $sheet->getRowDimension(1)->setRowHeight(28);
 
-            fclose($handle);
-        }, 200, $headers);
+        // Lebar kolom otomatis menyesuaikan panjang konten
+        foreach (range('A', 'F') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'template_impor_siswa.xlsx';
+
+        return response()->streamDownload(function () use ($writer) {
+            $writer->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'max-age=0',
+        ]);
     }
 
     /**
@@ -223,29 +256,33 @@ class StudentController extends Controller
      */
     public function import(Request $request)
     {
-        // 1. Validasi berkas unggahan: harus berupa berkas teks/CSV dengan ukuran maksimal 5MB
+        // 1. Validasi berkas unggahan: harus berupa berkas Excel dengan ukuran maksimal 10MB
         $request->validate([
-            'file' => ['required', 'file', 'mimes:csv,txt', 'max:5120'],
+            'file' => ['required', 'file', 'mimes:xlsx,xls', 'max:10240'],
         ], [
-            'file.required' => 'Silakan pilih berkas CSV terlebih dahulu.',
-            'file.mimes' => 'Format berkas harus berupa .csv.',
-            'file.max' => 'Ukuran berkas maksimal adalah 5MB.',
+            'file.required' => 'Silakan pilih berkas Excel terlebih dahulu.',
+            'file.mimes'    => 'Format berkas harus berupa Excel (.xlsx atau .xls).',
+            'file.max'      => 'Ukuran berkas maksimal adalah 10MB.',
         ]);
 
         $file = $request->file('file');
         $filePath = $file->getRealPath();
 
-        // 2. Membaca baris pertama untuk mendeteksi pembatas (delimiter koma atau titik koma)
-        $firstLine = file_get_contents($filePath, false, null, 0, 1024);
-        $delimiter = (substr_count($firstLine, ';') > substr_count($firstLine, ',')) ? ';' : ',';
+        // 2. Membaca isi spreadsheet menggunakan PhpSpreadsheet
+        try {
+            $spreadsheet = IOFactory::load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray(null, true, false, false);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal membaca berkas Excel: ' . $e->getMessage());
+        }
 
-        $handle = fopen($filePath, 'r');
-        if (!$handle) {
-            return redirect()->back()->with('error', 'Gagal membuka berkas CSV yang diunggah.');
+        if (empty($rows) || count($rows) < 2) {
+            return redirect()->back()->with('error', 'Berkas Excel tidak memuat data siswa (hanya baris header atau kosong).');
         }
 
         // Lewati baris header pertama
-        $header = fgetcsv($handle, 1000, $delimiter);
+        $header = array_shift($rows);
 
         // Ambil tahun ajaran yang sedang aktif dan buat peta pencarian kelas cerdas
         $activeYear = AcademicYear::where('is_active', true)->first();
@@ -275,29 +312,43 @@ class StudentController extends Controller
         $batchEmails = [];
         $batchNis = [];
 
-        // 3. Membaca dan memvalidasi setiap baris data dari berkas CSV
-        while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+        // 3. Membaca dan memvalidasi setiap baris data dari berkas Excel
+        foreach ($rows as $row) {
             $rowNumber++;
 
-            // Abaikan baris kosong
-            if (empty(array_filter($row))) {
+            // Abaikan baris yang seluruh kolomnya kosong
+            if (empty(array_filter($row, fn($val) => $val !== null && trim((string)$val) !== ''))) {
                 continue;
             }
 
-            // Pastikan baris memiliki minimal 4 kolom utama
-            if (count($row) < 4) {
-                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama, NIS, Email, dan Jenis Kelamin.";
+            // Pastikan baris memiliki minimal 3 kolom utama (Nama, NIS, dan Jenis Kelamin)
+            if (count($row) < 3) {
+                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama, NIS, dan Jenis Kelamin.";
                 continue;
             }
 
             // Bersihkan data dari karakter ekstra tanda kutip / formula Excel (contoh: ="0812..." atau '0812...)
             $fullName    = trim($row[0] ?? '');
             $nis         = trim(trim($row[1] ?? ''), "=\"' \t\n\r\0\x0B");
-            $email       = trim($row[2] ?? '');
-            $genderRaw   = strtolower(trim($row[3] ?? ''));
-            $phoneNumber = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
-            $parentPhone = trim(trim($row[5] ?? ''), "=\"' \t\n\r\0\x0B");
-            $className   = trim(trim($row[6] ?? ''), "=\"' \t\n\r\0\x0B");
+
+            // Deteksi format: apakah kolom ke-2 adalah email lama atau langsung jenis kelamin
+            $col2 = trim($row[2] ?? '');
+            $hasEmailColumn = str_contains($col2, '@') && filter_var($col2, FILTER_VALIDATE_EMAIL);
+
+            if ($hasEmailColumn) {
+                $email       = strtolower($col2);
+                $genderRaw   = strtolower(trim($row[3] ?? ''));
+                $phoneNumber = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
+                $parentPhone = trim(trim($row[5] ?? ''), "=\"' \t\n\r\0\x0B");
+                $className   = trim(trim($row[6] ?? ''), "=\"' \t\n\r\0\x0B");
+            } else {
+                // Email sistem dibuat otomatis berbasis NIS {nis}@siswa.smpsmi.com
+                $email       = $nis . '@siswa.smpsmi.com';
+                $genderRaw   = strtolower($col2);
+                $phoneNumber = trim(trim($row[3] ?? ''), "=\"' \t\n\r\0\x0B");
+                $parentPhone = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
+                $className   = trim(trim($row[5] ?? ''), "=\"' \t\n\r\0\x0B");
+            }
 
             // Validasi Nama Lengkap
             if (empty($fullName) || strlen($fullName) > 100) {
@@ -323,21 +374,15 @@ class StudentController extends Controller
                 continue;
             }
 
-            // Validasi format Email
-            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "Baris ke-{$rowNumber}: Format email '{$email}' tidak valid.";
-                continue;
-            }
-
             // Cek duplikasi Email di dalam berkas CSV
             if (in_array($email, $batchEmails)) {
-                $errors[] = "Baris ke-{$rowNumber}: Email '{$email}' terdeteksi ganda di dalam berkas yang sama.";
+                $errors[] = "Baris ke-{$rowNumber}: NIS/Email '{$email}' terdeteksi ganda di dalam berkas yang sama.";
                 continue;
             }
 
             // Cek duplikasi Email di database
             if (User::where('email', $email)->exists()) {
-                $errors[] = "Baris ke-{$rowNumber}: Email '{$email}' sudah digunakan oleh pengguna lain.";
+                $errors[] = "Baris ke-{$rowNumber}: Akun untuk NIS '{$nis}' sudah terdaftar di sistem.";
                 continue;
             }
 
@@ -394,8 +439,6 @@ class StudentController extends Controller
             ];
         }
 
-        fclose($handle);
-
         // Jika terdapat baris yang bermasalah, kembalikan dengan pesan kesalahan lengkap
         if (!empty($errors)) {
             return redirect()->back()
@@ -405,7 +448,7 @@ class StudentController extends Controller
 
         // Pastikan ada setidaknya satu baris data valid untuk diimpor
         if (empty($studentsToInsert)) {
-            return redirect()->back()->with('error', 'Berkas CSV tidak memuat data siswa yang dapat diimpor.');
+            return redirect()->back()->with('error', 'Berkas Excel tidak memuat data siswa yang dapat diimpor.');
         }
 
         // 4. Eksekusi penyimpanan ke basis data menggunakan Database Transaction

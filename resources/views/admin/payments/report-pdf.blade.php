@@ -63,14 +63,20 @@
 <body>
 
     <div class="header">
-        <h1>SMP SCIENCE MUTIARA INSANI</h1>
+        <h1>SMPS SCIENCE MUTIARA INSANI</h1>
         <p>Laporan Riwayat Pembayaran Ekstrakurikuler Siswa</p>
     </div>
 
     <div class="filter-info">
         <p><strong>Tanggal Dicetak:</strong> {{ $printDate }}</p>
-        @if($monthFilter || $yearFilter)
-            <p><strong>Periode:</strong> {{ $monthFilter ?? 'Semua Bulan' }} {{ $yearFilter ?? '' }}</p>
+        @if($startDate && $endDate)
+            <p><strong>Periode:</strong> {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }} s/d {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}</p>
+        @elseif($startDate)
+            <p><strong>Periode:</strong> Mulai {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }}</p>
+        @elseif($endDate)
+            <p><strong>Periode:</strong> Sampai {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}</p>
+        @else
+            <p><strong>Periode:</strong> Semua Periode</p>
         @endif
         @if($statusFilter)
             <p><strong>Filter Status:</strong> 
@@ -103,10 +109,15 @@
             @forelse($payments as $index => $payment)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ $payment->student->studentProfile->full_name ?? $payment->student->email ?? '-' }}</td>
+                    <td>{{ $payment->student->studentProfile->full_name ?? ($payment->student->studentProfile->nis ? 'NIS ' . $payment->student->studentProfile->nis : '-') }}</td>
                     <td>{{ $payment->student->studentProfile->nis ?? '-' }}</td>
                     <td>{{ $payment->extracurricular->name ?? '-' }}</td>
-                    <td>{{ $payment->month }} {{ $payment->year }}</td>
+                    <td>
+                        {{ $payment->month }} {{ $payment->year }}
+                        @if($payment->payment_status !== 'unpaid' && $payment->created_at)
+                            <div style="font-size: 9px; color: #666; margin-top: 2px;">Setor: {{ $payment->created_at->format('d/m/Y') }}</div>
+                        @endif
+                    </td>
                     <td class="text-center">
                         @if($payment->payment_status === 'verified')
                             LUNAS

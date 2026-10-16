@@ -110,18 +110,18 @@
                         <td class="px-7 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-xl bg-navy-light/10 text-navy-base flex items-center justify-center font-bold text-sm border border-navy-light/30 shrink-0 shadow-sm group-hover/row:scale-105 transition-transform">
-                                    {{ substr($registration->student->studentProfile->full_name ?? $registration->student->email ?? 'S', 0, 1) }}
+                                    {{ substr($registration->student->studentProfile->full_name ?? ($registration->student->studentProfile->nis ?? 'S'), 0, 1) }}
                                 </div>
                                 <div>
-                                    <p class="font-bold text-navy-dark block text-sm">{{ $registration->student->studentProfile->full_name ?? $registration->student->email }}</p>
+                                    <p class="font-bold text-navy-dark block text-sm">{{ $registration->student->studentProfile->full_name ?? ('Siswa NIS: ' . ($registration->student->studentProfile->nis ?? '-')) }}</p>
                                     @if($registration->student->studentProfile && $registration->student->studentProfile->nis)
                                         <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1 mt-0.5 tracking-wide">
                                             <span class="bg-white-off px-2 py-0.5 rounded border border-navy-light/20 font-mono">NIS: {{ $registration->student->studentProfile->nis }}</span>
                                         </p>
-                                    @else
-                                        <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1 mt-0.5 tracking-wide">
-                                            <svg class="w-3.5 h-3.5 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                            {{ $registration->student->email }}
+                                    @elseif($registration->student->studentProfile && $registration->student->studentProfile->phone_number)
+                                        <p class="text-[11px] text-gray-muted font-medium flex items-center gap-1 mt-0.5 tracking-wide">
+                                            <svg class="w-3.5 h-3.5 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                            {{ $registration->student->studentProfile->phone_number }}
                                         </p>
                                     @endif
                                 </div>
@@ -228,7 +228,7 @@
 
                                                 <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Tolak Pendaftaran?</h3>
                                                 <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
-                                                    Apakah Anda yakin ingin menolak permohonan pendaftaran dari <span class="font-bold text-slate-900">{{ $registration->student->studentProfile->full_name ?? $registration->student->email }}</span> untuk ekstrakurikuler <span class="font-bold text-slate-900">{{ $registration->extracurricular->name }}</span>?
+                                                    Apakah Anda yakin ingin menolak permohonan pendaftaran dari <span class="font-bold text-slate-900">{{ $registration->student->studentProfile->full_name ?? ('Siswa NIS ' . ($registration->student->studentProfile->nis ?? '-')) }}</span> untuk ekstrakurikuler <span class="font-bold text-slate-900">{{ $registration->extracurricular->name }}</span>?
                                                 </p>
                                                 
                                                 <form action="{{ route('extracurricular-registrations.reject', $registration->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">

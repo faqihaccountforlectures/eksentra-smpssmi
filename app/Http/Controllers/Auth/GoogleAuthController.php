@@ -42,7 +42,7 @@ class GoogleAuthController extends Controller
             } else {
                 // Jika akun siswa/guru tidak ada di database
                 return redirect('/login')->with('error', 'Akses ditolak!
-                Akun Anda belum terdaftar di sistem Portal Akademik SMP Science Mutiara Insani.');
+                Akun Anda belum terdaftar di sistem Portal Akademik SMPS Science Mutiara Insani.');
             }
 
         } catch (\Exception $e) {

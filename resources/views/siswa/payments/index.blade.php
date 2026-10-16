@@ -88,7 +88,7 @@
                 @if($approvedRegistrations->isEmpty())
                     <!-- Tampilan kalau siswa belum terdaftar di ekskul apa pun -->
                     <div class="bg-white-off border border-navy-light/30 rounded-xl p-4 text-center">
-                        <p class="text-xs text-gray-muted leading-relaxed font-medium">Anda belum bergabung dengan ekstrakurikuler mana pun. Silakan mendaftar terlebih dahulu di menu <a href="{{ route('siswa.extracurriculars.index') }}" class="text-navy-base font-bold hover:underline">Katalog Ekstrakurikuler</a>.</p>
+                        <p class="text-xs text-gray-muted leading-relaxed font-medium">Anda belum memiliki ekstrakurikuler aktif pada Tahun Ajaran {{ $activeYear->year_name ?? '' }}. Silakan mendaftar terlebih dahulu di menu <a href="{{ route('siswa.extracurriculars.index') }}" class="text-navy-base font-bold hover:underline">Katalog Ekstrakurikuler</a>.</p>
                     </div>
                 @else
                     <form action="{{ route('siswa.payments.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">

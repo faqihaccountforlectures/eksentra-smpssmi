@@ -96,41 +96,31 @@
             <!-- Baris 2: Toolbar Pencarian & Filter Grid -->
             <form action="{{ route('admin.payments.index') }}" method="GET" class="pt-3.5 border-t border-navy-light/20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
                 <!-- Search Box -->
-                <div class="relative lg:col-span-4">
+                <div class="relative sm:col-span-2 lg:col-span-3">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-navy-base/60">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                     <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama siswa..." class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-9 pr-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all placeholder:text-gray-muted/60 shadow-sm">
                 </div>
 
-                <!-- Filter Bulan -->
-                <div class="relative lg:col-span-3">
-                    <select name="month" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-4 pr-9 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none cursor-pointer shadow-sm" onchange="this.form.submit()">
-                        <option value="">Semua Bulan</option>
-                        @foreach($monthsList as $m)
-                            <option value="{{ $m }}" {{ ($monthFilter ?? '') === $m ? 'selected' : '' }}>{{ $m }}</option>
-                        @endforeach
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-navy-base">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                <!-- Dari Tanggal -->
+                <div class="relative sm:col-span-1 lg:col-span-2">
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3 text-[11px] font-bold text-gray-muted pointer-events-none">Dari:</span>
+                        <input type="date" name="start_date" value="{{ $startDate ?? '' }}" title="Dari Tanggal (dd/mm/yyyy)" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-12 pr-3 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm cursor-pointer">
                     </div>
                 </div>
 
-                <!-- Filter Tahun -->
-                <div class="relative lg:col-span-2">
-                    <select name="year" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-4 pr-9 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none cursor-pointer shadow-sm" onchange="this.form.submit()">
-                        <option value="">Semua Tahun</option>
-                        @foreach($yearsList as $y)
-                            <option value="{{ $y }}" {{ ($yearFilter ?? '') === $y ? 'selected' : '' }}>T.A. {{ $y }}</option>
-                        @endforeach
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-navy-base">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                <!-- Sampai Tanggal -->
+                <div class="relative sm:col-span-1 lg:col-span-2">
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3 text-[11px] font-bold text-gray-muted pointer-events-none">Sampai:</span>
+                        <input type="date" name="end_date" value="{{ $endDate ?? '' }}" title="Sampai Tanggal (dd/mm/yyyy)" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-16 pr-3 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm cursor-pointer">
                     </div>
                 </div>
 
                 <!-- Filter Status -->
-                <div class="relative lg:col-span-3">
+                <div class="relative sm:col-span-1 lg:col-span-3">
                     <select name="status" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-4 pr-9 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none cursor-pointer shadow-sm" onchange="this.form.submit()">
                         <option value="">Semua Status</option>
                         <option value="verifikasi" {{ ($statusFilter ?? '') === 'verifikasi' ? 'selected' : '' }}>Butuh Verifikasi</option>
@@ -142,8 +132,19 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                 </div>
-                
-                <button type="submit" class="hidden">Cari</button>
+
+                <!-- Tombol Aksi (Filter & Reset) -->
+                <div class="flex items-center gap-2 sm:col-span-1 lg:col-span-2">
+                    <button type="submit" class="flex-1 py-2.5 bg-navy-dark hover:bg-navy-base text-white-off text-xs font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 active:scale-95" title="Terapkan Filter">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        <span>Filter</span>
+                    </button>
+                    @if($search || ($startDate ?? '') || ($endDate ?? '') || ($statusFilter ?? ''))
+                        <a href="{{ route('admin.payments.index') }}" class="px-3 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-bold rounded-xl transition-all shadow-sm flex items-center justify-center active:scale-95" title="Reset Filter">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </a>
+                    @endif
+                </div>
             </form>
         </div>
         
@@ -167,18 +168,18 @@
                         <td class="px-7 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-xl bg-navy-light/10 text-navy-base flex items-center justify-center font-bold text-sm border border-navy-light/30 shrink-0 shadow-sm group-hover/row:scale-105 transition-transform">
-                                    {{ substr($payment->student->studentProfile->full_name ?? $payment->student->email ?? 'S', 0, 1) }}
+                                    {{ substr($payment->student->studentProfile->full_name ?? ($payment->student->studentProfile->nis ?? 'S'), 0, 1) }}
                                 </div>
                                 <div>
-                                    <p class="font-bold text-navy-dark block text-sm">{{ $payment->student->studentProfile->full_name ?? $payment->student->email }}</p>
+                                    <p class="font-bold text-navy-dark block text-sm">{{ $payment->student->studentProfile->full_name ?? ('Siswa NIS: ' . ($payment->student->studentProfile->nis ?? '-')) }}</p>
                                     @if($payment->student->studentProfile && $payment->student->studentProfile->nis)
                                         <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1 mt-0.5 tracking-wide">
                                             <span class="bg-white-off px-2 py-0.5 rounded border border-navy-light/20 font-mono">NIS: {{ $payment->student->studentProfile->nis }}</span>
                                         </p>
-                                    @else
-                                        <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1 mt-0.5 tracking-wide">
-                                            <svg class="w-3.5 h-3.5 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                            {{ $payment->student->email }}
+                                    @elseif($payment->student->studentProfile && $payment->student->studentProfile->phone_number)
+                                        <p class="text-[11px] text-gray-muted font-medium flex items-center gap-1 mt-0.5 tracking-wide">
+                                            <svg class="w-3.5 h-3.5 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                            {{ $payment->student->studentProfile->phone_number }}
                                         </p>
                                     @endif
                                 </div>
@@ -194,6 +195,12 @@
                                 <svg class="w-3.5 h-3.5 text-gray-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 {{ $payment->month }} {{ $payment->year }}
                             </p>
+                            @if($payment->payment_status !== 'unpaid' && $payment->created_at)
+                                <p class="text-[11px] text-gray-muted font-medium mt-1 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-gray-muted/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Setor: {{ $payment->created_at->format('d/m/Y') }}</span>
+                                </p>
+                            @endif
                         </td>
                         
                         <!-- Kolom Info Pembayaran -->
@@ -278,7 +285,7 @@
 
                                                 <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Tolak Pembayaran?</h3>
                                                 <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
-                                                    Apakah Anda yakin ingin menolak bukti setoran dari <span class="font-bold text-slate-900">{{ $payment->student->studentProfile->full_name ?? $payment->student->email }}</span>? Status pembayaran akan dikembalikan menjadi ditolak.
+                                                    Apakah Anda yakin ingin menolak bukti setoran dari <span class="font-bold text-slate-900">{{ $payment->student->studentProfile->full_name ?? ('Siswa NIS ' . ($payment->student->studentProfile->nis ?? '-')) }}</span>? Status pembayaran akan dikembalikan menjadi ditolak.
                                                 </p>
                                                 
                                                 <form action="{{ route('admin.payments.reject', $payment->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">

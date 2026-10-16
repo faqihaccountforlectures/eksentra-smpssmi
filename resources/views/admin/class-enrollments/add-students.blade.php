@@ -70,7 +70,7 @@
                                     <span class="font-mono text-xs font-bold text-navy-base bg-white-off/50 border border-navy-light/20 px-2.5 py-1.5 rounded-lg">{{ $student->studentProfile->nis ?? '-' }}</span>
                                 </td>
                                 <td class="px-7 py-4 font-bold text-navy-dark">
-                                    {{ $student->studentProfile->full_name ?? $student->email }}
+                                    {{ $student->studentProfile->full_name ?? ($student->studentProfile->nis ? 'NIS ' . $student->studentProfile->nis : 'Siswa') }}
                                 </td>
                                 <td class="px-7 py-4">
                                     @if(isset($student->studentProfile->gender))

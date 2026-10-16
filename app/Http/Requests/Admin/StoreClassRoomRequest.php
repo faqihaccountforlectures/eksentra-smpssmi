@@ -25,10 +25,6 @@ class StoreClassRoomRequest extends FormRequest
             
             // Tingkat kelas (misal: 7, 8, 9) maksimal 50 karakter
             'grade_level' => 'required|string|max:50',
-            
-            // Wali kelas boleh kosong (karena mungkin belum ditentukan).
-            // Tapi JIKA diisi, ID guru tersebut WAJIB ada di tabel users.
-            'homeroom_teacher_id' => 'nullable|exists:users,id',
         ];
     }
 
@@ -40,7 +36,6 @@ class StoreClassRoomRequest extends FormRequest
         return [
             'name.required' => 'Nama kelas wajib diisi (misal: VII-A).',
             'grade_level.required' => 'Tingkat kelas wajib diisi.',
-            'homeroom_teacher_id.exists' => 'Wali kelas yang dipilih tidak valid atau tidak terdaftar di sistem.',
         ];
     }
 }

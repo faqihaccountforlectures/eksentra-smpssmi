@@ -71,7 +71,6 @@
                 <thead>
                     <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-wider font-bold border-b border-slate-100">
                         <th class="px-7 py-3.5">Kelas</th>
-                        <th class="px-7 py-3.5">Wali Kelas</th>
                         <th class="px-7 py-3.5 text-center">Jumlah Siswa</th>
                         <th class="px-7 py-3.5 text-right">Aksi</th>
                     </tr>
@@ -89,18 +88,6 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="px-7 py-4 font-medium text-slate-600">
-                            @if($classRoom->homeroomTeacher)
-                                <div class="flex items-center gap-2">
-                                    <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-[10px] font-bold">
-                                        {{ substr($classRoom->homeroomTeacher->display_name ?? 'G', 0, 1) }}
-                                    </div>
-                                    <span>{{ $classRoom->homeroomTeacher->display_name ?? $classRoom->homeroomTeacher->email }}</span>
-                                </div>
-                            @else
-                                <span class="text-slate-400 italic text-xs">Belum diatur</span>
-                            @endif
-                        </td>
                         <td class="px-7 py-4 text-center">
                             <span class="inline-block px-3 py-1 rounded-full text-xs {{ $classRoom->enrollments_count > 0 ? 'bg-blue-800 text-white font-bold shadow-sm' : 'bg-slate-100 border border-slate-200 text-slate-500 font-medium' }}">
                                 {{ $classRoom->enrollments_count }} Siswa
@@ -115,7 +102,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-7 py-14 text-center">
+                        <td colspan="3" class="px-7 py-14 text-center">
                             <div class="flex flex-col items-center justify-center text-slate-400">
                                 <div class="bg-slate-100 p-4 rounded-full mb-3">
                                     <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>

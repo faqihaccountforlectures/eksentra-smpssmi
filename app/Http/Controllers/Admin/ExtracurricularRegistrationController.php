@@ -85,6 +85,16 @@ class ExtracurricularRegistrationController extends Controller
             return back()->with('error', 'Pendaftaran ekstrakurikuler saat ini belum dapat dilakukan karena belum ada tahun ajaran yang aktif.');
         }
 
+        // Validasi kesesuaian tanggal kalender riil dengan rentang tahun ajaran
+        $now = now()->startOfDay();
+        if ($now->lt($activeYear->startDate())) {
+            return back()->with('error', 'Pendaftaran untuk Tahun Ajaran ' . $activeYear->year_name . ' belum dibuka. Periode tahun ajaran baru dimulai pada ' . $activeYear->startDate()->locale('id')->translatedFormat('d F Y') . '.');
+        }
+
+        if ($now->gt($activeYear->endDate())) {
+            return back()->with('error', 'Pendaftaran untuk Tahun Ajaran ' . $activeYear->year_name . ' sudah ditutup karena periode tahun ajaran telah berakhir pada ' . $activeYear->endDate()->locale('id')->translatedFormat('d F Y') . '.');
+        }
+
         // Mencegah pendaftaran ganda pada tahun ajaran aktif jika statusnya masih pending atau sudah approved
         $existingRegistration = ExtracurricularRegistration::where('student_id', auth()->id())
             ->where('extracurricular_id', $request->extracurricular_id)

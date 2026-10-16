@@ -113,11 +113,12 @@
                                         <span class="font-mono text-xs font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg">{{ $student->studentProfile->nis ?? '-' }}</span>
                                     </td>
                                     <td class="px-7 py-4">
-                                        <div class="font-bold text-slate-900 mb-0.5">{{ $student->studentProfile->full_name ?? $student->email }}</div>
-                                        <div class="text-[11px] text-slate-500 flex items-center gap-1.5">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                            {{ $student->email }}
-                                        </div>
+                                        <div class="font-bold text-slate-900 mb-0.5">{{ $student->studentProfile->full_name ?? ($student->studentProfile->nis ? 'NIS ' . $student->studentProfile->nis : 'Siswa') }}</div>
+                                        @if($student->studentProfile && $student->studentProfile->phone_number)
+                                            <div class="text-[11px] text-slate-500 font-mono">
+                                                {{ $student->studentProfile->phone_number }}
+                                            </div>
+                                        @endif
                                     </td>
                                     <td class="px-7 py-4 font-medium">
                                         @if(isset($student->studentProfile->gender))

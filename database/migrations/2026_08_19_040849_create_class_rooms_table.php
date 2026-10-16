@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('name', 20); // Contoh: "7A"
             $table->integer('grade_level'); // Tingkat: 7, 8, atau 9
 
-            // FK ke tabel users (Wali Kelas). Pakai nullOnDelete agar kalau guru resign, kelas tidak ikut terhapus.
-            $table->foreignid('homeroom_teacher_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

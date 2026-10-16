@@ -8,7 +8,7 @@
 
             <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Hapus Data Siswa?</h3>
             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
-                Akun siswa milik <span class="font-bold text-slate-900">{{ $student->studentProfile->full_name ?? $student->email }}</span> akan dihapus secara permanen beserta seluruh data pendaftaran dan riwayatnya. Tindakan ini tidak dapat dibatalkan.
+                Data siswa milik <span class="font-bold text-slate-900">{{ $student->studentProfile->full_name ?? ($student->studentProfile->nis ? 'NIS ' . $student->studentProfile->nis : 'Siswa') }}</span> akan dihapus secara permanen beserta seluruh data pendaftaran dan riwayatnya. Tindakan ini tidak dapat dibatalkan.
             </p>
             
             <form action="{{ route('students.destroy', $student->id) }}" method="POST">

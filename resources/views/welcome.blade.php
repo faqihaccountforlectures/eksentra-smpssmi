@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eksentra — Portal Ekstrakurikuler SMP Science Mutiara Insani</title>
+    <title>Eksentra — Portal Ekstrakurikuler SMPS Science Mutiara Insani</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Ambient Background Canvas */
@@ -78,17 +78,13 @@
                 
                 <!-- Logo & Identitas Brand EKSENTRA -->
                 <a href="#hero" class="flex items-center gap-3 group">
-                    <div class="relative">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center shadow-md group-hover:shadow-blue-300/60 transition-shadow p-1.5">
-                            <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-full h-full object-contain group-hover:scale-105 transition-transform">
-                        </div>
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-9 h-9 sm:w-10 sm:h-10 object-contain group-hover:scale-105 transition-transform shrink-0">
                     <div>
                         <div class="flex items-center gap-1.5">
                             <span class="font-extrabold text-lg sm:text-xl text-blue-900 font-heading tracking-wide">EKSENTRA</span>
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
                         </div>
-                        <p class="text-[9px] sm:text-[10px] text-blue-600 font-bold uppercase tracking-wider hidden sm:block">SMP Science Mutiara Insani</p>
+                        <p class="text-[9px] sm:text-[10px] text-blue-600 font-bold uppercase tracking-wider hidden sm:block">SMPS Science Mutiara Insani</p>
                     </div>
                 </a>
 
@@ -162,12 +158,12 @@
                     Satu Portal, <span class="text-blue-800">Beragam Potensi.</span>
                 </p>
                 <p class="reveal text-xs sm:text-sm font-semibold text-blue-600 uppercase tracking-widest mb-5 font-mono">
-                    Portal Ekstrakurikuler SMP Science Mutiara Insani
+                    Portal Ekstrakurikuler SMPS Science Mutiara Insani
                 </p>
 
                 <!-- Deskripsi Hero -->
                 <p class="reveal text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
-                    Eksentra merupakan portal terintegrasi yang mendukung pengelolaan kegiatan ekstrakurikuler di SMP Science Mutiara Insani. Melalui Eksentra, pengelolaan administrasi ekstrakurikuler menjadi lebih terstruktur sehingga siswa dapat mengembangkan minat, menemukan bakat, dan menggali potensi diri melalui kegiatan non-akademik.
+                    Eksentra merupakan portal terintegrasi yang mendukung pengelolaan kegiatan ekstrakurikuler di SMPS Science Mutiara Insani. Melalui Eksentra, pengelolaan administrasi ekstrakurikuler menjadi lebih terstruktur sehingga siswa dapat mengembangkan minat, menemukan bakat, dan menggali potensi diri melalui kegiatan non-akademik.
                 </p>
 
                 <!-- CTA Buttons -->
@@ -225,7 +221,7 @@
                         </h2>
                         <div class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
                             <p>
-                                <strong class="text-blue-900 font-bold">Eksentra</strong> adalah Portal Ekstrakurikuler SMP Science Mutiara Insani yang dirancang untuk mengintegrasikan berbagai proses pengelolaan kegiatan ekstrakurikuler dalam satu sistem terpusat.
+                                <strong class="text-blue-900 font-bold">Eksentra</strong> adalah Portal Ekstrakurikuler SMPS Science Mutiara Insani yang dirancang untuk mengintegrasikan berbagai proses pengelolaan kegiatan ekstrakurikuler dalam satu sistem terpusat.
                             </p>
                             <p>
                                 Portal ini memfasilitasi pengelolaan data ekstrakurikuler, pendaftaran siswa, verifikasi pembayaran, hingga pencatatan nilai kegiatan. Dengan pembagian akses bagi admin, pembina, dan siswa, Eksentra membantu menciptakan pengelolaan ekstrakurikuler yang lebih terorganisasi, efektif, dan mudah diakses.
@@ -286,7 +282,7 @@
                         <span>Tujuan Pengembangan</span>
                     </div>
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">
-                        Tujuan Pengembangan <span class="text-blue-800">Ekskul</span>
+                        Tujuan Pengembangan <span class="text-blue-800">Eksentra</span>
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1.5">
                         Mendukung pengelolaan kegiatan ekstrakurikuler secara terpusat, terstruktur, dan efisien.
@@ -412,7 +408,7 @@
                         Galeri <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 to-indigo-800">Kegiatan</span>
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1.5">
-                        Jelajahi berbagai momen kegiatan ekstrakurikuler yang menjadi bagian dari perjalanan siswa SMP Science Mutiara Insani.
+                        Jelajahi berbagai momen kegiatan ekstrakurikuler yang menjadi bagian dari perjalanan siswa SMPS Science Mutiara Insani.
                     </p>
                 </div>
 
@@ -462,7 +458,7 @@
                         Visi & <span class="text-blue-800">Misi</span> Sekolah
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1.5">
-                        Pedoman dan landasan utama SMP Science Mutiara Insani menyelenggarakan pendidikan berkualitas.
+                        Pedoman dan landasan utama SMPS Science Mutiara Insani menyelenggarakan pendidikan berkualitas.
                     </p>
                 </div>
 
@@ -534,7 +530,7 @@
                         Video Profil & <span class="text-blue-800">Lokasi Sekolah</span>
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1.5">
-                        SMP Science Mutiara Insani — lingkungan pendidikan untuk belajar, berkolaborasi, dan mengembangkan potensi diri.
+                        SMPS Science Mutiara Insani — lingkungan pendidikan untuk belajar, berkolaborasi, dan mengembangkan potensi diri.
                     </p>
                 </div>
 
@@ -550,7 +546,7 @@
                                 </div>
                                 <div>
                                     <h3 class="text-xs sm:text-sm font-bold text-slate-900">Video Profil Sekolah</h3>
-                                    <p class="text-[11px] text-slate-500">SMP Science Mutiara Insani</p>
+                                    <p class="text-[11px] text-slate-500">SMPS Science Mutiara Insani</p>
                                 </div>
                             </div>
                             <a href="https://youtu.be/NYeyeyumWPA?si=ncWARGMhPVnf24Wv" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold text-red-600 hover:text-red-700 flex items-center gap-1 transition-colors">
@@ -563,7 +559,7 @@
                         <div class="rounded-xl overflow-hidden border border-slate-200 shadow-inner bg-slate-100 h-52 sm:h-56">
                             <iframe
                                 src="https://www.youtube.com/embed/NYeyeyumWPA"
-                                title="Video Profil SMP Science Mutiara Insani"
+                                title="Video Profil SMPS Science Mutiara Insani"
                                 class="w-full h-full border-0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowfullscreen>
@@ -668,12 +664,10 @@
                 <!-- Kolom 1: Nama & Deskripsi Eksentra -->
                 <div class="md:col-span-5 space-y-3">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-xl bg-blue-800 flex items-center justify-center p-1.5 shadow">
-                            <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-full h-full object-contain">
-                        </div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-9 h-9 object-contain shrink-0">
                         <div>
                             <h4 class="font-extrabold text-base text-white font-heading">Eksentra</h4>
-                            <p class="text-[10px] text-blue-400 font-semibold">Portal Ekstrakurikuler SMP Science Mutiara Insani</p>
+                            <p class="text-[10px] text-blue-400 font-semibold">Portal Ekstrakurikuler SMPS Science Mutiara Insani</p>
                         </div>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
@@ -711,7 +705,7 @@
 
             <!-- Copyright Dinamis -->
             <div class="pt-6 text-center text-xs text-slate-500">
-                <p>© {{ date('Y') }} SMP Science Mutiara Insani. Seluruh hak cipta dilindungi.</p>
+                <p>© {{ date('Y') }} SMPS Science Mutiara Insani. Seluruh hak cipta dilindungi.</p>
             </div>
         </div>
     </footer>

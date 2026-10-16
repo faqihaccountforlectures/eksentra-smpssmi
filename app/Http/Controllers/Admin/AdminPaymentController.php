@@ -19,8 +19,8 @@ class AdminPaymentController extends Controller
     public function index(Request $request)
     {
         $statusFilter = $request->query('status');
-        $monthFilter = $request->query('month');
-        $yearFilter = $request->query('year');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
         $search = $request->query('search');
 
         // 1. Ambil semua data pembayaran riil dari seluruh siswa
@@ -97,20 +97,27 @@ class AdminPaymentController extends Controller
         // 3. Gabungkan pembayaran riil dan tagihan virtual
         $allTransactions = $unpaidBills->concat($realPayments);
 
-        // 4. Proses Filter Bulan & Tahun Ajaran
-        if ($monthFilter) {
-            $allTransactions = $allTransactions->where('month', $monthFilter);
+        // 4. Proses Filter Rentang Waktu (Dari Tanggal s/d Sampai Tanggal)
+        if ($startDate) {
+            try {
+                $startCarbon = \Carbon\Carbon::parse($startDate)->startOfDay();
+                $allTransactions = $allTransactions->filter(function ($payment) use ($startCarbon) {
+                    return $payment->created_at && $payment->created_at->gte($startCarbon);
+                });
+            } catch (\Exception $e) {
+                // Abaikan jika format tidak valid
+            }
         }
 
-        if ($yearFilter && str_contains($yearFilter, '/')) {
-            // yearFilter = "2026/2027" → Juli 2026 s/d Juni 2027
-            [$fyStart, $fyEnd] = explode('/', $yearFilter);
-            $fyMonthsInStartYear = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            $fyMonthsInEndYear   = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'];
-            $allTransactions = $allTransactions->filter(function ($p) use ($fyStart, $fyEnd, $fyMonthsInStartYear, $fyMonthsInEndYear) {
-                return (in_array($p->month, $fyMonthsInStartYear) && (int)$p->year === (int)$fyStart)
-                    || (in_array($p->month, $fyMonthsInEndYear)   && (int)$p->year === (int)$fyEnd);
-            });
+        if ($endDate) {
+            try {
+                $endCarbon = \Carbon\Carbon::parse($endDate)->endOfDay();
+                $allTransactions = $allTransactions->filter(function ($payment) use ($endCarbon) {
+                    return $payment->created_at && $payment->created_at->lte($endCarbon);
+                });
+            } catch (\Exception $e) {
+                // Abaikan jika format tidak valid
+            }
         }
 
         // 5. Proses Filter Status
@@ -160,18 +167,12 @@ class AdminPaymentController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        $monthsList = array_values($monthsName);
-        // Gunakan tahun-tahun kalender yang relevan dari data pembayaran yang ada
-        $yearsList = AcademicYear::orderBy('year_name')->pluck('year_name')->toArray();
-
         return view('admin.payments.index', compact(
             'payments',
             'search',
             'statusFilter',
-            'monthFilter',
-            'yearFilter',
-            'monthsList',
-            'yearsList',
+            'startDate',
+            'endDate',
             'totalCount',
             'pendingCount',
             'verifiedCount',
@@ -218,8 +219,8 @@ class AdminPaymentController extends Controller
     public function exportPdf(Request $request)
     {
         $statusFilter = $request->query('status');
-        $monthFilter = $request->query('month');
-        $yearFilter = $request->query('year');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
         $search = $request->query('search');
 
         // Gunakan logika yang sama dengan index() untuk mengambil data
@@ -284,18 +285,23 @@ class AdminPaymentController extends Controller
 
         $allTransactions = $unpaidBills->concat($realPayments);
 
-        if ($monthFilter) {
-            $allTransactions = $allTransactions->where('month', $monthFilter);
+        // Filter Rentang Waktu (Dari Tanggal s/d Sampai Tanggal)
+        if ($startDate) {
+            try {
+                $startCarbon = \Carbon\Carbon::parse($startDate)->startOfDay();
+                $allTransactions = $allTransactions->filter(function ($payment) use ($startCarbon) {
+                    return $payment->created_at && $payment->created_at->gte($startCarbon);
+                });
+            } catch (\Exception $e) {}
         }
 
-        if ($yearFilter && str_contains($yearFilter, '/')) {
-            [$fyStart, $fyEnd] = explode('/', $yearFilter);
-            $fyMonthsInStartYear = ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            $fyMonthsInEndYear   = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'];
-            $allTransactions = $allTransactions->filter(function ($p) use ($fyStart, $fyEnd, $fyMonthsInStartYear, $fyMonthsInEndYear) {
-                return (in_array($p->month, $fyMonthsInStartYear) && (int)$p->year === (int)$fyStart)
-                    || (in_array($p->month, $fyMonthsInEndYear)   && (int)$p->year === (int)$fyEnd);
-            });
+        if ($endDate) {
+            try {
+                $endCarbon = \Carbon\Carbon::parse($endDate)->endOfDay();
+                $allTransactions = $allTransactions->filter(function ($payment) use ($endCarbon) {
+                    return $payment->created_at && $payment->created_at->lte($endCarbon);
+                });
+            } catch (\Exception $e) {}
         }
 
         if ($statusFilter) {
@@ -324,8 +330,8 @@ class AdminPaymentController extends Controller
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.payments.report-pdf', [
             'payments' => $allTransactions,
             'statusFilter' => $statusFilter,
-            'monthFilter' => $monthFilter,
-            'yearFilter' => $yearFilter,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
             'search' => $search,
             'totalAmount' => $totalAmount,
             'printDate' => now()->translatedFormat('d F Y')
@@ -333,7 +339,15 @@ class AdminPaymentController extends Controller
         
         $pdf->setPaper('A4', 'landscape');
         
-        $filenameMonth = $monthFilter ? '-' . strtolower($monthFilter) : '';
-        return $pdf->download('laporan-pembayaran-ekskul' . $filenameMonth . '-' . now()->format('Y-m-d') . '.pdf');
+        $filenamePeriod = '';
+        if ($startDate && $endDate) {
+            $filenamePeriod = '-' . $startDate . '-sd-' . $endDate;
+        } elseif ($startDate) {
+            $filenamePeriod = '-mulai-' . $startDate;
+        } elseif ($endDate) {
+            $filenamePeriod = '-sampai-' . $endDate;
+        }
+
+        return $pdf->download('laporan-pembayaran-ekskul' . $filenamePeriod . '-' . now()->format('Y-m-d') . '.pdf');
     }
 }

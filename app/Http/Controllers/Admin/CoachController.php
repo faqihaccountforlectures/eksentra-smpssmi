@@ -9,6 +9,13 @@ use App\Http\Requests\Admin\StoreCoachRequest;
 use App\Http\Requests\Admin\UpdateCoachRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class CoachController extends Controller
 {
@@ -148,112 +155,177 @@ class CoachController extends Controller
     }
 
     /**
-     * Mengunduh berkas template CSV contoh untuk impor data coach massal.
+     * Mengunduh berkas template Excel (.xlsx) untuk impor data coach / pembina massal.
      */
     public function downloadTemplate()
     {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Pembina');
+
+        // Header Kolom
         $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="template_data_pembina.csv"',
+            'A1' => 'Nama Lengkap & Gelar',
+            'B1' => 'Username / Email Pembina',
+            'C1' => 'Jenis Kelamin',
+            'D1' => 'No. Telepon',
         ];
 
-        $callback = function () {
-            $output = fopen('php://output', 'w');
-            fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF)); // BOM UTF-8
+        foreach ($headers as $cell => $value) {
+            $sheet->setCellValue($cell, $value);
+        }
 
-            // Header kolom
-            fputcsv($output, [
-                'Nama Lengkap',
-                'Username / Email (@smpsmi.com)',
-                'Jenis Kelamin',
-                'Nomor Telepon',
-            ], ';');
+        // Contoh Data
+        $sampleData = [
+            ['Drs. H. Ahmad Subardjo, M.Pd.', 'ahmad.subardjo@smpsmi.com', 'Laki-laki', '081234567891'],
+            ['Siti Rahmawati, S.Pd.', 'siti.rahmawati@smpsmi.com', 'Perempuan', '081234567892'],
+        ];
 
-            // Baris data contoh
-            fputcsv($output, [
-                'Drs. H. Ahmad Subardjo, M.Pd.',
-                'ahmad.subardjo@smpsmi.com',
-                'Laki-laki',
-                '081234567891',
-            ], ';');
+        $rowIdx = 2;
+        foreach ($sampleData as $row) {
+            $sheet->setCellValue('A' . $rowIdx, $row[0]);
+            $sheet->setCellValue('B' . $rowIdx, $row[1]);
+            $sheet->setCellValue('C' . $rowIdx, $row[2]);
+            $sheet->setCellValueExplicit('D' . $rowIdx, $row[3], DataType::TYPE_STRING);
+            $rowIdx++;
+        }
 
-            fputcsv($output, [
-                'Siti Rahmawati, S.Pd.',
-                'siti.rahmawati@smpsmi.com',
-                'Perempuan',
-                '081234567892',
-            ], ';');
+        // Format kolom No. Telepon sebagai Text (@) agar angka 0 di depan tidak hilang
+        $sheet->getStyle('D2:D500')->getNumberFormat()->setFormatCode('@');
 
-            fclose($output);
-        };
+        // Styling Header (Warna Navy, Font Putih Tebal, Center)
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+                'size' => 11,
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '1E3A8A'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['rgb' => 'CBD5E1'],
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+        $sheet->getRowDimension(1)->setRowHeight(28);
 
-        return response()->stream($callback, 200, $headers);
+        // Lebar kolom otomatis menyesuaikan panjang teks
+        foreach (range('A', 'D') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'template_impor_pembina.xlsx';
+
+        return response()->streamDownload(function () use ($writer) {
+            $writer->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'max-age=0',
+        ]);
     }
 
     /**
-     * Memproses impor massal data coach dari berkas CSV/Excel.
+     * Memproses impor massal data coach dari berkas Excel (.xlsx / .xls).
      */
     public function import(Request $request)
     {
+        // 1. Validasi berkas unggahan: harus berupa berkas Excel dengan ukuran maksimal 10MB
         $request->validate([
-            'file' => 'required|file|mimes:csv,txt|max:5120',
+            'file' => 'required|file|mimes:xlsx,xls|max:10240',
         ], [
-            'file.required' => 'Silakan pilih berkas CSV terlebih dahulu.',
-            'file.mimes'    => 'Berkas harus berupa file format .csv.',
-            'file.max'      => 'Ukuran berkas maksimal adalah 5MB.',
+            'file.required' => 'Silakan pilih berkas Excel (.xlsx / .xls) terlebih dahulu.',
+            'file.mimes'    => 'Berkas harus berupa file format Excel (.xlsx atau .xls).',
+            'file.max'      => 'Ukuran berkas maksimal adalah 10MB.',
         ]);
 
         $file = $request->file('file');
         $filePath = $file->getRealPath();
 
-        $firstLine = file_get_contents($filePath, false, null, 0, 1024);
-        $delimiter = (substr_count($firstLine, ';') > substr_count($firstLine, ',')) ? ';' : ',';
-
-        $handle = fopen($filePath, 'r');
-        if (!$handle) {
-            return redirect()->back()->with('error', 'Gagal membuka berkas CSV yang diunggah.');
+        // 2. Membaca isi spreadsheet menggunakan PhpSpreadsheet
+        try {
+            $spreadsheet = IOFactory::load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray(null, true, false, false);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal membaca berkas Excel: ' . $e->getMessage());
         }
 
-        fgetcsv($handle, 1000, $delimiter); // header
+        if (empty($rows) || count($rows) < 2) {
+            return redirect()->back()->with('error', 'Berkas Excel tidak memuat data pembina (hanya baris header atau kosong).');
+        }
+
+        // Lewati baris header pertama
+        array_shift($rows);
 
         $rowNumber = 1;
         $errors = [];
         $coachesToInsert = [];
         $batchEmails = [];
 
-        while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+        // 3. Membaca dan memvalidasi setiap baris data dari berkas Excel
+        foreach ($rows as $row) {
             $rowNumber++;
 
-            if (empty(array_filter($row))) {
+            // Abaikan baris kosong
+            if (empty(array_filter($row, fn($val) => $val !== null && trim((string)$val) !== ''))) {
                 continue;
             }
 
+            // Pastikan baris memiliki minimal 3 kolom utama
             if (count($row) < 3) {
-                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama Lengkap, Email, dan Jenis Kelamin.";
+                $errors[] = "Baris ke-{$rowNumber}: Jumlah kolom tidak lengkap. Pastikan mengisi Nama Lengkap, Username/Email, dan Jenis Kelamin.";
                 continue;
             }
 
-            $fullName    = trim($row[0] ?? '');
-            $email       = trim($row[1] ?? '');
-            $genderRaw   = strtolower(trim($row[2] ?? ''));
-            $phoneNumber = trim(trim($row[3] ?? ''), "=\"' \t\n\r\0\x0B");
+            $fullName    = trim((string)($row[0] ?? ''));
+            $emailRaw    = trim((string)($row[1] ?? ''));
+            $genderRaw   = strtolower(trim((string)($row[2] ?? '')));
+            $phoneNumber = trim(trim((string)($row[3] ?? '')), "=\"' \t\n\r\0\x0B");
 
+            // Format email / username: jika hanya nama pengguna tanpa @, tambahkan domain sekolah @smpsmi.com
+            if (!empty($emailRaw) && !str_contains($emailRaw, '@')) {
+                $email = strtolower($emailRaw) . '@smpsmi.com';
+            } else {
+                $email = strtolower($emailRaw);
+            }
+
+            // Validasi Nama Lengkap
             if (empty($fullName) || strlen($fullName) > 100) {
                 $errors[] = "Baris ke-{$rowNumber}: Nama lengkap wajib diisi dan maksimal 100 karakter.";
                 continue;
             }
 
+            // Validasi Format Email
             if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "Baris ke-{$rowNumber}: Format email '{$email}' tidak valid.";
+                $errors[] = "Baris ke-{$rowNumber}: Format email/username '{$emailRaw}' tidak valid.";
                 continue;
             }
 
+            // Validasi duplikasi di file yang sama
             if (in_array($email, $batchEmails)) {
-                $errors[] = "Baris ke-{$rowNumber}: Email '{$email}' terdeteksi ganda di dalam berkas yang sama.";
+                $errors[] = "Baris ke-{$rowNumber}: Email/Username '{$emailRaw}' terdeteksi ganda di dalam berkas yang sama.";
                 continue;
             }
 
-            if (in_array($genderRaw, ['l', 'laki-laki', 'laki laki', 'pria'])) {
+            // Cek apakah email digunakan oleh role lain
+            $existingNonCoach = User::where('email', $email)->where('role', '!=', 'coach')->first();
+            if ($existingNonCoach) {
+                $errors[] = "Baris ke-{$rowNumber}: Email '{$email}' sudah terdaftar untuk pengguna dengan peran {$existingNonCoach->role}.";
+                continue;
+            }
+
+            // Normalisasi Jenis Kelamin
+            if (in_array($genderRaw, ['l', 'laki-laki', 'laki laki', 'pria', 'laki'])) {
                 $gender = 'laki-laki';
             } elseif (in_array($genderRaw, ['p', 'perempuan', 'wanita'])) {
                 $gender = 'perempuan';
@@ -272,18 +344,19 @@ class CoachController extends Controller
             ];
         }
 
-        fclose($handle);
-
+        // Jika terdapat baris yang bermasalah, kembalikan dengan pesan kesalahan lengkap
         if (!empty($errors)) {
             return redirect()->back()
                 ->with('import_errors', $errors)
                 ->with('error', 'Proses impor dibatalkan karena ditemukan kesalahan pada format data. Silakan periksa rincian kesalahan di bawah ini.');
         }
 
+        // Pastikan ada setidaknya satu baris data valid untuk diimpor
         if (empty($coachesToInsert)) {
-            return redirect()->back()->with('error', 'Berkas CSV tidak memuat data yang dapat diimpor.');
+            return redirect()->back()->with('error', 'Berkas Excel tidak memuat data pembina yang dapat diimpor.');
         }
 
+        // 4. Eksekusi penyimpanan ke basis data menggunakan Database Transaction
         DB::transaction(function () use ($coachesToInsert) {
             foreach ($coachesToInsert as $coachData) {
                 $user = User::firstOrCreate(

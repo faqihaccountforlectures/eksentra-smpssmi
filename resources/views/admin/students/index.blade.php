@@ -50,7 +50,7 @@
                 </div>
                 <div>
                     <h2 class="font-bold text-navy-dark font-heading tracking-wide text-base">Daftar Peserta Didik</h2>
-                    <p class="text-[11px] text-gray-muted mt-0.5 tracking-wide font-bold">Kelola biodata dan akses akun belajar siswa di sini.</p>
+                    <p class="text-[11px] text-gray-muted mt-0.5 tracking-wide font-bold">Kelola biodata dan akses akun login peserta didik (NIS) di sini.</p>
                 </div>
             </div>
             
@@ -65,10 +65,10 @@
                     </div>
                 </form>
 
-                {{-- FUNGSI KODE: Tombol pemicu modal pop-up untuk mengimpor berkas Excel / CSV siswa --}}
+                {{-- FUNGSI KODE: Tombol pemicu modal pop-up untuk mengimpor berkas Excel siswa --}}
                 <button type="button" onclick="openStudentImportModal()" class="w-full sm:w-auto px-4 py-2.5 bg-white border border-navy-light/50 text-navy-dark hover:text-navy-base hover:bg-navy-light/10 font-bold text-sm rounded-xl shadow-sm hover:shadow active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap">
                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                    Impor Excel / CSV
+                    Impor Excel
                 </button>
 
                 <a href="{{ route('students.create') }}" class="w-full sm:w-auto px-5 py-2.5 bg-navy-dark text-white-off font-bold text-sm rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md hover:shadow-navy-base/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 border border-transparent whitespace-nowrap">
@@ -86,7 +86,8 @@
                         <th class="px-7 py-4 font-bold w-16 text-center">No</th>
                         <th class="px-7 py-4 font-bold">Profil Siswa</th>
                         <th class="px-7 py-4 font-bold">NIS</th>
-                        <th class="px-7 py-4 font-bold">No. Orang Tua</th>
+                        <th class="px-7 py-4 font-bold">No. Telepon Siswa</th>
+                        <th class="px-7 py-4 font-bold">No. Telepon Orang Tua</th>
                         <th class="px-7 py-4 font-bold text-center w-36">Aksi</th>
                     </tr>
                 </thead>
@@ -103,16 +104,27 @@
                                 </div>
                                 <div>
                                     <p class="font-bold text-navy-dark group-hover/row:text-navy-base transition-colors">{{ $student->studentProfile->full_name ?? 'Belum ada nama' }}</p>
-                                    <p class="text-[11px] text-gray-muted font-semibold flex items-center gap-1.5 mt-0.5 tracking-wide">
-                                        <svg class="w-3 h-3 text-navy-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                        {{ $student->email }}
-                                    </p>
+                                    @if($student->studentProfile && $student->studentProfile->gender)
+                                        <p class="text-[11px] text-gray-muted font-medium flex items-center gap-1.5 mt-0.5 tracking-wide">
+                                            <span class="inline-flex items-center gap-1.5">
+                                                <span class="w-1.5 h-1.5 rounded-full {{ strtolower($student->studentProfile->gender) === 'laki-laki' ? 'bg-blue-500' : 'bg-pink-500' }}"></span>
+                                                <span class="capitalize">{{ $student->studentProfile->gender }}</span>
+                                            </span>
+                                        </p>
+                                    @endif
                                 </div>
                             </div>
                         </td>
                         <td class="px-7 py-4 font-mono font-medium text-sm">
                             @if($student->studentProfile && $student->studentProfile->nis)
                                 {{ $student->studentProfile->nis }}
+                            @else
+                                <span class="text-gray-muted italic text-xs">Belum diisi</span>
+                            @endif
+                        </td>
+                        <td class="px-7 py-4 font-mono font-medium text-sm">
+                            @if($student->studentProfile && $student->studentProfile->phone_number)
+                                {{ $student->studentProfile->phone_number }}
                             @else
                                 <span class="text-gray-muted italic text-xs">Belum diisi</span>
                             @endif
@@ -147,7 +159,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-7 py-16 text-center">
+                        <td colspan="6" class="px-7 py-16 text-center">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="bg-navy-light/10 p-4 rounded-2xl mb-4 border border-navy-light/30">
                                     <svg class="w-10 h-10 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +197,7 @@
         @endif
     </div>
 
-    {{-- FUNGSI KODE: Modal Pop-up untuk Mengunggah Berkas CSV / Excel Data Siswa --}}
+    {{-- FUNGSI KODE: Modal Pop-up untuk Mengunggah Berkas Excel Data Siswa --}}
     <div id="studentImportModal" class="fixed inset-0 z-[9999] flex items-center justify-center hidden bg-slate-900/60 backdrop-blur-sm p-4 transition-all duration-300">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-lg w-full overflow-hidden transform transition-all relative">
             <!-- Header Modal -->
@@ -195,8 +207,8 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-slate-900 font-heading text-base">Impor Data Siswa</h3>
-                        <p class="text-xs text-slate-500 font-medium mt-0.5">Unggah berkas CSV/Excel untuk menambahkan banyak siswa sekaligus.</p>
+                        <h3 class="font-bold text-slate-900 font-heading text-base">Impor Data Siswa (Excel)</h3>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5">Unggah berkas Excel (.xlsx / .xls) untuk menambahkan banyak siswa sekaligus.</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeStudentImportModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
@@ -211,27 +223,27 @@
                 <!-- Panduan & Tombol Unduh Template -->
                 <div class="bg-blue-50/70 border border-blue-100 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div>
-                        <p class="text-xs font-bold text-blue-900">Gunakan Template Resmi</p>
-                        <p class="text-[11px] text-slate-600 mt-0.5">Unduh template berformat CSV yang dapat langsung diedit di Microsoft Excel.</p>
+                        <p class="text-xs font-bold text-blue-900">Gunakan Template Resmi Excel</p>
+                        <p class="text-[11px] text-slate-600 mt-0.5">Unduh template .xlsx yang sudah rapi dan siap diisi di Microsoft Excel.</p>
                     </div>
                     <a href="{{ route('students.template') }}" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5 shrink-0 transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Unduh Template
+                        Unduh Template Excel
                     </a>
                 </div>
 
-                <!-- Input File CSV -->
+                <!-- Input File Excel -->
                 <div class="space-y-1.5">
-                    <label for="student_csv_file" class="block text-xs font-bold text-slate-700">Pilih Berkas CSV (.csv)</label>
-                    <input type="file" id="student_csv_file" name="file" accept=".csv,text/csv,text/plain" required class="w-full text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-xl file:mr-4 file:py-2.5 file:px-4 file:rounded-l-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-800 hover:file:bg-blue-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-100">
-                    <p class="text-[10px] text-slate-500">Ukuran berkas maksimal 5 MB. Kolom nama, NIS, email, dan jenis kelamin wajib diisi. Kolom <b>Kelas (contoh: 7A)</b> bersifat opsional jika ingin langsung mendaftarkan siswa ke rombel kelas.</p>
+                    <label for="student_excel_file" class="block text-xs font-bold text-slate-700">Pilih Berkas Excel (.xlsx / .xls)</label>
+                    <input type="file" id="student_excel_file" name="file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" required class="w-full text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-xl file:mr-4 file:py-2.5 file:px-4 file:rounded-l-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-800 hover:file:bg-blue-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-100">
+                    <p class="text-[10px] text-slate-500">Ukuran berkas maksimal 10 MB. Kolom Nama Lengkap, NIS, dan Jenis Kelamin wajib diisi. Kolom <b>Kelas (contoh: 7A)</b> opsional.</p>
                 </div>
 
-                <!-- Petunjuk Pencegahan Format Ilmiah Excel -->
-                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2.5 text-amber-900">
-                    <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <!-- Petunjuk Format Excel -->
+                <div class="bg-blue-50/50 border border-blue-200/80 rounded-xl p-3 flex items-start gap-2.5 text-blue-900">
+                    <svg class="w-4 h-4 text-blue-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <p class="text-[11px] leading-relaxed">
-                        <b>Tips Microsoft Excel:</b> Agar angka <b>NIS</b> atau <b>No. HP</b> tidak otomatis berubah menjadi format ilmiah (seperti <i>1.98E+17</i>) dan angka <i>0</i> di awal tidak hilang, awali angka dengan tanda petik satu (contoh: <code class="bg-amber-100 px-1 py-0.5 rounded text-amber-900 font-mono">'12345678</code>).
+                        <b>Informasi:</b> Akun sistem siswa otomatis dibuat dengan format <b>NIS@siswa.smpsmi.com</b> dan kata sandi default <b>siswasmpsmi</b>. Siswa login ke portal menggunakan NIS dan kata sandi tersebut.
                     </p>
                 </div>
 
@@ -241,7 +253,7 @@
                         Batal
                     </button>
                     <button type="submit" class="px-5 py-2 bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold rounded-xl shadow-sm active:scale-95 transition-all">
-                        Mulai Impor Siswa
+                        Mulai Impor Excel
                     </button>
                 </div>
             </form>

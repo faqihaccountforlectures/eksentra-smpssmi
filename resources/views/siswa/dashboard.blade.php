@@ -19,7 +19,7 @@
             </div>
             <h2 class="text-xl sm:text-2xl font-black text-white font-heading tracking-tight">Halo, {{ $user->studentProfile->full_name ?? $user->name }}! 👋</h2>
             <p class="text-xs text-blue-100 mt-1.5">
-                Selamat datang di Portal Ekstrakurikuler SMP Science Mutiara Insani.
+                Selamat datang di Portal Ekstrakurikuler SMPS Science Mutiara Insani.
             </p>
             
             <!-- Badges Informasi Diri Siswa -->

@@ -8,7 +8,7 @@
 
             <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Reset Kata Sandi Siswa?</h3>
             <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 font-medium">
-                Kata sandi untuk akun siswa <span class="font-bold text-slate-900">{{ $student->studentProfile->full_name ?? $student->email }}</span>
+                Kata sandi untuk siswa <span class="font-bold text-slate-900">{{ $student->studentProfile->full_name ?? ($student->studentProfile->nis ? 'NIS ' . $student->studentProfile->nis : 'Siswa') }}</span>
                 @if($student->studentProfile && $student->studentProfile->nis)
                     (NIS: <span class="font-mono font-bold text-slate-900">{{ $student->studentProfile->nis }}</span>)
                 @endif

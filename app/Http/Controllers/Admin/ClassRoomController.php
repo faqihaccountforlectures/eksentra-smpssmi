@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\ClassRoom;
-use App\Models\User;
 use App\Http\Requests\Admin\StoreClassRoomRequest;
 use App\Http\Requests\Admin\UpdateClassRoomRequest;
 use Illuminate\Http\Request;
@@ -15,17 +14,12 @@ class ClassRoomController extends Controller
     // Nampilin halaman utama daftar Data Kelas
     public function index()
     {
-        // Ngambil semua data kelas beserta relasi wali kelas (dan profil gurunya)
         // Diurutin berdasarkan tingkat kelas (grade_level) terus nama kelas
-        $classes = ClassRoom::with('homeroomTeacher')
-            ->orderBy('grade_level')
+        $classes = ClassRoom::orderBy('grade_level')
             ->orderBy('name')
             ->paginate(5);
-        
-        // Ngambil daftar akun yang ber-role 'guru' buat ngisi pilihan dropdown Wali Kelas
-        $teachers = User::whereIn('role', ['admin', 'coach'])->get();
 
-        return view('admin.classes.index', compact('classes', 'teachers'));
+        return view('admin.classes.index', compact('classes'));
     }
 
     public function store(StoreClassRoomRequest $request)
@@ -39,11 +33,8 @@ class ClassRoomController extends Controller
     public function edit($id)
     {
         $classRoom = ClassRoom::findOrFail($id);
-        
-        // Perlu ngambil daftar guru lagi buat dropdown di halaman edit
-        $teachers = User::whereIn('role', ['admin', 'coach'])->get();
 
-        return view('admin.classes.edit', compact('classRoom', 'teachers'));
+        return view('admin.classes.edit', compact('classRoom'));
     }
 
     public function update(UpdateClassRoomRequest $request, $id)

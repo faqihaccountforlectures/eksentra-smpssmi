@@ -25,9 +25,19 @@
 
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h2 class="text-lg font-bold text-white font-heading tracking-wide">Pilih Kegiatan Ekstrakurikuler</h2>
-            <p class="text-xs text-slate-400 mt-0.5 tracking-wide font-medium">Daftarkan diri Anda ke kegiatan ekstrakurikuler yang sesuai dengan minat dan bakat.</p>
+            <h2 class="text-lg font-bold text-slate-800 font-heading tracking-wide">Pilih Kegiatan Ekstrakurikuler</h2>
+            <p class="text-xs text-slate-500 mt-0.5 tracking-wide font-medium">Daftarkan diri Anda ke kegiatan ekstrakurikuler yang sesuai dengan minat dan bakat.</p>
         </div>
+        @if($activeYear)
+            <div class="inline-flex items-center gap-2 bg-blue-900 text-white border border-blue-950 px-4 py-2 rounded-xl text-xs font-bold shadow-md shrink-0">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <svg class="w-4 h-4 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>Tahun Ajaran Aktif: <strong class="text-white font-extrabold tracking-wider font-mono ml-0.5">{{ $activeYear->year_name }}</strong></span>
+            </div>
+        @endif
     </div>
 
     <!-- Grid Katalog Ekskul -->
@@ -98,15 +108,27 @@
                     <!-- Tombol Aksi Berdasarkan Status -->
                     <div class="pt-4 border-t border-navy-light/20 mt-auto">
                         @if(!$status || $status === 'rejected')
-                            <form action="{{ route('extracurricular-registrations.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="extracurricular_id" value="{{ $ekskul->id }}">
-                                <button type="submit" class="w-full py-2.5 bg-blue-800 hover:bg-blue-900 text-white font-bold text-xs rounded-xl shadow-sm active:scale-95 transition-all">
-                                    Daftar Ekstrakurikuler
-                                </button>
-                            </form>
-                            @if($status === 'rejected')
-                                <p class="text-center text-[11px] font-bold text-rose-500 mt-2">Pendaftaran sebelumnya ditolak admin.</p>
+                            @if($activeYear && now()->startOfDay()->lt($activeYear->startDate()))
+                                <div class="w-full py-2.5 bg-slate-100 border border-slate-200 text-slate-500 rounded-xl text-xs font-bold text-center tracking-wide flex items-center justify-center gap-1.5 cursor-not-allowed">
+                                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Pendaftaran Belum Dibuka
+                                </div>
+                                <p class="text-center text-[10px] text-slate-400 mt-1.5 font-medium">Periode T.A. {{ $activeYear->year_name }} dimulai {{ $activeYear->startDate()->locale('id')->translatedFormat('d F Y') }}</p>
+                            @elseif($activeYear && now()->startOfDay()->gt($activeYear->endDate()))
+                                <div class="w-full py-2.5 bg-slate-100 border border-slate-200 text-slate-500 rounded-xl text-xs font-bold text-center tracking-wide flex items-center justify-center gap-1.5 cursor-not-allowed">
+                                    Tahun Ajaran Berakhir
+                                </div>
+                            @else
+                                <form action="{{ route('extracurricular-registrations.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="extracurricular_id" value="{{ $ekskul->id }}">
+                                    <button type="submit" class="w-full py-2.5 bg-blue-800 hover:bg-blue-900 text-white font-bold text-xs rounded-xl shadow-sm active:scale-95 transition-all">
+                                        Daftar Ekstrakurikuler
+                                    </button>
+                                </form>
+                                @if($status === 'rejected')
+                                    <p class="text-center text-[11px] font-bold text-rose-500 mt-2">Pendaftaran sebelumnya ditolak admin.</p>
+                                @endif
                             @endif
                         
                         @elseif($status === 'pending')

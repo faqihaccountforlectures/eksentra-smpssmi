@@ -44,7 +44,7 @@
                     <h2 class="text-xl sm:text-2xl font-bold font-heading !text-white text-white" style="color: #ffffff !important;">{{ $profile->full_name ?? $user->name }}</h2>
                     <span class="inline-flex items-center gap-1.5 mt-1 px-3 py-1 bg-blue-900/80 border border-blue-700/60 text-blue-200 text-xs font-semibold rounded-lg shadow-sm">
                         <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-                        Siswa SMP Science Mutiara Insani
+                        Siswa SMPS Science Mutiara Insani
                     </span>
                 </div>
             </div>

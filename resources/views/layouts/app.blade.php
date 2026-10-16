@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Eksentra') — Portal Ekstrakurikuler SMP Science Mutiara Insani</title>
+    <title>@yield('title', 'Eksentra') — Portal Ekstrakurikuler SMPS Science Mutiara Insani</title>
     
     <!-- ANTI-FLICKER SIDEBAR: Baca status collapsed sebelum halaman dirender agar tidak berkedip/flicker -->
     <script>
@@ -39,15 +39,13 @@
             <!-- Logo area & Identitas Brand EKSENTRA (Sejajar Sempurna dengan Topbar Header) -->
             <div class="h-14 md:h-16 flex items-center justify-between px-3.5 sm:px-4 bg-white border-b border-slate-200 shrink-0">
                 <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
-                    <div class="w-8 h-8 rounded-lg bg-white border border-blue-100 shadow-xs flex items-center justify-center p-1 shrink-0 group-hover:border-blue-300 transition-colors">
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-full h-full object-contain">
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo Eksentra" class="w-8 h-8 object-contain shrink-0 group-hover:scale-105 transition-transform">
                     <div class="min-w-0">
                         <div class="flex items-center gap-1.5">
                             <span class="font-black text-sm text-blue-950 font-heading tracking-tight leading-none">Eksentra</span>
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
                         </div>
-                        <p class="text-[8.5px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">SMP Science Mutiara Insani</p>
+                        <p class="text-[8.5px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">SMPS Science Mutiara Insani</p>
                     </div>
                 </a>
 
@@ -329,8 +327,8 @@
                 </div>
             </header>
 
-            <!-- Area Konten Dinamis (Tampilan Rapi & Padat) -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-3.5 sm:p-5 md:p-6 thin-scrollbar-light relative z-10 {{ Auth::check() && Auth::user()->role === 'admin' ? 'admin-compact' : '' }}">
+            <!-- Area Konten Dinamis (Tampilan Rapi & Padat untuk Seluruh Portal: Admin, Pembina, Siswa) -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-3.5 sm:p-5 md:p-6 thin-scrollbar-light relative z-10 {{ Auth::check() ? 'portal-compact admin-compact' : '' }}">
                 @yield('content')
             </main>
 

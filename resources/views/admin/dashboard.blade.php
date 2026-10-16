@@ -176,7 +176,7 @@
                         
                         <!-- Detail Transaksi -->
                         <div class="flex-1 min-w-0">
-                            <p class="text-xs font-bold text-slate-800 truncate">{{ $payment->student->studentProfile->full_name ?? $payment->student->email }}</p>
+                            <p class="text-xs font-bold text-slate-800 truncate">{{ $payment->student->studentProfile->full_name ?? ($payment->student->studentProfile->nis ? 'Siswa NIS ' . $payment->student->studentProfile->nis : 'Siswa') }}</p>
                             <p class="text-[10px] font-mono text-slate-500 truncate mt-0.5">{{ $payment->extracurricular->name }} • {{ $payment->month }}</p>
                         </div>
                         

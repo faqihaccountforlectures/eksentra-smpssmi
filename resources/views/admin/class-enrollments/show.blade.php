@@ -34,12 +34,8 @@
                 <h2 class="text-xl font-bold text-navy-dark font-heading">Kelas {{ $classRoom->name }}</h2>
                 <div class="flex items-center gap-4 mt-1.5 text-xs text-gray-muted font-medium">
                     <span class="flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                        Wali kelas: <strong class="text-navy-dark">{{ $classRoom->homeroomTeacher->display_name ?? 'Belum diatur' }}</strong>
-                    </span>
-                    <span class="flex items-center gap-1.5 border-l border-navy-light/40 pl-4">
                         <svg class="w-4 h-4 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        {{ $activeYear->year_name }}
+                        Tahun Ajaran: <strong class="text-navy-dark">{{ $activeYear->year_name }}</strong>
                     </span>
                 </div>
             </div>
@@ -89,11 +85,12 @@
                             <span class="font-mono text-xs font-bold text-navy-base bg-white-off/50 border border-navy-light/20 px-2.5 py-1.5 rounded-lg">{{ $enrollment->student->studentProfile->nis ?? '-' }}</span>
                         </td>
                         <td class="px-7 py-4">
-                            <div class="font-bold text-navy-dark mb-0.5">{{ $enrollment->student->studentProfile->full_name ?? $enrollment->student->email }}</div>
-                            <div class="text-[11px] text-gray-muted flex items-center gap-1.5">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                {{ $enrollment->student->email }}
-                            </div>
+                            <div class="font-bold text-navy-dark mb-0.5">{{ $enrollment->student->studentProfile->full_name ?? ($enrollment->student->studentProfile->nis ? 'NIS ' . $enrollment->student->studentProfile->nis : 'Siswa') }}</div>
+                            @if($enrollment->student->studentProfile && $enrollment->student->studentProfile->phone_number)
+                                <div class="text-[11px] text-gray-muted font-mono">
+                                    {{ $enrollment->student->studentProfile->phone_number }}
+                                </div>
+                            @endif
                         </td>
                         <td class="px-7 py-4 font-medium">
                             @if(isset($enrollment->student->studentProfile->gender))
@@ -123,7 +120,7 @@
 
                                 <h3 class="font-bold text-lg sm:text-xl text-slate-900 font-heading tracking-wide mb-2">Keluarkan Siswa?</h3>
                                 <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
-                                    Anda yakin ingin mengeluarkan <span class="font-bold text-slate-900">{{ $enrollment->student->studentProfile->full_name ?? $enrollment->student->email }}</span> dari kelas ini? Data kehadiran dan nilai mungkin akan terpengaruh.
+                                    Anda yakin ingin mengeluarkan <span class="font-bold text-slate-900">{{ $enrollment->student->studentProfile->full_name ?? ($enrollment->student->studentProfile->nis ? 'NIS ' . $enrollment->student->studentProfile->nis : 'Siswa') }}</span> dari kelas ini? Data kehadiran dan nilai mungkin akan terpengaruh.
                                 </p>
                                 
                                 <form action="{{ route('class-enrollments.destroy', $enrollment->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">

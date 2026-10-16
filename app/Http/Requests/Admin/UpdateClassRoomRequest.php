@@ -23,7 +23,6 @@ class UpdateClassRoomRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'grade_level' => 'required|string|max:50',
-            'homeroom_teacher_id' => 'nullable|exists:users,id',
         ];
     }
 
@@ -35,7 +34,6 @@ class UpdateClassRoomRequest extends FormRequest
         return [
             'name.required' => 'Nama kelas wajib diisi (misal: VII-A).',
             'grade_level.required' => 'Tingkat kelas wajib diisi.',
-            'homeroom_teacher_id.exists' => 'Wali kelas yang dipilih tidak valid atau tidak terdaftar di sistem.',
         ];
     }
 }

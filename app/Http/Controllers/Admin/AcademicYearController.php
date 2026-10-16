@@ -65,7 +65,15 @@ class AcademicYearController extends Controller
             'is_active' => $request->is_active,
         ]);
 
-        return redirect()->route('academic-years.index')->with('success', 'Data tahun ajaran berhasil diperbarui.');
+        $notice = '';
+        if ($request->is_active) {
+            $now = now()->startOfDay();
+            if ($now->lt($academicYear->startDate())) {
+                $notice = ' (Catatan: Periode T.A. ' . $academicYear->year_name . ' baru dimulai pada ' . $academicYear->startDate()->locale('id')->translatedFormat('d F Y') . '. Pendaftaran ekskul siswa untuk T.A. ini belum dibuka hingga tanggal mulai tercapai).';
+            }
+        }
+
+        return redirect()->route('academic-years.index')->with('success', 'Data tahun ajaran berhasil diperbarui.' . $notice);
     }
 
     // Menghapus data tahun ajaran

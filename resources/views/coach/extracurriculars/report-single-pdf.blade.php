@@ -119,7 +119,7 @@
 
     <!-- KOP SURAT RESMI -->
     <div class="header">
-        <h1>SMP SCIENCE MUTIARA INSANI</h1>
+        <h1>SMPS SCIENCE MUTIARA INSANI</h1>
         <h2>LAPORAN PENILAIAN PERKEMBANGAN EKSTRAKURIKULER</h2>
         <p>Jl. KH. Noer Ali, Sukadanau, Cikarang Barat, Kab. Bekasi, Jawa Barat | Portal Informasi Eksentra</p>
     </div>
@@ -253,7 +253,7 @@
         <tr>
             <td>
                 Mengetahui,<br>
-                <strong>Kepala Sekolah SMP Science Mutiara Insani</strong>
+                <strong>Kepala Sekolah SMPS Science Mutiara Insani</strong>
                 <div class="sign-space"></div>
                 <strong><u>Dra. Hj. Titin Sugiarti, M.Pd.</u></strong><br>
                 NIP. 197108151998022001

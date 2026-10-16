@@ -48,21 +48,6 @@
                         <input type="text" name="name" placeholder="Contoh: 7A, VIII B" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold text-sm rounded-xl px-3 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-700/20 focus:border-blue-700 outline-none transition-colors duration-200">
                     </div>
 
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">Wali Kelas (Opsional)</label>
-                        <div class="relative">
-                            <select name="homeroom_teacher_id" class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold text-sm rounded-xl pl-3 pr-10 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-700/20 focus:border-blue-700 outline-none transition-colors duration-200 appearance-none">
-                                <option value="">-- Kosongkan / Belum Ada --</option>
-                                @foreach($teachers as $teacher)
-                                    <option value="{{ $teacher->id }}">{{ $teacher->display_name ?? $teacher->email }}</option>
-                                @endforeach
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-blue-800">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </div>
-                        </div>
-                    </div>
-
                     <button type="submit" class="w-full mt-2 bg-blue-800 hover:bg-blue-900 text-white font-bold text-xs py-3 rounded-xl shadow-sm active:scale-95 transition-colors duration-200 flex items-center justify-center gap-2">
                         <span>Simpan Data</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -90,7 +75,6 @@
                             <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-wider font-bold">
                                 <th class="px-5 py-3.5 font-semibold border-b border-slate-100 text-center">Tingkat</th>
                                 <th class="px-5 py-3.5 font-semibold border-b border-slate-100">Nama Kelas</th>
-                                <th class="px-5 py-3.5 font-semibold border-b border-slate-100">Wali Kelas</th>
                                 <th class="px-5 py-3.5 font-semibold border-b border-slate-100 text-right">Aksi</th>
                             </tr>
                         </thead>
@@ -104,18 +88,6 @@
                                 </td>
                                 <td class="px-5 py-3.5 font-semibold text-slate-900">
                                     {{ $classRoom->name }}
-                                </td>
-                                <td class="px-5 py-3.5 text-slate-600 font-medium">
-                                    @if($classRoom->homeroomTeacher)
-                                        <div class="flex items-center gap-2">
-                                            <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-[10px] font-bold">
-                                                {{ substr($classRoom->homeroomTeacher->display_name ?? 'G', 0, 1) }}
-                                            </div>
-                                            <span>{{ $classRoom->homeroomTeacher->display_name ?? $classRoom->homeroomTeacher->email }}</span>
-                                        </div>
-                                    @else
-                                        <span class="text-slate-400 italic text-xs">Belum diatur</span>
-                                    @endif
                                 </td>
                                 <td class="px-5 py-3.5 text-right">
                                     <div class="flex justify-end items-center gap-1">
@@ -132,7 +104,7 @@
                             @include('admin.classes.delete')
                             @empty
                             <tr>
-                                <td colspan="4" class="px-5 py-12 text-center">
+                                <td colspan="3" class="px-5 py-12 text-center">
                                     <div class="flex flex-col items-center justify-center text-slate-400">
                                         <div class="bg-slate-100 p-4 rounded-full mb-3">
                                             <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>

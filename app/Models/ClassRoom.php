@@ -13,15 +13,7 @@ class ClassRoom extends Model
     protected $fillable = [
         'name',
         'grade_level',
-        'homeroom_teacher_id'
     ];
-
-    // Relasi ke tabel users (khusus yang rolenya Guru) yang jadi wali kelas
-    // Jadi dari kelas kita bisa langsung nge-load data akun wali kelasnya
-    public function homeroomTeacher()
-    {
-        return $this->belongsTo(User::class, 'homeroom_teacher_id');
-    }
 
     // Relasi ke tabel class_enrollments.
     // Ibaratnya, ini tuh buat nyari "Siapa aja sih anak-anak yang terdaftar dan duduk di kelas ini?"
