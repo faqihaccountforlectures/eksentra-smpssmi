@@ -14,11 +14,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat Akun Admin Default dari file .env (dengan fallback aman)
+        // Buat Akun Admin Default langsung di seeder
         User::create([
-            'username' => env('ADMIN_DEFAULT_USERNAME', 'admin'),
-            'password' => Hash::make(env('ADMIN_DEFAULT_PASSWORD', 'password123')),
-            'role' => 'admin'
+            'username' => 'admin',
+            'password' => Hash::make('smpsmi_admin'),
+            'role' => 'admin',
         ]);
     }
 }
