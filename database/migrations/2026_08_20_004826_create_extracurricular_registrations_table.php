@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('extracurricular_registrations', function (Blueprint $table) {
             $table->id();
 
-            // Relasi ke Siswa, Eskul, dan Pembayaran
+            // Relasi ke Siswa, Eskul, dan Tahun Ajaran
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('extracurricular_id')->constrained('extracurriculars')->onDelete('cascade');
+            $table->foreignId('academic_year_id')->constrained('academic_years')->onDelete('cascade');
 
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
