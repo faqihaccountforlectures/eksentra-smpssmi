@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForcePasswordChangeController;
 use App\Http\Controllers\Admin\AcademicYearController;
@@ -41,10 +40,6 @@ Route::get('/login', function () {
 // Memproses formulir login manual (Email & Kata Sandi)
 // throttle:5,1 → maksimal 5 percobaan login per menit per IP (mencegah brute-force)
 Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('login.post');
-
-// Rute Autentikasi Google (SSO)
-Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
-Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 
 // Memproses proses keluar (Logout)
 Route::post('/logout', function () {
