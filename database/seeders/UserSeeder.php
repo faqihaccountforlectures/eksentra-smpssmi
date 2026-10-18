@@ -14,11 +14,13 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat Akun Admin Default langsung di seeder
-        User::create([
-            'username' => 'admin',
-            'password' => Hash::make('smpsmi_admin'),
-            'role' => 'admin',
-        ]);
+        // Buat Akun Admin Default langsung di seeder jika belum ada
+        User::firstOrCreate(
+            ['username' => 'admin'],
+            [
+                'password' => Hash::make('smpsmi_admin'),
+                'role' => 'admin',
+            ]
+        );
     }
 }
