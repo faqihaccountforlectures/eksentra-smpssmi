@@ -215,6 +215,9 @@ class AdminPaymentController extends Controller
      */
     public function exportPdf(Request $request)
     {
+        ini_set('memory_limit', '1024M');
+        set_time_limit(300);
+
         $statusFilter = $request->query('status');
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');

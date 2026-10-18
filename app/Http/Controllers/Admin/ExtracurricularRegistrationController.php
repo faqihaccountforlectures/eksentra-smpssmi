@@ -13,14 +13,35 @@ class ExtracurricularRegistrationController extends Controller
     /**
      * Menampilkan daftar pendaftaran ekstrakurikuler (Hanya untuk Admin)
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil data pendaftaran dipaginasi (10 per halaman) beserta relasi siswa (dan profilnya), tahun ajaran serta data ekstrakurikulernya
-        // Diurutkan berdasarkan tanggal daftar terbaru (created_at)
-        $registrations = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular', 'academicYear', 'grades.academicYear'])
-            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+        $status = $request->query('status');
+        $academicYearId = $request->query('academic_year_id');
+        $extracurricularId = $request->query('extracurricular_id');
+        $search = $request->query('search');
+
+        $query = ExtracurricularRegistration::with(['student.studentProfile', 'extracurricular', 'academicYear', 'grades.academicYear']);
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+        if ($academicYearId) {
+            $query->where('academic_year_id', $academicYearId);
+        }
+        if ($extracurricularId) {
+            $query->where('extracurricular_id', $extracurricularId);
+        }
+        if ($search) {
+            $query->whereHas('student.studentProfile', function ($sp) use ($search) {
+                $sp->where('full_name', 'like', "%{$search}%")
+                  ->orWhere('nis', 'like', "%{$search}%");
+            });
+        }
+
+        $registrations = $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->appends($request->all());
             
         // Hitung total statistik secara keseluruhan
         $totalCount = ExtracurricularRegistration::count();
@@ -28,12 +49,21 @@ class ExtracurricularRegistrationController extends Controller
         $approvedCount = ExtracurricularRegistration::where('status', 'approved')->count();
         $rejectedCount = ExtracurricularRegistration::where('status', 'rejected')->count();
 
+        $academicYears = AcademicYear::orderBy('year_name', 'desc')->get();
+        $extracurriculars = \App\Models\Extracurricular::orderBy('name')->get();
+
         return view('admin.extracurricular_registrations.index', compact(
             'registrations',
             'totalCount',
             'pendingCount',
             'approvedCount',
-            'rejectedCount'
+            'rejectedCount',
+            'academicYears',
+            'extracurriculars',
+            'status',
+            'academicYearId',
+            'extracurricularId',
+            'search'
         ));
     }
 
@@ -78,6 +108,12 @@ class ExtracurricularRegistrationController extends Controller
         $request->validate([
             'extracurricular_id' => 'required|exists:extracurriculars,id'
         ]);
+
+        // Cegah pendaftaran baru untuk siswa berstatus alumni (lulus) atau keluar
+        $user = auth()->user();
+        if ($user->studentProfile && in_array($user->studentProfile->status, ['lulus', 'keluar'])) {
+            return back()->with('error', 'Pendaftaran kegiatan ekstrakurikuler hanya dapat dilakukan oleh peserta didik yang berstatus aktif.');
+        }
 
         // Cek tahun ajaran aktif saat ini
         $activeYear = AcademicYear::where('is_active', true)->first();

@@ -49,10 +49,15 @@
                 </div>
             </div>
 
-            <!-- Kanan: Badge Status Siswa Aktif -->
+            <!-- Kanan: Badge Status Siswa -->
             <div class="relative z-10 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-blue-900/80 border border-blue-700/60 text-white text-xs font-mono font-medium shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="font-semibold text-white !text-white" style="color: #ffffff !important;">Siswa Aktif</span>
+                @if(($profile->status ?? 'aktif') === 'lulus')
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span class="font-semibold text-white !text-white" style="color: #ffffff !important;">Alumni (Lulus)</span>
+                @else
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="font-semibold text-white !text-white" style="color: #ffffff !important;">Siswa Aktif</span>
+                @endif
             </div>
         </div>
 

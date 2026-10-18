@@ -16,8 +16,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // 1. Hitung total siswa aktif
-        $totalSiswa = User::where('role', 'siswa')->count();
+        // 1. Hitung total siswa aktif dan alumni
+        $totalSiswa = User::where('role', 'siswa')
+            ->whereHas('studentProfile', fn($q) => $q->where('status', 'aktif'))
+            ->count();
+        $totalAlumni = User::where('role', 'siswa')
+            ->whereHas('studentProfile', fn($q) => $q->where('status', 'lulus'))
+            ->count();
 
         // 2. Hitung total coach (pembina ekstrakurikuler)
         $totalCoach = User::where('role', 'coach')->count();
@@ -50,6 +55,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'totalSiswa',
+            'totalAlumni',
             'totalCoach',
             'pendingRegistrations',
             'pendingPayments',

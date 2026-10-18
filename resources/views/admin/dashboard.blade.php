@@ -59,8 +59,13 @@
         <div class="bg-white p-4 sm:p-5 rounded-2xl border border-blue-100 shadow-sm flex items-center justify-between group hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md transition-all duration-200">
             <div>
                 <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">Total Siswa Aktif</p>
-                <h3 class="text-2xl font-black text-slate-900 font-heading mt-0.5">{{ $totalSiswa }}</h3>
-                <a href="{{ route('students.index') }}" class="text-[11px] font-bold text-blue-700 hover:text-blue-900 inline-flex items-center gap-1 mt-1.5 transition-colors">
+                <div class="flex items-baseline gap-2 mt-0.5">
+                    <h3 class="text-2xl font-black text-slate-900 font-heading">{{ $totalSiswa }}</h3>
+                    <a href="{{ route('students.index', ['status' => 'lulus']) }}" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-md hover:bg-emerald-100 transition-colors" title="Lihat Alumni">
+                        +{{ $totalAlumni }} Alumni
+                    </a>
+                </div>
+                <a href="{{ route('students.index', ['status' => 'aktif']) }}" class="text-[11px] font-bold text-blue-700 hover:text-blue-900 inline-flex items-center gap-1 mt-1.5 transition-colors">
                     <span>Lihat Siswa</span>
                     <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </a>

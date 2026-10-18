@@ -5,45 +5,45 @@
     <title>Laporan Penilaian {{ $extracurricular->name }}</title>
     <style>
         @page {
-            margin: 20mm 15mm 20mm 15mm;
+            margin: 15mm 15mm 15mm 15mm;
             size: A4 landscape;
         }
         body {
             font-family: 'Times New Roman', Times, serif;
             font-size: 10pt;
-            color: #111827;
+            color: #000000;
             line-height: 1.35;
         }
         .header {
             text-align: center;
-            border-bottom: 2.5px double #1e3a8a;
+            border-bottom: 2.5px double #000000;
             padding-bottom: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 14px;
         }
         .header h1 {
             margin: 0;
             font-size: 16pt;
             font-weight: bold;
-            color: #1e3a8a;
+            color: #000000;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
         .header h2 {
             margin: 3px 0 0;
-            font-size: 13pt;
+            font-size: 12pt;
             font-weight: bold;
-            color: #0f172a;
+            color: #000000;
             text-transform: uppercase;
         }
         .header p {
             margin: 3px 0 0;
             font-size: 9pt;
-            color: #475569;
+            color: #333333;
         }
         .meta-table {
             width: 100%;
-            margin-bottom: 14px;
-            font-size: 9.5pt;
+            margin-bottom: 12px;
+            font-size: 9pt;
         }
         .meta-table td {
             padding: 2px 4px;
@@ -52,55 +52,52 @@
         }
         .badge {
             display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
             font-size: 8.5pt;
             font-weight: bold;
         }
-        .badge-approved { background-color: #dcfce7; color: #166534; }
-        .badge-pending { background-color: #fef3c7; color: #92400e; }
-        .badge-rejected { background-color: #ffe4e6; color: #9f1239; }
-
         .data-table {
             width: 100%;
+            table-layout: fixed;
+            word-wrap: break-word;
             border-collapse: collapse;
-            margin-bottom: 15px;
-            font-size: 9pt;
+            margin-bottom: 14px;
+            font-size: 8.5pt;
         }
         .data-table th, .data-table td {
-            border: 1px solid #94a3b8;
-            padding: 6px 7px;
+            border: 1px solid #000000;
+            padding: 5px 6px;
             vertical-align: middle;
         }
         .data-table th {
-            background-color: #1e3a8a;
-            color: #ffffff;
+            background-color: #d1d5db;
+            color: #000000;
             font-weight: bold;
             text-align: center;
             text-transform: uppercase;
             font-size: 8.5pt;
         }
         .data-table tr:nth-child(even) {
-            background-color: #f8fafc;
+            background-color: #f9f9f9;
         }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
         .font-bold { font-weight: bold; }
-        .text-muted { color: #64748b; font-size: 8pt; font-style: italic; }
+        .text-muted { color: #555555; font-size: 8pt; font-style: italic; }
 
         .grade-box {
             display: inline-block;
             padding: 2px 6px;
             font-weight: bold;
             border-radius: 3px;
-            font-size: 9pt;
+            font-size: 8.5pt;
+            background-color: #f0f0f0;
+            color: #000000;
+            border: 1px solid #777777;
         }
-        .grade-ganjil { background-color: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
-        .grade-genap { background-color: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
 
         .signatures {
             width: 100%;
-            margin-top: 25px;
+            margin-top: 20px;
             page-break-inside: avoid;
         }
         .signatures td {
@@ -117,11 +114,11 @@
 </head>
 <body>
 
-    <!-- KOP SURAT RESMI -->
+    <!-- KOP SURAT RESMI (MONOCHROME) -->
     <div class="header">
         <h1>SMPS SCIENCE MUTIARA INSANI</h1>
         <h2>LAPORAN PENILAIAN PERKEMBANGAN EKSTRAKURIKULER</h2>
-        <p>Jl. KH. Noer Ali, Sukadanau, Cikarang Barat, Kab. Bekasi, Jawa Barat | Portal Informasi Eksentra</p>
+        <p>Munjuljaya, Kec. Purwakarta, Kabupaten Purwakarta, Jawa Barat 41117 | Eksentra Portal Ekstrakurikuler</p>
     </div>
 
     <!-- METADATA LAPORAN -->
@@ -160,7 +157,7 @@
         </tr>
     </table>
 
-    <!-- TABEL DATA NILAI SISWA -->
+    <!-- TABEL DATA NILAI SISWA (MONOCHROME) -->
     <table class="data-table">
         <thead>
             <tr>
@@ -189,16 +186,16 @@
                     <td class="text-center font-bold">{{ $className }}</td>
                     <td class="text-center">
                         @if($reg->status === 'approved')
-                            <span class="badge badge-approved">Disetujui</span>
+                            <span class="badge">Disetujui</span>
                         @elseif($reg->status === 'pending')
-                            <span class="badge badge-pending">Menunggu</span>
+                            <span class="badge" style="font-style: italic;">Menunggu</span>
                         @else
-                            <span class="badge badge-rejected">Ditolak</span>
+                            <span class="badge" style="text-decoration: line-through;">Ditolak</span>
                         @endif
                     </td>
                     <td class="text-center">
                         @if($gradeGanjil && $gradeGanjil->grade)
-                            <span class="grade-box grade-ganjil">
+                            <span class="grade-box">
                                 {{ $gradeGanjil->grade }} @if($gradeGanjil->score !== null) ({{ $gradeGanjil->score }}) @endif
                             </span>
                         @else
@@ -214,7 +211,7 @@
                     </td>
                     <td class="text-center">
                         @if($gradeGenap && $gradeGenap->grade)
-                            <span class="grade-box grade-genap">
+                            <span class="grade-box">
                                 {{ $gradeGenap->grade }} @if($gradeGenap->score !== null) ({{ $gradeGenap->score }}) @endif
                             </span>
                         @else
@@ -231,7 +228,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center text-muted" style="padding: 20px;">
+                    <td colspan="9" class="text-center text-muted" style="padding: 18px;">
                         Tidak ada data siswa / anggota yang sesuai dengan filter yang dipilih.
                     </td>
                 </tr>
@@ -239,8 +236,8 @@
         </tbody>
     </table>
 
-    <!-- REKAPITULASI RINGKAS -->
-    <table style="width: 100%; font-size: 8.5pt; color: #475569; margin-bottom: 20px;">
+    <!-- REKAPITULASI RINGKAS SKALA NILAI -->
+    <table style="width: 100%; font-size: 8pt; color: #444444; margin-bottom: 16px;">
         <tr>
             <td>
                 * Keterangan Skala Nilai: <strong>A</strong> = Sangat Baik (85-100), <strong>B</strong> = Baik (75-84), <strong>C</strong> = Cukup (60-74), <strong>D</strong> = Kurang (&lt;60).
@@ -255,11 +252,10 @@
                 Mengetahui,<br>
                 <strong>Kepala Sekolah SMPS Science Mutiara Insani</strong>
                 <div class="sign-space"></div>
-                <strong><u>Dra. Hj. Titin Sugiarti, M.Pd.</u></strong><br>
-                NIP. 197108151998022001
+                <strong><u>Rika Aryanti, M. Pd,. Gr</u></strong>
             </td>
             <td>
-                Bekasi, {{ $printDate }}<br>
+                Purwakarta, {{ $printDate }}<br>
                 <strong>Pembina Ekstrakurikuler {{ $extracurricular->name }}</strong>
                 <div class="sign-space"></div>
                 <strong><u>{{ $coachUser->display_name ?? $coachUser->username }}</u></strong><br>

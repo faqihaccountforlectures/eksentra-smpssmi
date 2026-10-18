@@ -166,10 +166,13 @@ class ClassEnrollmentController extends Controller
                 ->where('class_room_id', $sourceClassId)
                 ->get();
 
-            // Saring agar hanya menampilkan siswa yang belum dapet kelas di tahun ini
+            // Saring agar hanya menampilkan siswa aktif yang belum dapet kelas di tahun ini (abaikan alumni/keluar)
             foreach ($enrollments as $enrollment) {
-                if (!in_array($enrollment->student_id, $alreadyEnrolledIds)) {
-                    $students[] = $enrollment->student;
+                if ($enrollment->student && $enrollment->student->studentProfile) {
+                    $profileStatus = $enrollment->student->studentProfile->status;
+                    if ($profileStatus === 'aktif' && !in_array($enrollment->student_id, $alreadyEnrolledIds)) {
+                        $students[] = $enrollment->student;
+                    }
                 }
             }
         }

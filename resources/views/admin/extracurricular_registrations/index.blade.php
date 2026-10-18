@@ -26,7 +26,7 @@
     <!-- Cards Ringkasan Statistik -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
         <!-- Total Pendaftaran -->
-        <div class="bg-white p-5 rounded-2xl border border-navy-light/30 shadow-sm shadow-navy-base/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
+        <a href="{{ route('extracurricular-registrations.index', request()->except('status', 'page')) }}" class="bg-white p-5 rounded-2xl border {{ empty($status) ? 'border-navy-base ring-2 ring-navy-base/20' : 'border-navy-light/30' }} shadow-sm shadow-navy-base/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-navy-base/50 transition-all duration-300">
             <div>
                 <p class="text-[11px] font-bold text-gray-muted uppercase tracking-wider">Total Permohonan</p>
                 <h3 class="text-2xl font-bold text-navy-dark font-heading mt-1">{{ $totalCount ?? $registrations->total() }}</h3>
@@ -34,60 +34,117 @@
             <div class="w-12 h-12 rounded-xl bg-navy-light/10 text-navy-base flex items-center justify-center border border-navy-light/30 group-hover:scale-110 transition-transform">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
-        </div>
+        </a>
 
         <!-- Menunggu Persetujuan -->
-        <div class="bg-white p-5 rounded-2xl border border-amber-200/60 shadow-sm shadow-amber-500/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-amber-300 transition-all duration-300">
+        <a href="{{ route('extracurricular-registrations.index', array_merge(request()->except('page'), ['status' => 'pending'])) }}" class="bg-white p-5 rounded-2xl border {{ $status === 'pending' ? 'border-amber-400 ring-2 ring-amber-300/40 bg-amber-50/20' : 'border-amber-200/60' }} shadow-sm shadow-amber-500/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-amber-300 transition-all duration-300">
             <div>
                 <p class="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Menunggu Persetujuan</p>
-                <h3 class="text-2xl font-bold text-amber-800 font-heading mt-1">{{ $pendingCount ?? $registrations->where('status', 'pending')->count() }}</h3>
+                <h3 class="text-2xl font-bold text-amber-800 font-heading mt-1">{{ $pendingCount }}</h3>
             </div>
             <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200 group-hover:scale-110 transition-transform">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-        </div>
+        </a>
 
         <!-- Disetujui -->
-        <div class="bg-white p-5 rounded-2xl border border-emerald-200/60 shadow-sm shadow-emerald-500/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-emerald-300 transition-all duration-300">
+        <a href="{{ route('extracurricular-registrations.index', array_merge(request()->except('page'), ['status' => 'approved'])) }}" class="bg-white p-5 rounded-2xl border {{ $status === 'approved' ? 'border-emerald-400 ring-2 ring-emerald-300/40 bg-emerald-50/20' : 'border-emerald-200/60' }} shadow-sm shadow-emerald-500/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-emerald-300 transition-all duration-300">
             <div>
                 <p class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Disetujui</p>
-                <h3 class="text-2xl font-bold text-emerald-800 font-heading mt-1">{{ $approvedCount ?? $registrations->where('status', 'approved')->count() }}</h3>
+                <h3 class="text-2xl font-bold text-emerald-800 font-heading mt-1">{{ $approvedCount }}</h3>
             </div>
             <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200 group-hover:scale-110 transition-transform">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-        </div>
+        </a>
 
         <!-- Ditolak -->
-        <div class="bg-white p-5 rounded-2xl border border-rose-200/60 shadow-sm shadow-rose-500/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-rose-300 transition-all duration-300">
+        <a href="{{ route('extracurricular-registrations.index', array_merge(request()->except('page'), ['status' => 'rejected'])) }}" class="bg-white p-5 rounded-2xl border {{ $status === 'rejected' ? 'border-rose-400 ring-2 ring-rose-300/40 bg-rose-50/20' : 'border-rose-200/60' }} shadow-sm shadow-rose-500/5 flex items-center justify-between group hover:-translate-y-1 hover:shadow-md hover:border-rose-300 transition-all duration-300">
             <div>
                 <p class="text-[11px] font-bold text-rose-700 uppercase tracking-wider">Ditolak</p>
-                <h3 class="text-2xl font-bold text-rose-800 font-heading mt-1">{{ $rejectedCount ?? $registrations->where('status', 'rejected')->count() }}</h3>
+                <h3 class="text-2xl font-bold text-rose-800 font-heading mt-1">{{ $rejectedCount }}</h3>
             </div>
             <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-200 group-hover:scale-110 transition-transform">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- Tabel Utama -->
     <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden flex flex-col group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
         
-        <!-- Header Tabel -->
-        <div class="px-7 py-5 border-b border-navy-light/30 bg-white-off/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="bg-navy-light/10 p-2.5 rounded-xl text-navy-base border border-navy-light/30 shadow-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        <!-- Header Tabel & Toolbar Filter -->
+        <div class="px-7 py-5 border-b border-navy-light/30 bg-white-off/30 flex flex-col gap-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-navy-light/10 p-2.5 rounded-xl text-navy-base border border-navy-light/30 shadow-sm shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-navy-dark font-heading tracking-wide">Daftar Pendaftaran Ekstrakurikuler</h2>
+                        <p class="text-[11px] text-gray-muted mt-0.5 tracking-wide font-bold">Kelola dan verifikasi permohonan pendaftaran ekskul dari para siswa.</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="text-base font-bold text-navy-dark font-heading tracking-wide">Daftar Pendaftaran Ekstrakurikuler</h2>
-                    <p class="text-[11px] text-gray-muted mt-0.5 tracking-wide font-bold">Kelola dan verifikasi permohonan pendaftaran ekskul dari para siswa.</p>
-                </div>
+
+                <span class="text-xs font-bold text-navy-base bg-navy-light/20 px-3 py-1.5 rounded-lg border border-navy-light/40 whitespace-nowrap self-stretch sm:self-auto text-center">
+                    Total: {{ $registrations->total() }} Pendaftar Ditemukan
+                </span>
             </div>
 
-            <span class="text-xs font-bold text-navy-base bg-navy-light/20 px-3 py-1.5 rounded-lg border border-navy-light/40">
-                Total: {{ $totalCount ?? $registrations->total() }} Pendaftar
-            </span>
+            <!-- Toolbar Pencarian & Filter Grid -->
+            <form action="{{ route('extracurricular-registrations.index') }}" method="GET" class="pt-3.5 border-t border-navy-light/20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
+                <!-- Search Box -->
+                <div class="relative sm:col-span-2 lg:col-span-4">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-navy-base/60">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama siswa / NIS..." class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-9 pr-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all placeholder:text-gray-muted/60 shadow-sm">
+                </div>
+
+                <!-- Filter Tahun Ajaran -->
+                <div class="relative sm:col-span-1 lg:col-span-3">
+                    <select name="academic_year_id" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-3.5 pr-8 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none cursor-pointer shadow-sm" onchange="this.form.submit()">
+                        <option value="">Semua Tahun Ajaran</option>
+                        @foreach($academicYears as $year)
+                            <option value="{{ $year->id }}" {{ ($academicYearId ?? '') == $year->id ? 'selected' : '' }}>
+                                T.A. {{ $year->year_name }} {{ $year->is_active ? '(Aktif)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-navy-base">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Filter Ekstrakurikuler -->
+                <div class="relative sm:col-span-1 lg:col-span-3">
+                    <select name="extracurricular_id" class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-3.5 pr-8 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all appearance-none cursor-pointer shadow-sm" onchange="this.form.submit()">
+                        <option value="">Semua Ekstrakurikuler</option>
+                        @foreach($extracurriculars as $eks)
+                            <option value="{{ $eks->id }}" {{ ($extracurricularId ?? '') == $eks->id ? 'selected' : '' }}>
+                                {{ $eks->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-navy-base">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Filter Status & Tombol Reset -->
+                <div class="flex items-center gap-2 sm:col-span-2 lg:col-span-2">
+                    <input type="hidden" name="status" value="{{ $status ?? '' }}">
+                    <button type="submit" class="flex-1 py-2.5 bg-navy-dark hover:bg-navy-base text-white-off text-xs font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 active:scale-95" title="Terapkan Filter">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        <span>Cari</span>
+                    </button>
+                    @if($search || $academicYearId || $extracurricularId || $status)
+                    <a href="{{ route('extracurricular-registrations.index') }}" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all border border-slate-200" title="Reset Semua Filter">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </a>
+                    @endif
+                </div>
+            </form>
         </div>
         
         <!-- Container untuk Tabel -->
