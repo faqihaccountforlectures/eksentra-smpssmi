@@ -35,19 +35,23 @@ class ClassEnrollmentController extends Controller
 
     // Fungsi ini buat ngeliat "Dalemnya kelas ini ada siapa aja sih?".
     // Pas kita klik salah satu kelas, fungsi ini jalan buat nyari daftar siswa yang udah kecatet di kelas tersebut.
-    // Pastinya, dicari yang sesuai sama tahun ajaran yang lagi jalan (aktif) sekarang.
-    public function show($classId)
+    // Nampilin daftar siswa di dalam kelas, mendukung filter tahun ajaran aktif maupun riwayat lampau.
+    public function show(Request $request, $classId)
     {
         $activeYear = AcademicYear::where('is_active', true)->first();
+        $selectedYearId = $request->query('academic_year_id', $activeYear ? $activeYear->id : null);
+        $selectedYear = AcademicYear::find($selectedYearId) ?? $activeYear;
         $classRoom = ClassRoom::findOrFail($classId);
         
+        $academicYears = AcademicYear::orderBy('year_name', 'desc')->get();
+
         $enrollments = ClassEnrollment::with('student.studentProfile')
             ->where('class_room_id', $classId)
-            ->where('academic_year_id', $activeYear->id)
+            ->where('academic_year_id', $selectedYear->id)
             ->get()
             ->sortBy(fn($e) => strtolower($e->student->studentProfile->full_name ?? ''));
 
-        return view('admin.class-enrollments.show', compact('classRoom', 'enrollments', 'activeYear'));
+        return view('admin.class-enrollments.show', compact('classRoom', 'enrollments', 'activeYear', 'selectedYear', 'academicYears'));
     }
 
     // Kalau kita mau masukin siswa baru ke dalam kelas, kita bakal dilempar ke fungsi ini.
@@ -234,6 +238,7 @@ class ClassEnrollmentController extends Controller
         $destinationClasses = ClassRoom::where('grade_level', 9)->orderBy('name')->get();
 
         $students = [];
+        $graduatedStudents = [];
         $sourceYearId = $request->get('source_year_id');
         $sourceClassId = $request->get('source_class_id');
         $destinationClassId = $request->get('destination_class_id'); // Biar form ingat class apa yang dipilih
@@ -241,30 +246,33 @@ class ClassEnrollmentController extends Controller
         // Jika Admin sudah memilih tahun dan kelas asal di filter atas
         if ($sourceYearId && $sourceClassId) {
             // Kita cari siswa Kelas 9 tahun lalu
-            // Dan kita buang siswa yang kebetulan sudah terdaftar di kelas manapun di tahun ajaran aktif ini
             $alreadyEnrolledIds = ClassEnrollment::where('academic_year_id', $activeYear->id)
                 ->pluck('student_id')
                 ->toArray();
 
-            $enrollments = ClassEnrollment::with(['student.studentProfile' => function($q) {
-                    $q->where('status', 'aktif');
-                }])
+            $enrollments = ClassEnrollment::with('student.studentProfile')
                 ->where('academic_year_id', $sourceYearId)
                 ->where('class_room_id', $sourceClassId)
                 ->get();
 
-            // Saring agar hanya menampilkan siswa yang aktif dan belum dapet kelas di tahun ini
             foreach ($enrollments as $enrollment) {
-                if ($enrollment->student && $enrollment->student->studentProfile && $enrollment->student->studentProfile->status === 'aktif') {
-                    if (!in_array($enrollment->student_id, $alreadyEnrolledIds)) {
+                if ($enrollment->student && $enrollment->student->studentProfile) {
+                    $profileStatus = $enrollment->student->studentProfile->status;
+                    
+                    // Saring siswa yang aktif dan belum dapat kelas di tahun aktif ini (perlu diproses)
+                    if ($profileStatus === 'aktif' && !in_array($enrollment->student_id, $alreadyEnrolledIds)) {
                         $students[] = $enrollment->student;
+                    }
+                    // Siswa yang sudah berstatus lulus (Alumni) dari kelas ini
+                    elseif ($profileStatus === 'lulus' || $enrollment->status === 'lulus') {
+                        $graduatedStudents[] = $enrollment->student;
                     }
                 }
             }
         }
 
         return view('admin.class-enrollments.graduate', compact(
-            'activeYear', 'previousYears', 'sourceClasses', 'destinationClasses', 'students', 'sourceYearId', 'sourceClassId', 'destinationClassId'
+            'activeYear', 'previousYears', 'sourceClasses', 'destinationClasses', 'students', 'graduatedStudents', 'sourceYearId', 'sourceClassId', 'destinationClassId'
         ));
     }
 

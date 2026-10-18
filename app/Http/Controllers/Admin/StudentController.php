@@ -27,6 +27,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
+        $status = $request->query('status');
 
         $query = User::where('role', 'siswa')
             ->with('studentProfile');
@@ -42,11 +43,17 @@ class StudentController extends Controller
             });
         }
 
+        if ($status) {
+            $query->whereHas('studentProfile', function($sp) use ($status) {
+                $sp->where('status', $status);
+            });
+        }
+
         $students = $query->orderBy(StudentProfile::select('full_name')->whereColumn('student_profiles.user_id', 'users.id'), 'asc')
             ->paginate(10)
             ->appends($request->all());
 
-        return view('admin.students.index', compact('students', 'search'));
+        return view('admin.students.index', compact('students', 'search', 'status'));
     }
 
     // Nampilin form tambah data

@@ -231,17 +231,19 @@
                                                     Apakah Anda yakin ingin menolak permohonan pendaftaran dari <span class="font-bold text-slate-900">{{ $registration->student->studentProfile->full_name ?? ('Siswa NIS ' . ($registration->student->studentProfile->nis ?? '-')) }}</span> untuk ekstrakurikuler <span class="font-bold text-slate-900">{{ $registration->extracurricular->name }}</span>?
                                                 </p>
                                                 
-                                                <form action="{{ route('extracurricular-registrations.reject', $registration->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">
+                                                <form action="{{ route('extracurricular-registrations.reject', $registration->id) }}" method="POST">
                                                     @csrf
                                                     @method('PATCH')
                                                     
-                                                    <button type="button" onclick="document.getElementById('rejectModal-{{ $registration->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm">
-                                                        Batal
-                                                    </button>
-                                                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                                        <span>Ya, Tolak Pendaftaran</span>
-                                                    </button>
+                                                    <div style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; gap: 12px !important; width: 100% !important;">
+                                                        <button type="button" onclick="document.getElementById('rejectModal-{{ $registration->id }}').classList.add('hidden')" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm whitespace-nowrap">
+                                                            Batal
+                                                        </button>
+                                                        <button type="submit" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95 whitespace-nowrap">
+                                                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                            <span>Ya, Tolak Pendaftaran</span>
+                                                        </button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>

@@ -55,14 +55,21 @@
             </div>
             
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-                <!-- Form Pencarian -->
-                <form action="{{ route('students.index') }}" method="GET" class="w-full sm:w-auto">
-                    <div class="relative w-full sm:w-64">
+                <!-- Form Pencarian & Filter Status -->
+                <form action="{{ route('students.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                    <div class="relative w-full sm:w-60">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-navy-base/60">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
                         <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari nama / NIS..." class="w-full bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl pl-9 pr-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all placeholder:text-gray-muted/60 shadow-sm">
                     </div>
+
+                    <select name="status" onchange="this.form.submit()" class="w-full sm:w-auto bg-white border border-navy-light/40 text-navy-dark font-semibold text-xs rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none shadow-sm cursor-pointer">
+                        <option value="">Semua Status</option>
+                        <option value="aktif" {{ request('status') === 'aktif' ? 'selected' : '' }}>Siswa Aktif</option>
+                        <option value="lulus" {{ request('status') === 'lulus' ? 'selected' : '' }}>Alumni (Lulus)</option>
+                        <option value="keluar" {{ request('status') === 'keluar' ? 'selected' : '' }}>Keluar</option>
+                    </select>
                 </form>
 
                 {{-- FUNGSI KODE: Tombol pemicu modal pop-up untuk mengimpor berkas Excel siswa --}}
@@ -88,6 +95,7 @@
                         <th class="px-7 py-4 font-bold">NIS</th>
                         <th class="px-7 py-4 font-bold">No. Telepon Siswa</th>
                         <th class="px-7 py-4 font-bold">No. Telepon Orang Tua</th>
+                        <th class="px-7 py-4 font-bold text-center">Status</th>
                         <th class="px-7 py-4 font-bold text-center w-36">Aksi</th>
                     </tr>
                 </thead>
@@ -137,6 +145,25 @@
                             @endif
                         </td>
                         <td class="px-7 py-4 text-center whitespace-nowrap">
+                            @php $st = $student->studentProfile->status ?? 'aktif'; @endphp
+                            @if($st === 'lulus')
+                                <span class="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    Alumni (Lulus)
+                                </span>
+                            @elseif($st === 'keluar')
+                                <span class="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 text-rose-700 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                    Keluar
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 text-blue-700 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                    Aktif
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-7 py-4 text-center whitespace-nowrap">
                             <div class="flex justify-center items-center gap-2">
                                 <!-- Tombol Ubah (Edit) -->
                                 <a href="{{ route('students.edit', $student->id) }}" class="text-gray-muted hover:text-navy-base transition-colors p-2 rounded-xl hover:bg-navy-light/30 border border-transparent hover:border-navy-light/50 flex items-center justify-center bg-white" title="Ubah Data">
@@ -159,7 +186,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-7 py-16 text-center">
+                        <td colspan="7" class="px-7 py-16 text-center">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="bg-navy-light/10 p-4 rounded-2xl mb-4 border border-navy-light/30">
                                     <svg class="w-10 h-10 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">

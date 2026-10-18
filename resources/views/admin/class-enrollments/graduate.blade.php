@@ -160,15 +160,88 @@
                     </div>
                 </form>
             @else
-                <div class="p-12 text-center text-slate-500 flex flex-col items-center">
-                    <div class="bg-slate-100 border border-slate-200 p-4 rounded-full mb-4 text-slate-400">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    </div>
-                    <h4 class="text-base font-bold text-slate-800 mb-1 font-heading">Tidak Ada Siswa Aktif</h4>
-                    <p class="max-w-md text-xs leading-relaxed text-slate-500">Semua siswa di kelas tersebut mungkin sudah diluluskan, atau sudah dimasukkan ke kelas lain pada tahun ajaran ini.</p>
+                <div class="p-8 text-center text-slate-500 flex flex-col items-center">
+                    @if(count($graduatedStudents) > 0)
+                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl mb-3 text-emerald-600">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 mb-1 font-heading">Seluruh Siswa di Kelas Ini Telah Lulus (Alumni)</h4>
+                        <p class="max-w-md text-xs leading-relaxed text-slate-500">Semua siswa pada kelas dan tahun ajaran asal yang Anda pilih telah diproses kelulusannya menjadi alumni. Lihat daftar lengkapnya pada tabel di bawah.</p>
+                    @else
+                        <div class="bg-slate-100 border border-slate-200 p-4 rounded-full mb-4 text-slate-400">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-800 mb-1 font-heading">Tidak Ada Siswa Ditemukan</h4>
+                        <p class="max-w-md text-xs leading-relaxed text-slate-500">Tidak ada riwayat pendaftaran siswa di kelas dan tahun ajaran yang dipilih.</p>
+                    @endif
                 </div>
             @endif
         </div>
+
+        {{-- TABEL ALUMNI (SISWA YANG SUDAH LULUS) --}}
+        @if(count($graduatedStudents) > 0)
+        <div class="mt-6 bg-white rounded-2xl shadow-sm border border-emerald-200 overflow-hidden flex flex-col hover:border-emerald-300 transition-colors duration-200">
+            <div class="px-7 py-5 border-b border-emerald-100 bg-emerald-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-emerald-100 p-2 rounded-xl text-emerald-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 font-heading tracking-wide">Daftar Siswa yang Telah Lulus (Alumni)</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Daftar lulusan dari kelas dan tahun ajaran asal yang dipilih.</p>
+                    </div>
+                </div>
+                <span class="bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-lg tracking-wider">{{ count($graduatedStudents) }} Alumni Terdata</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-wider font-bold border-b border-slate-100">
+                            <th class="px-7 py-3.5 w-16 text-center">No</th>
+                            <th class="px-7 py-3.5">NIS</th>
+                            <th class="px-7 py-3.5">Nama Lengkap Siswa</th>
+                            <th class="px-7 py-3.5">Jenis Kelamin</th>
+                            <th class="px-7 py-3.5">No. Telepon Ortu</th>
+                            <th class="px-7 py-3.5 text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-slate-100 text-slate-800">
+                        @foreach($graduatedStudents as $idx => $student)
+                        <tr class="hover:bg-emerald-50/30 transition-colors">
+                            <td class="px-7 py-4 text-center font-mono font-bold text-slate-400">
+                                {{ $idx + 1 }}
+                            </td>
+                            <td class="px-7 py-4">
+                                <span class="font-mono text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg">{{ $student->studentProfile->nis ?? '-' }}</span>
+                            </td>
+                            <td class="px-7 py-4">
+                                <div class="font-bold text-slate-900">{{ $student->studentProfile->full_name ?? ($student->studentProfile->nis ? 'NIS ' . $student->studentProfile->nis : 'Siswa') }}</div>
+                                @if($student->studentProfile && $student->studentProfile->phone_number)
+                                    <div class="text-[11px] text-slate-500 font-mono mt-0.5">
+                                        {{ $student->studentProfile->phone_number }}
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="px-7 py-4 capitalize text-xs font-medium text-slate-600">
+                                {{ $student->studentProfile->gender ?? '-' }}
+                            </td>
+                            <td class="px-7 py-4 font-mono text-xs text-slate-600">
+                                {{ $student->studentProfile->parent_phone ?? '-' }}
+                            </td>
+                            <td class="px-7 py-4 text-center">
+                                <span class="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    Alumni (Lulus)
+                                </span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
         
         <script>
             // Logika untuk mencentang/menghapus centang semua siswa sekaligus

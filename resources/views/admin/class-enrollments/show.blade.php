@@ -31,12 +31,26 @@
                 {{ $classRoom->grade_level }}
             </div>
             <div>
-                <h2 class="text-xl font-bold text-navy-dark font-heading">Kelas {{ $classRoom->name }}</h2>
-                <div class="flex items-center gap-4 mt-1.5 text-xs text-gray-muted font-medium">
-                    <span class="flex items-center gap-1.5">
+                <div class="flex items-center gap-3">
+                    <h2 class="text-xl font-bold text-navy-dark font-heading">Kelas {{ $classRoom->name }}</h2>
+                    @if($selectedYear->id != $activeYear->id)
+                        <span class="bg-amber-100 text-amber-800 border border-amber-200 text-[11px] px-2.5 py-0.5 rounded-full font-bold">Arsip / Riwayat Lampau</span>
+                    @else
+                        <span class="bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px] px-2.5 py-0.5 rounded-full font-bold">Tahun Ajaran Aktif</span>
+                    @endif
+                </div>
+                <div class="flex items-center gap-4 mt-2 text-xs text-gray-muted font-medium">
+                    <form method="GET" action="{{ route('class-enrollments.show', $classRoom->id) }}" class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-navy-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        Tahun Ajaran: <strong class="text-navy-dark">{{ $activeYear->year_name }}</strong>
-                    </span>
+                        <span class="font-bold text-slate-700">Tahun Ajaran:</span>
+                        <select name="academic_year_id" onchange="this.form.submit()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1 font-bold text-navy-dark focus:ring-2 focus:ring-navy-base cursor-pointer">
+                            @foreach($academicYears as $year)
+                                <option value="{{ $year->id }}" {{ $selectedYear->id == $year->id ? 'selected' : '' }}>
+                                    {{ $year->year_name }} {{ $year->is_active ? '(Aktif)' : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
                 </div>
             </div>
         </div>
@@ -47,23 +61,31 @@
                 <span class="text-[9px] uppercase font-bold text-gray-muted tracking-widest">Total Siswa</span>
             </div>
             
-            <!-- Tombol Migrasi Kenaikan Kelas (Baru) -->
-            <a href="{{ route('class-enrollments.promote', $classRoom->id) }}" class="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-700 text-white-off px-5 py-2.5 text-sm rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-lg hover:shadow-emerald-600/20 active:scale-95 border border-transparent" title="Tarik siswa dari kelas lama">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                Migrasi Kenaikan
-            </a>
-            
-            <a href="{{ route('class-enrollments.add-students', $classRoom->id) }}" class="flex-1 md:flex-none bg-navy-dark hover:bg-navy-base text-white-off px-5 py-2.5 text-sm rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-lg hover:shadow-navy-base/20 active:scale-95 border border-transparent">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                Tambah Siswa
-            </a>
+            @if($selectedYear->id == $activeYear->id)
+                <!-- Tombol Migrasi Kenaikan Kelas (Baru) -->
+                <a href="{{ route('class-enrollments.promote', $classRoom->id) }}" class="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-700 text-white-off px-5 py-2.5 text-sm rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-lg hover:shadow-emerald-600/20 active:scale-95 border border-transparent" title="Tarik siswa dari kelas lama">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    Migrasi Kenaikan
+                </a>
+                
+                <a href="{{ route('class-enrollments.add-students', $classRoom->id) }}" class="flex-1 md:flex-none bg-navy-dark hover:bg-navy-base text-white-off px-5 py-2.5 text-sm rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-lg hover:shadow-navy-base/20 active:scale-95 border border-transparent">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    Tambah Siswa
+                </a>
+            @else
+                <div class="text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3.5 py-2 rounded-xl font-medium flex items-center gap-2">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Menampilkan arsip riwayat kelas</span>
+                </div>
+            @endif
         </div>
     </div>
 
     <!-- TABEL DAFTAR SISWA -->
     <div class="bg-white rounded-2xl shadow-sm shadow-navy-base/5 border border-navy-light/30 overflow-hidden flex flex-col group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
-        <div class="px-7 py-5 border-b border-navy-light/30 bg-white-off/30">
+        <div class="px-7 py-5 border-b border-navy-light/30 bg-white-off/30 flex justify-between items-center">
             <h3 class="font-bold text-navy-dark font-heading tracking-wide text-base">Daftar Siswa di Kelas Ini</h3>
+            <span class="text-xs font-semibold text-slate-500">T.A. {{ $selectedYear->year_name }}</span>
         </div>
         
         <div class="overflow-x-auto">
@@ -74,7 +96,10 @@
                         <th class="px-7 py-4 font-bold">NIS</th>
                         <th class="px-7 py-4 font-bold">Nama Lengkap</th>
                         <th class="px-7 py-4 font-bold">Jenis Kelamin</th>
+                        <th class="px-7 py-4 font-bold text-center">Status</th>
+                        @if($selectedYear->id == $activeYear->id)
                         <th class="px-7 py-4 font-bold text-right">Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody class="text-sm divide-y divide-white-off text-navy-base">
@@ -103,11 +128,33 @@
                                 <span class="text-gray-muted italic">-</span>
                             @endif
                         </td>
+                        <td class="px-7 py-4 text-center">
+                            @php
+                                $studentStatus = $enrollment->student->studentProfile->status ?? 'aktif';
+                            @endphp
+                            @if($studentStatus === 'lulus' || $enrollment->status === 'lulus')
+                                <span class="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    Alumni (Lulus)
+                                </span>
+                            @elseif($studentStatus === 'keluar')
+                                <span class="inline-flex items-center gap-1.5 bg-rose-50 border border-rose-200 text-rose-700 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    Keluar
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 text-blue-700 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                    Aktif
+                                </span>
+                            @endif
+                        </td>
+                        @if($selectedYear->id == $activeYear->id)
                         <td class="px-7 py-4 text-right">
                             <button onclick="document.getElementById('removeModal-{{ $enrollment->id }}').classList.remove('hidden')" class="inline-flex items-center justify-center p-2 text-gray-muted hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-xl transition-all shadow-sm" title="Keluarkan dari Kelas">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </td>
+                        @endif
                     </tr>
 
                     <!-- MODAL HAPUS ENROLLMENT -->
@@ -123,33 +170,43 @@
                                     Anda yakin ingin mengeluarkan <span class="font-bold text-slate-900">{{ $enrollment->student->studentProfile->full_name ?? ($enrollment->student->studentProfile->nis ? 'NIS ' . $enrollment->student->studentProfile->nis : 'Siswa') }}</span> dari kelas ini? Data kehadiran dan nilai mungkin akan terpengaruh.
                                 </p>
                                 
-                                <form action="{{ route('class-enrollments.destroy', $enrollment->id) }}" method="POST" class="flex flex-col-reverse sm:flex-row gap-3 justify-center items-center">
+                                <form action="{{ route('class-enrollments.destroy', $enrollment->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     
-                                    <button type="button" onclick="document.getElementById('removeModal-{{ $enrollment->id }}').classList.add('hidden')" class="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm">
-                                        Batal
-                                    </button>
-                                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        <span>Ya, Keluarkan</span>
-                                    </button>
+                                    <div style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; gap: 12px !important; width: 100% !important;">
+                                        <button type="button" onclick="document.getElementById('removeModal-{{ $enrollment->id }}').classList.add('hidden')" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-all active:scale-95 shadow-sm whitespace-nowrap">
+                                            Batal
+                                        </button>
+                                        <button type="submit" style="display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 auto !important;" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95 whitespace-nowrap">
+                                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            <span>Ya, Keluarkan</span>
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-7 py-16 text-center">
+                        <td colspan="{{ $selectedYear->id == $activeYear->id ? 6 : 5 }}" class="px-7 py-16 text-center">
                             <div class="flex flex-col items-center justify-center">
                                 <div class="w-16 h-16 bg-white-off rounded-full flex items-center justify-center text-gray-muted mb-4 border border-navy-light/40">
                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                 </div>
                                 <p class="text-base font-bold text-navy-dark font-heading mb-1">Belum Ada Siswa</p>
-                                <p class="text-xs mt-1.5 text-center text-gray-muted mb-5">Kelas ini masih kosong. Silakan tambahkan siswa.</p>
+                                <p class="text-xs mt-1.5 text-center text-gray-muted mb-5">
+                                    @if($selectedYear->id == $activeYear->id)
+                                        Kelas ini masih kosong. Silakan tambahkan siswa.
+                                    @else
+                                        Tidak ada data siswa terdaftar untuk kelas ini pada Tahun Ajaran {{ $selectedYear->year_name }}.
+                                    @endif
+                                </p>
+                                @if($selectedYear->id == $activeYear->id)
                                 <a href="{{ route('class-enrollments.add-students', $classRoom->id) }}" class="text-xs text-navy-base font-bold bg-navy-light/20 px-4 py-2 rounded-lg border border-navy-light/40 hover:bg-navy-light/40 transition-colors">
                                     + Tambah Siswa Sekarang
                                 </a>
+                                @endif
                             </div>
                         </td>
                     </tr>
