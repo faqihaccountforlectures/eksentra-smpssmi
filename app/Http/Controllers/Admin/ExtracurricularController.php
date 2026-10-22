@@ -16,8 +16,15 @@ class ExtracurricularController extends Controller
      */
     public function index()
     {
-        // Ambil semua data ekskul beserta data coach dan profilnya, urutkan berdasarkan nama, paginate 5
-        $extracurriculars = Extracurricular::with('coach.coachProfile')->orderBy('name')->paginate(5);
+        // Ambil semua data ekskul beserta data coach dan profilnya, serta hitung riwayat siswa terdaftar (termasuk yang soft delete)
+        $extracurriculars = Extracurricular::with('coach.coachProfile')
+            ->withCount([
+                'registrations as total_members_count' => function ($q) {
+                    $q->withTrashed();
+                }
+            ])
+            ->orderBy('name')
+            ->paginate(5);
         
         return view('admin.extracurriculars.index', compact('extracurriculars'));
     }
@@ -120,11 +127,18 @@ class ExtracurricularController extends Controller
 
     /**
      * Hapus data ekstrakurikuler selamanya dari database.
+     * Dilengkapi proteksi integritas: Menolak penghapusan jika ekskul masih memiliki data pendaftar/nilai/pembayaran.
      */
     public function destroy(string $id)
     {
         $extracurricular = Extracurricular::findOrFail($id);
         
+        // Proteksi: Cegah penghapusan jika ekskul masih memiliki riwayat pendaftaran siswa (termasuk soft-deleted), pembayaran, atau nilai
+        if ($extracurricular->registrations()->withTrashed()->exists()) {
+            return redirect()->route('extracurriculars.index')
+                             ->with('error', "Ekstrakurikuler '{$extracurricular->name}' tidak dapat dihapus karena sudah memiliki riwayat siswa terdaftar, catatan nilai, atau pembayaran.");
+        }
+
         if ($extracurricular->image) {
             Storage::disk('public')->delete($extracurricular->image);
         }
@@ -132,6 +146,6 @@ class ExtracurricularController extends Controller
         $extracurricular->delete();
 
         return redirect()->route('extracurriculars.index')
-                         ->with('success', 'Oke, data Ekstrakurikuler telah dihapus selamanya.');
+                         ->with('success', "Ekstrakurikuler '{$extracurricular->name}' berhasil dihapus.");
     }
 }
