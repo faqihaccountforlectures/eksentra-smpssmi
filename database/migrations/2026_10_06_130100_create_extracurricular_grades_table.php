@@ -15,11 +15,14 @@ return new class extends Migration
         Schema::create('extracurricular_grades', function (Blueprint $table) {
             $table->id();
             
-            // Relasi ke pendaftaran ekstrakurikuler siswa
-            $table->foreignId('registration_id')->constrained('extracurricular_registrations')->onDelete('cascade');
+            // Relasi ke pendaftaran ekstrakurikuler siswa (restrict agar histori nilai tidak terhapus jika siswa keluar)
+            $table->foreignId('registration_id')->constrained('extracurricular_registrations')->onDelete('restrict');
             
             // Relasi ke tahun ajaran
             $table->foreignId('academic_year_id')->constrained('academic_years')->onDelete('cascade');
+
+            // Relasi ke pembina/coach yang memberikan penilaian (mencegah rusaknya histori nilai saat rolling pembina)
+            $table->foreignId('coach_id')->nullable()->constrained('users')->nullOnDelete();
             
             // Semester: Ganjil atau Genap
             $table->enum('semester', ['ganjil', 'genap']);

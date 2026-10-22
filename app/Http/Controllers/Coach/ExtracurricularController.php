@@ -235,6 +235,7 @@ class ExtracurricularController extends Controller
                     'semester' => 'ganjil',
                 ],
                 [
+                    'coach_id' => $extracurricular->coach_id,
                     'grade' => $validated['ganjil_grade'],
                     'score' => $validated['ganjil_score'] ?? null,
                     'notes' => $validated['ganjil_notes'] ?? null,
@@ -258,6 +259,7 @@ class ExtracurricularController extends Controller
                     'semester' => 'genap',
                 ],
                 [
+                    'coach_id' => $extracurricular->coach_id,
                     'grade' => $validated['genap_grade'],
                     'score' => $validated['genap_score'] ?? null,
                     'notes' => $validated['genap_notes'] ?? null,

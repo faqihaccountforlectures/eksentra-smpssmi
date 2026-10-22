@@ -31,7 +31,7 @@ class ExtracurricularGradeSeeder extends Seeder
 
         // 1. Nilai untuk TA 2025/2026 (Semester Ganjil dan Genap)
         if ($year2025) {
-            $registrations2025 = ExtracurricularRegistration::where('academic_year_id', $year2025->id)->get();
+            $registrations2025 = ExtracurricularRegistration::with('extracurricular')->where('academic_year_id', $year2025->id)->get();
 
             foreach ($registrations2025 as $index => $reg) {
                 // Semester Ganjil
@@ -43,6 +43,7 @@ class ExtracurricularGradeSeeder extends Seeder
                         'semester' => 'ganjil',
                     ],
                     [
+                        'coach_id' => $reg->extracurricular->coach_id ?? null,
                         'grade' => $evalGanjil['grade'],
                         'score' => $evalGanjil['score'],
                         'notes' => $evalGanjil['notes'],
@@ -58,6 +59,7 @@ class ExtracurricularGradeSeeder extends Seeder
                         'semester' => 'genap',
                     ],
                     [
+                        'coach_id' => $reg->extracurricular->coach_id ?? null,
                         'grade' => $evalGenap['grade'],
                         'score' => $evalGenap['score'],
                         'notes' => $evalGenap['notes'],
@@ -68,7 +70,7 @@ class ExtracurricularGradeSeeder extends Seeder
 
         // 2. Nilai untuk TA 2026/2027 (Evaluasi Berjalan Semester Ganjil)
         if ($year2026) {
-            $registrations2026 = ExtracurricularRegistration::where('academic_year_id', $year2026->id)->get();
+            $registrations2026 = ExtracurricularRegistration::with('extracurricular')->where('academic_year_id', $year2026->id)->get();
 
             foreach ($registrations2026 as $index => $reg) {
                 $eval = $sampleEvaluations[($index + 1) % count($sampleEvaluations)];
@@ -79,6 +81,7 @@ class ExtracurricularGradeSeeder extends Seeder
                         'semester' => 'ganjil',
                     ],
                     [
+                        'coach_id' => $reg->extracurricular->coach_id ?? null,
                         'grade' => $eval['grade'],
                         'score' => $eval['score'],
                         'notes' => $eval['notes'],
