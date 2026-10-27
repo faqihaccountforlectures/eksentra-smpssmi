@@ -92,14 +92,23 @@
                 @endif
 
                 <!-- TAB NAVIGASI PERAN LOGIN -->
+                @php
+                    $activeTab = session('active_tab', old('login_type', 'siswa'));
+                    if (!in_array($activeTab, ['siswa', 'coach', 'admin'])) {
+                        $activeTab = 'siswa';
+                    }
+                @endphp
                 <div class="grid grid-cols-3 p-1 bg-slate-100 border border-slate-200 rounded-xl mb-4 text-xs font-bold gap-1">
-                    <button type="button" id="tab-btn-siswa" onclick="switchLoginTab('siswa')" class="py-2 rounded-lg transition-all shadow-sm bg-blue-800 text-white font-bold text-center">
+                    <button type="button" id="tab-btn-siswa" onclick="switchLoginTab('siswa')" 
+                        class="py-2 rounded-lg transition-colors duration-150 text-center {{ $activeTab === 'siswa' ? 'shadow-sm bg-blue-800 text-white font-bold' : 'text-slate-600 font-medium hover:text-blue-900 border border-transparent' }}">
                         🎓 Siswa
                     </button>
-                    <button type="button" id="tab-btn-coach" onclick="switchLoginTab('coach')" class="py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent text-center">
+                    <button type="button" id="tab-btn-coach" onclick="switchLoginTab('coach')" 
+                        class="py-2 rounded-lg transition-colors duration-150 text-center {{ $activeTab === 'coach' ? 'shadow-sm bg-blue-800 text-white font-bold' : 'text-slate-600 font-medium hover:text-blue-900 border border-transparent' }}">
                         🏅 Pembina
                     </button>
-                    <button type="button" id="tab-btn-admin" onclick="switchLoginTab('admin')" class="py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent text-center">
+                    <button type="button" id="tab-btn-admin" onclick="switchLoginTab('admin')" 
+                        class="py-2 rounded-lg transition-colors duration-150 text-center {{ $activeTab === 'admin' ? 'shadow-sm bg-blue-800 text-white font-bold' : 'text-slate-600 font-medium hover:text-blue-900 border border-transparent' }}">
                         🔐 Admin
                     </button>
                 </div>
@@ -107,10 +116,10 @@
                 <!-- ========================================================= -->
                 <!-- TAB 1: LOGIN SISWA (NIS & PASSWORD) -->
                 <!-- ========================================================= -->
-                <div id="panel-siswa" class="space-y-3.5">
+                <div id="panel-siswa" class="space-y-3.5 {{ $activeTab === 'siswa' ? '' : 'hidden' }}">
                     <div class="p-3 rounded-xl bg-blue-50/80 border border-blue-200 text-left">
                         <p class="text-xs font-bold text-blue-900 mb-0.5 flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path></svg>
+                            <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                             Akses Peserta Didik
                         </p>
                         <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
@@ -138,7 +147,7 @@
                                     </svg>
                                 </button>
                             </div>
-                            <p class="text-[10px] text-slate-500 mt-1 font-medium">Kata sandi default: <code class="bg-blue-50 text-blue-900 px-1 py-0.5 rounded font-mono font-bold">siswasmpsmi</code></p>
+                            <p class="text-[10px] text-slate-500 mt-1 font-medium">Kata sandi awal: Tanggal lahir (format <code class="bg-blue-50 text-blue-900 px-1 py-0.5 rounded font-mono font-bold">YYYYMMDD</code>, misal: 20100817)</p>
                         </div>
 
                         <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-extrabold py-2.5 rounded-xl transition-all duration-200 shadow-md shadow-blue-900/20 active:scale-95 text-xs">
@@ -150,7 +159,7 @@
                 <!-- ========================================================= -->
                 <!-- TAB 2: LOGIN PEMBINA (USERNAME / EMAIL & PASSWORD) -->
                 <!-- ========================================================= -->
-                <div id="panel-coach" class="hidden space-y-3.5">
+                <div id="panel-coach" class="space-y-3.5 {{ $activeTab === 'coach' ? '' : 'hidden' }}">
                     <div class="p-3 rounded-xl bg-indigo-50/80 border border-indigo-200 text-left">
                         <p class="text-xs font-bold text-indigo-900 mb-0.5 flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -181,7 +190,7 @@
                                     </svg>
                                 </button>
                             </div>
-                            <p class="text-[10px] text-slate-500 mt-1 font-medium">Kata sandi default: <code class="bg-indigo-50 text-indigo-900 px-1 py-0.5 rounded font-mono font-bold">pembinasmpsmi</code></p>
+                            <p class="text-[10px] text-slate-500 mt-1 font-medium">Kata sandi awal: Tanggal lahir (format <code class="bg-indigo-50 text-indigo-900 px-1 py-0.5 rounded font-mono font-bold">YYYYMMDD</code>, misal: 19850512)</p>
                         </div>
 
                         <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-extrabold py-2.5 rounded-xl transition-all duration-200 shadow-md shadow-blue-900/20 active:scale-95 text-xs">
@@ -193,7 +202,7 @@
                 <!-- ========================================================= -->
                 <!-- TAB 3: LOGIN ADMINISTRATOR (USERNAME & PASSWORD) -->
                 <!-- ========================================================= -->
-                <div id="panel-admin" class="hidden space-y-3.5">
+                <div id="panel-admin" class="space-y-3.5 {{ $activeTab === 'admin' ? '' : 'hidden' }}">
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-left">
                         <p class="text-xs font-bold text-slate-800 mb-0.5 flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -319,8 +328,8 @@
         // 2. Tab Switch Handler (Siswa, Coach, Admin)
         function switchLoginTab(type) {
             const tabs = ['siswa', 'coach', 'admin'];
-            const activeClass = "py-2 rounded-lg transition-all shadow-sm bg-blue-800 text-white font-bold text-center";
-            const inactiveClass = "py-2 rounded-lg transition-all text-slate-600 font-medium hover:text-blue-900 border border-transparent text-center";
+            const activeClass = "py-2 rounded-lg transition-colors duration-150 shadow-sm bg-blue-800 text-white font-bold text-center";
+            const inactiveClass = "py-2 rounded-lg transition-colors duration-150 text-slate-600 font-medium hover:text-blue-900 border border-transparent text-center";
 
             tabs.forEach(t => {
                 const btn = document.getElementById('tab-btn-' + t);
@@ -349,15 +358,6 @@
                 icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
             }
         }
-
-        // Buka tab sesuai session atau error jika ada
-        @if(session('active_tab'))
-            switchLoginTab('{{ session('active_tab') }}');
-        @elseif(old('login_type'))
-            switchLoginTab('{{ old('login_type') }}');
-        @else
-            switchLoginTab('siswa');
-        @endif
     </script>
 
 </body>

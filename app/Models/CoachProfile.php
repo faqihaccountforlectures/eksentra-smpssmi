@@ -17,7 +17,12 @@ class CoachProfile extends Model
         'user_id',
         'full_name',
         'gender',
+        'birth_date',
         'phone_number',
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',
     ];
 
     /**

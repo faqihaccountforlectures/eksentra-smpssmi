@@ -129,15 +129,53 @@ class StudentSeeder extends Seeder
             ['nis' => '262707020', 'name' => 'Syifa Fauziah', 'gender' => 'perempuan', 'status' => 'aktif'],
         ];
 
-        $studentPassword = Hash::make('siswasmpsmi');
+        // Generator tanggal lahir acak unik untuk siswa (dijamin tidak ada yang sama antar seluruh siswa dan deterministik)
+        mt_srand(123456);
+        $usedDates = ['2011-01-23' => true];
 
         foreach ($students as $index => $item) {
+            if ($item['nis'] === '242508011') {
+                $birthDateStr = '2011-01-23';
+                $birthDateFormatted = '20110123';
+            } else {
+                // Tentukan rentang tahun lahir berdasarkan cohort/tingkat kelas siswa agar realistis
+                if ($index < 20) {
+                    // Cohort 1: Alumni / Lulusan (usia 15-16 tahun)
+                    $startYear = 2010;
+                    $endYear = 2011;
+                } elseif ($index < 40) {
+                    // Cohort 2: Kelas 9 (usia 14-15 tahun)
+                    $startYear = 2011;
+                    $endYear = 2012;
+                } elseif ($index < 60) {
+                    // Cohort 3: Kelas 8 (usia 13-14 tahun)
+                    $startYear = 2012;
+                    $endYear = 2013;
+                } else {
+                    // Cohort 4: Kelas 7 Baru (usia 12-13 tahun)
+                    $startYear = 2013;
+                    $endYear = 2014;
+                }
+
+                // Acak tanggal lahir unik
+                do {
+                    $year = mt_rand($startYear, $endYear);
+                    $month = mt_rand(1, 12);
+                    $maxDays = \Carbon\Carbon::create($year, $month, 1)->daysInMonth;
+                    $day = mt_rand(1, $maxDays);
+                    $birthDateStr = sprintf('%04d-%02d-%02d', $year, $month, $day);
+                } while (isset($usedDates[$birthDateStr]));
+
+                $usedDates[$birthDateStr] = true;
+                $birthDateFormatted = sprintf('%04d%02d%02d', $year, $month, $day);
+            }
+
             $user = User::updateOrCreate(
                 ['username' => $item['nis']],
                 [
-                    'password' => $studentPassword,
+                    'password' => Hash::make($birthDateFormatted),
                     'role' => 'siswa',
-                    'must_change_password' => false,
+                    'must_change_password' => true,
                 ]
             );
 
@@ -151,6 +189,7 @@ class StudentSeeder extends Seeder
                     'nis' => $item['nis'],
                     'full_name' => $item['name'],
                     'gender' => $item['gender'],
+                    'birth_date' => $birthDateStr,
                     'phone_number' => $phoneStudent,
                     'parent_phone' => $phoneParent,
                     'status' => $item['status'],

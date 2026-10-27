@@ -60,25 +60,21 @@ class AdminProfileController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Validasi form penggantian password (current_password dibuat opsional)
+        // Validasi form penggantian password: kata sandi saat ini wajib diisi demi keamanan
         $request->validate([
-            'current_password' => 'nullable|string',
-            'password'         => ['required', 'confirmed', Password::min(8)],
+            'current_password' => ['required', 'string'],
+            'password'         => ['required', 'string', 'confirmed', 'different:current_password', Password::min(8)],
         ], [
-            'password.required'  => 'Password baru wajib diisi.',
-            'password.min'       => 'Password baru minimal harus 8 karakter.',
-            'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+            'current_password.required' => 'Password saat ini wajib diisi.',
+            'password.required'         => 'Password baru wajib diisi.',
+            'password.min'              => 'Password baru minimal harus 8 karakter.',
+            'password.confirmed'        => 'Konfirmasi password baru tidak cocok.',
+            'password.different'        => 'Password baru harus berbeda dari password saat ini.',
         ]);
 
-        // Jika admin mengisi password saat ini, verifikasi kebenarannya
-        if ($request->filled('current_password')) {
-            if (!Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'Password saat ini yang Anda ketikkan tidak sesuai. Silakan periksa kembali.']);
-            }
-
-            if ($request->password === $request->current_password) {
-                return back()->withErrors(['password' => 'Password baru harus berbeda dan tidak boleh sama dengan password saat ini.']);
-            }
+        // Verifikasi kebenaran password saat ini
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini yang Anda ketikkan tidak sesuai. Silakan periksa kembali.']);
         }
 
         // 1. Update password baru ke database (akan di-hash otomatis oleh model User $casts)

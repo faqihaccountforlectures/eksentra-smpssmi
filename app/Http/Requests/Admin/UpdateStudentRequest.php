@@ -34,6 +34,7 @@ class UpdateStudentRequest extends FormRequest
             'nis' => 'required|string|max:20|unique:student_profiles,nis,' . $profileId,
             
             'gender' => 'required|in:laki-laki,perempuan',
+            'birth_date' => 'required|date',
             'phone_number' => 'required|string|max:20',
             'parent_phone' => 'required|string|max:20',
         ];
@@ -50,6 +51,8 @@ class UpdateStudentRequest extends FormRequest
             'nis.unique' => 'NIS tersebut sudah digunakan oleh siswa lain.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in' => 'Pilihan jenis kelamin tidak valid.',
+            'birth_date.required' => 'Tanggal lahir wajib diisi.',
+            'birth_date.date' => 'Format tanggal lahir tidak valid.',
             'phone_number.required' => 'Nomor telepon siswa wajib diisi.',
             'parent_phone.required' => 'Nomor telepon orang tua wajib diisi.',
         ];

@@ -15,9 +15,14 @@ class StudentProfile extends Model
         'nis',
         'full_name',
         'gender',
+        'birth_date',
         'phone_number',
         'parent_phone',
         'status',
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',
     ];
 
     // Relasi balik (Inverse) ke tabel users

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nis', 20)->unique(); // Nomor Induk Siswa (NIS)
             $table->string('full_name', 100); // Nama lengkap siswa
             $table->enum('gender', ['laki-laki', 'perempuan']); // Jenis kelamin siswa
+            $table->date('birth_date'); // Tanggal lahir siswa
             $table->string('phone_number', 20)->nullable(); // Nomor telepon siswa
             $table->string('parent_phone', 20)->nullable(); // Nomor telepon orang tua siswa
             $table->enum('status', ['aktif', 'lulus', 'keluar'])->default('aktif'); // Status siswa

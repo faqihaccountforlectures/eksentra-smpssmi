@@ -33,20 +33,33 @@ class ForcePasswordChangeController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'password' => ['required', 'confirmed', Password::min(6)],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
         ], [
             'password.required'  => 'Kata sandi baru wajib diisi.',
-            'password.min'       => 'Kata sandi baru minimal harus 6 karakter.',
+            'password.min'       => 'Kata sandi baru minimal harus 8 karakter.',
+            'password.letters'   => 'Kata sandi baru harus mengandung setidaknya satu huruf.',
+            'password.numbers'   => 'Kata sandi baru harus mengandung setidaknya satu angka.',
             'password.confirmed' => 'Konfirmasi kata sandi baru tidak cocok.',
         ]);
 
-        // Cek agar kata sandi baru tidak boleh sama persis dengan kata sandi default sistem
-        if ($user->role === 'siswa' && $request->password === 'siswasmpsmi') {
-            return back()->withErrors(['password' => 'Kata sandi baru tidak boleh sama dengan kata sandi default (siswasmpsmi). Silakan buat kata sandi pribadi Anda.']);
+        // Cek agar kata sandi baru tidak boleh sama persis dengan tanggal lahir pengguna (YYYYMMDD)
+        $birthDate = null;
+        if ($user->role === 'siswa') {
+            $birthDate = $user->studentProfile?->birth_date;
+        } elseif ($user->role === 'coach') {
+            $birthDate = $user->coachProfile?->birth_date;
         }
 
-        if ($user->role === 'coach' && $request->password === 'pembinasmpsmi') {
-            return back()->withErrors(['password' => 'Kata sandi baru tidak boleh sama dengan kata sandi default (pembinasmpsmi). Silakan buat kata sandi pribadi Anda.']);
+        if ($birthDate) {
+            $birthDatePass = \Carbon\Carbon::parse($birthDate)->format('Ymd');
+            if ($request->password === $birthDatePass) {
+                return back()->withErrors(['password' => "Kata sandi baru tidak boleh sama dengan tanggal lahir Anda ({$birthDatePass}). Silakan buat kata sandi baru yang berbeda dan aman."]);
+            }
+        }
+
+        // Cegah kata sandi default statis lama
+        if (in_array($request->password, ['siswasmpsmi', 'pembinasmpsmi'])) {
+            return back()->withErrors(['password' => 'Kata sandi baru tidak boleh menggunakan kata sandi default sistem. Silakan buat kata sandi pribadi Anda.']);
         }
 
         // Simpan kata sandi baru (akan di-hash otomatis oleh casting model User)

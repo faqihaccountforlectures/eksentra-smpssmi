@@ -69,6 +69,13 @@
                         </div>
                     </div>
 
+                    <!-- Tanggal Lahir -->
+                    <div>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Tanggal Lahir <span class="text-rose-500">*</span></label>
+                        <input type="date" name="birth_date" value="{{ old('birth_date') }}" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
+                        <p class="text-[11px] text-gray-muted mt-1">Digunakan sebagai kata sandi awal siswa (format YYYYMMDD).</p>
+                    </div>
+
                     <!-- Nomor Telepon Siswa -->
                     <div>
                         <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">No. Telepon Siswa <span class="text-rose-500">*</span></label>
@@ -88,7 +95,7 @@
                     <div class="text-xs text-navy-dark leading-relaxed">
                         <p class="font-bold text-navy-base mb-0.5">Informasi Akses Login Siswa</p>
                         <p class="text-gray-muted">
-                            Siswa akan login menggunakan <strong>NIS</strong> dan kata sandi default <code>siswasmpsmi</code>. Siswa akan diwajibkan membuat kata sandi baru pribadi saat pertama kali masuk ke sistem.
+                            Siswa akan login menggunakan <strong>NIS</strong> dan kata sandi awal berupa <strong>tanggal lahir (format YYYYMMDD, contoh: 20100817)</strong>. Siswa diwajibkan membuat kata sandi baru pribadi saat pertama kali masuk ke sistem.
                         </p>
                     </div>
                 </div>

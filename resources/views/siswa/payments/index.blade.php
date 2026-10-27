@@ -243,7 +243,7 @@
                                     @if($payment->payment_status === 'unpaid')
                                         <span class="text-xs italic text-gray-muted">-</span>
                                     @elseif($payment->proof_of_payment)
-                                        <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-white-off hover:bg-navy-dark hover:text-white-off text-navy-base border border-navy-light/30 rounded-xl transition-all shadow-sm active:scale-95" title="Lihat Bukti Transfer">
+                                        <a href="{{ route('payments.proof', $payment->id) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-white-off hover:bg-navy-dark hover:text-white-off text-navy-base border border-navy-light/30 rounded-xl transition-all shadow-sm active:scale-95" title="Lihat Bukti Transfer">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                         </a>
                                     @else

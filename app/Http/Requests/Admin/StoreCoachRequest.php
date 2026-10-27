@@ -28,6 +28,9 @@ class StoreCoachRequest extends FormRequest
             
             // Jenis kelamin diwajibkan
             'gender' => 'required|in:laki-laki,perempuan',
+
+            // Tanggal lahir diwajibkan untuk kata sandi default pembina (YYYYMMDD)
+            'birth_date' => 'required|date',
             
             // Nomor telepon diwajibkan, maksimal 20 karakter
             'phone_number' => 'required|string|max:20',
@@ -45,6 +48,8 @@ class StoreCoachRequest extends FormRequest
             'full_name.required' => 'Nama lengkap pembina wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in' => 'Pilihan jenis kelamin tidak valid.',
+            'birth_date.required' => 'Tanggal lahir pembina wajib diisi.',
+            'birth_date.date' => 'Format tanggal lahir pembina tidak valid.',
             'phone_number.required' => 'Nomor WA / Telepon wajib diisi.',
         ];
     }

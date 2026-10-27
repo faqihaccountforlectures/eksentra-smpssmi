@@ -26,6 +26,7 @@ class UpdateCoachRequest extends FormRequest
             'username' => 'required|string|max:100|unique:users,username,' . $userId,
             'full_name' => 'required|string|max:255',
             'gender' => 'required|in:laki-laki,perempuan',
+            'birth_date' => 'required|date',
             'phone_number' => 'required|string|max:20',
         ];
     }
@@ -41,6 +42,8 @@ class UpdateCoachRequest extends FormRequest
             'full_name.required' => 'Nama lengkap pembina wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'gender.in' => 'Pilihan jenis kelamin tidak valid.',
+            'birth_date.required' => 'Tanggal lahir pembina wajib diisi.',
+            'birth_date.date' => 'Format tanggal lahir pembina tidak valid.',
             'phone_number.required' => 'Nomor WA / Telepon wajib diisi.',
         ];
     }

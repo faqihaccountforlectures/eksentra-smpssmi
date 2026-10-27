@@ -70,8 +70,14 @@ class AuthController extends Controller
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
 
-            // Cek jika siswa harus mengubah kata sandi default
-            if ($user->must_change_password || Hash::check('siswasmpsmi', $user->password)) {
+            // Cek jika siswa harus mengubah kata sandi default (berdasarkan flag atau jika login menggunakan password tanggal lahir)
+            $birthDate = $studentProfile->birth_date;
+            $isDefaultPassword = ($birthDate && $request->password === $birthDate->format('Ymd')) || $request->password === 'siswasmpsmi';
+
+            if ($user->must_change_password || $isDefaultPassword) {
+                if (!$user->must_change_password) {
+                    $user->update(['must_change_password' => true]);
+                }
                 return redirect()->route('password.force_change');
             }
 
@@ -108,8 +114,14 @@ class AuthController extends Controller
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
 
-            // Cek jika pembina harus mengubah kata sandi default
-            if ($user->must_change_password || Hash::check('pembinasmpsmi', $user->password)) {
+            // Cek jika pembina harus mengubah kata sandi default (berdasarkan flag atau jika login menggunakan password tanggal lahir)
+            $birthDate = $user->coachProfile?->birth_date;
+            $isDefaultPassword = ($birthDate && $request->password === $birthDate->format('Ymd')) || $request->password === 'pembinasmpsmi';
+
+            if ($user->must_change_password || $isDefaultPassword) {
+                if (!$user->must_change_password) {
+                    $user->update(['must_change_password' => true]);
+                }
                 return redirect()->route('password.force_change');
             }
 

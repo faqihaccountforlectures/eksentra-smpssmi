@@ -127,9 +127,9 @@
 
                     <!-- Input 1: Password Saat Ini (Opsional & Dapat Dilihat Ikon Mata) -->
                     <div>
-                        <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Password Saat Ini <span class="text-gray-muted font-normal font-sans text-[10px]">(Opsional)</span></label>
+                        <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Password Saat Ini <span class="text-rose-500 font-bold">*</span></label>
                         <div class="relative">
-                            <input type="password" id="current_password" name="current_password" value="{{ old('current_password') }}" placeholder="Ketik password saat ini (opsional)" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl pl-4 pr-11 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm">
+                            <input type="password" id="current_password" name="current_password" required placeholder="Ketik password saat ini" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl pl-4 pr-11 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm">
                             <button type="button" onclick="togglePasswordVisibility('current_password', 'icon-current_password')" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-navy-base/60 hover:text-navy-dark transition-colors focus:outline-none" title="Tampilkan / Sembunyikan Password">
                                 <svg id="icon-current_password" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>

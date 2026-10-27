@@ -62,19 +62,24 @@ class CoachController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData) {
-            // 1. Buat akun user coach dengan password default 'pembinasmpsmi'
+            // Kata sandi default pembina menggunakan tanggal lahir format YYYYMMDD (contoh: 19850512)
+            $birthDate = \Carbon\Carbon::parse($validatedData['birth_date']);
+            $defaultPassword = $birthDate->format('Ymd');
+
+            // 1. Buat akun user coach dengan password tanggal lahir
             $user = User::create([
-                'username' => $validatedData['username'],
-                'password' => 'pembinasmpsmi',
+                'username'             => $validatedData['username'],
+                'password'             => $defaultPassword,
                 'must_change_password' => true,
-                'role' => 'coach',
+                'role'                 => 'coach',
             ]);
 
             // 2. Buat profil coach terkait
             CoachProfile::create([
-                'user_id' => $user->id,
-                'full_name' => $validatedData['full_name'],
-                'gender' => $validatedData['gender'],
+                'user_id'      => $user->id,
+                'full_name'    => $validatedData['full_name'],
+                'gender'       => $validatedData['gender'],
+                'birth_date'   => $validatedData['birth_date'],
                 'phone_number' => $validatedData['phone_number'],
             ]);
         });
@@ -106,8 +111,9 @@ class CoachController extends Controller
 
             $profile = $coach->coachProfile;
             $profileData = [
-                'full_name' => $validatedData['full_name'],
-                'gender' => $validatedData['gender'],
+                'full_name'    => $validatedData['full_name'],
+                'gender'       => $validatedData['gender'],
+                'birth_date'   => $validatedData['birth_date'],
                 'phone_number' => $validatedData['phone_number'],
             ];
 
@@ -139,21 +145,23 @@ class CoachController extends Controller
     }
 
     /**
-     * Me-reset kata sandi akun pembina ke kata sandi default sistem ('pembinasmpsmi')
+     * Me-reset kata sandi akun pembina ke kata sandi tanggal lahir (format YYYYMMDD)
      * dan mewajibkan pembina untuk mengganti kata sandi saat login berikutnya.
      */
     public function resetPassword($id)
     {
         $coach = User::where('role', 'coach')->with('coachProfile')->findOrFail($id);
+        $birthDate = $coach->coachProfile?->birth_date;
+        $defaultPassword = $birthDate ? \Carbon\Carbon::parse($birthDate)->format('Ymd') : 'pembinasmpsmi';
 
         $coach->update([
-            'password'             => 'pembinasmpsmi',
+            'password'             => $defaultPassword,
             'must_change_password' => true,
         ]);
 
         $name = $coach->coachProfile->full_name ?? $coach->username;
 
-        return redirect()->back()->with('success', "Kata sandi pembina {$name} berhasil di-reset ke default ('pembinasmpsmi'). Pembina diwajibkan membuat kata sandi baru saat login kembali.");
+        return redirect()->back()->with('success', "Kata sandi pembina {$name} berhasil di-reset ke tanggal lahir (format YYYYMMDD: {$defaultPassword}). Pembina diwajibkan membuat kata sandi baru saat login kembali.");
     }
 
     /**
@@ -170,7 +178,8 @@ class CoachController extends Controller
             'A1' => 'Nama Lengkap & Gelar',
             'B1' => 'Username Pembina',
             'C1' => 'Jenis Kelamin',
-            'D1' => 'No. Telepon',
+            'D1' => 'Tanggal Lahir (YYYY-MM-DD)',
+            'E1' => 'No. Telepon',
         ];
 
         foreach ($headers as $cell => $value) {
@@ -179,8 +188,8 @@ class CoachController extends Controller
 
         // Contoh Data
         $sampleData = [
-            ['Drs. H. Ahmad Subardjo, M.Pd.', 'ahmadsubardjo', 'Laki-laki', '081234567891'],
-            ['Siti Rahmawati, S.Pd.', 'sitirahmawati', 'Perempuan', '081234567892'],
+            ['Drs. H. Ahmad Subardjo, M.Pd.', 'ahmadsubardjo', 'Laki-laki', '1980-05-14', '081234567891'],
+            ['Siti Rahmawati, S.Pd.', 'sitirahmawati', 'Perempuan', '1988-11-20', '081234567892'],
         ];
 
         $rowIdx = 2;
@@ -189,11 +198,13 @@ class CoachController extends Controller
             $sheet->setCellValue('B' . $rowIdx, $row[1]);
             $sheet->setCellValue('C' . $rowIdx, $row[2]);
             $sheet->setCellValueExplicit('D' . $rowIdx, $row[3], DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit('E' . $rowIdx, $row[4], DataType::TYPE_STRING);
             $rowIdx++;
         }
 
-        // Format kolom No. Telepon sebagai Text (@) agar angka 0 di depan tidak hilang
+        // Format kolom Tanggal Lahir dan No. Telepon sebagai Text (@) agar format tidak rusak di Excel
         $sheet->getStyle('D2:D500')->getNumberFormat()->setFormatCode('@');
+        $sheet->getStyle('E2:E500')->getNumberFormat()->setFormatCode('@');
 
         // Styling Header (Warna Navy, Font Putih Tebal, Center)
         $headerStyle = [
@@ -217,11 +228,11 @@ class CoachController extends Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
         $sheet->getRowDimension(1)->setRowHeight(28);
 
         // Lebar kolom otomatis menyesuaikan panjang teks
-        foreach (range('A', 'D') as $col) {
+        foreach (range('A', 'E') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
@@ -292,7 +303,34 @@ class CoachController extends Controller
             $fullName    = trim((string)($row[0] ?? ''));
             $usernameRaw = trim((string)($row[1] ?? ''));
             $genderRaw   = strtolower(trim((string)($row[2] ?? '')));
-            $phoneNumber = trim(trim((string)($row[3] ?? '')), "=\"' \t\n\r\0\x0B");
+
+            // Deteksi apakah berkas menyertakan kolom Tanggal Lahir (5 kolom) atau template lama (4 kolom)
+            $col3Raw = trim(trim((string)($row[3] ?? '')), "=\"' \t\n\r\0\x0B");
+            $birthDate = null;
+            $defaultPassword = 'pembinasmpsmi';
+
+            if (count($row) >= 5 || preg_match('/\d{4}[-\/]\d{1,2}[-\/]\d{1,2}/', $col3Raw) || preg_match('/\d{1,2}[-\/]\d{1,2}[-\/]\d{4}/', $col3Raw)) {
+                $birthDateRaw = $col3Raw;
+                $phoneNumber  = trim(trim((string)($row[4] ?? '')), "=\"' \t\n\r\0\x0B");
+            } else {
+                $birthDateRaw = null;
+                $phoneNumber  = $col3Raw;
+            }
+
+            if (!empty($birthDateRaw)) {
+                try {
+                    if (is_numeric($birthDateRaw)) {
+                        $parsedDate = \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($birthDateRaw));
+                    } else {
+                        $parsedDate = \Carbon\Carbon::parse($birthDateRaw);
+                    }
+                    $birthDate = $parsedDate->format('Y-m-d');
+                    $defaultPassword = $parsedDate->format('Ymd');
+                } catch (\Exception $e) {
+                    $errors[] = "Baris ke-{$rowNumber}: Format tanggal lahir '{$birthDateRaw}' tidak valid. Gunakan format YYYY-MM-DD (contoh: 1985-05-12).";
+                    continue;
+                }
+            }
 
             // Format username: jika user menulis email (misal: ahmad@smpsmi.com), ambil username depannya
             $username = str_contains($usernameRaw, '@') ? explode('@', $usernameRaw)[0] : $usernameRaw;
@@ -336,10 +374,12 @@ class CoachController extends Controller
             $batchEmails[] = $username;
 
             $coachesToInsert[] = [
-                'full_name'    => $fullName,
-                'username'     => $username,
-                'gender'       => $gender,
-                'phone_number' => $phoneNumber ?: null,
+                'full_name'        => $fullName,
+                'username'         => $username,
+                'gender'           => $gender,
+                'birth_date'       => $birthDate,
+                'default_password' => $defaultPassword,
+                'phone_number'     => $phoneNumber ?: null,
             ];
         }
 
@@ -361,7 +401,7 @@ class CoachController extends Controller
                 $user = User::firstOrCreate(
                     ['username' => $coachData['username']],
                     [
-                        'password'             => 'pembinasmpsmi',
+                        'password'             => $coachData['default_password'],
                         'must_change_password' => true,
                         'role'                 => 'coach',
                     ]
@@ -372,6 +412,7 @@ class CoachController extends Controller
                     [
                         'full_name'    => $coachData['full_name'],
                         'gender'       => $coachData['gender'],
+                        'birth_date'   => $coachData['birth_date'],
                         'phone_number' => $coachData['phone_number'],
                     ]
                 );

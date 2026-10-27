@@ -71,8 +71,18 @@
                         </div>
                     </div>
 
-                    <!-- Nomor HP / WA -->
+                    <!-- Tanggal Lahir -->
                     <div>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Tanggal Lahir <span class="text-rose-500">*</span></label>
+                        @php 
+                            $birthDateVal = old('birth_date', $coach->coachProfile?->birth_date ? $coach->coachProfile->birth_date->format('Y-m-d') : ''); 
+                        @endphp
+                        <input type="date" name="birth_date" value="{{ $birthDateVal }}" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
+                        <p class="text-[11px] text-gray-muted mt-1">Digunakan sebagai kata sandi awal/reset pembina (format YYYYMMDD).</p>
+                    </div>
+
+                    <!-- Nomor HP / WA -->
+                    <div class="sm:col-span-2">
                         <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">No. WA / Telepon <span class="text-rose-500">*</span></label>
                         <input type="text" name="phone_number" value="{{ old('phone_number', $coach->coachProfile->phone_number ?? '') }}" placeholder="Contoh: 08123456789" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium font-mono">
                     </div>
@@ -82,11 +92,11 @@
                 <div class="mt-6 pt-5 border-t border-navy-light/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <p class="text-xs font-bold text-navy-dark uppercase tracking-wider">Akses Akun Pembina</p>
-                        <p class="text-[11px] text-gray-muted mt-0.5">Pembina login menggunakan username. Jika pembina lupa kata sandi, admin dapat meresetnya ke kata sandi default.</p>
+                        <p class="text-[11px] text-gray-muted mt-0.5">Pembina login menggunakan username. Jika pembina lupa kata sandi, admin dapat meresetnya ke tanggal lahir pembina.</p>
                     </div>
                     <button type="button" onclick="document.getElementById('resetPasswordModal-{{ $coach->id }}').classList.remove('hidden')" class="px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold rounded-xl border border-amber-200 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 shrink-0 whitespace-nowrap">
                         <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
-                        <span>Reset Password Default (pembinasmpsmi)</span>
+                        <span>Reset Password ke Tanggal Lahir</span>
                     </button>
                 </div>
             </div>

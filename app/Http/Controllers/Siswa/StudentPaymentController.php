@@ -201,9 +201,9 @@ class StudentPaymentController extends Controller
 
         $proofPath = null;
 
-        // Jika ada file bukti transfer yang diunggah, simpan ke direktori storage/app/public/payments
+        // Jika ada file bukti transfer yang diunggah, simpan ke direktori privat (storage/app/payments) demi keamanan data perbankan
         if ($request->hasFile('proof_of_payment')) {
-            $proofPath = $request->file('proof_of_payment')->store('payments', 'public');
+            $proofPath = $request->file('proof_of_payment')->store('payments', 'local');
         }
 
         // Masukkan data pembayaran ke tabel 'payments', default status = 'pending'

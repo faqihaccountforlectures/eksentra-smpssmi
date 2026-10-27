@@ -70,8 +70,15 @@
                         </div>
                     </div>
 
-                    <!-- Nomor HP / WA -->
+                    <!-- Tanggal Lahir -->
                     <div>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Tanggal Lahir <span class="text-rose-500">*</span></label>
+                        <input type="date" name="birth_date" value="{{ old('birth_date') }}" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium">
+                        <p class="text-[11px] text-gray-muted mt-1">Digunakan sebagai kata sandi awal pembina (format YYYYMMDD).</p>
+                    </div>
+
+                    <!-- Nomor HP / WA -->
+                    <div class="sm:col-span-2">
                         <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">No. WA / Telepon <span class="text-rose-500">*</span></label>
                         <input type="text" name="phone_number" value="{{ old('phone_number') }}" placeholder="Contoh: 08123456789" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 shadow-sm font-medium font-mono">
                     </div>
@@ -83,7 +90,7 @@
                     <div class="text-xs text-navy-dark leading-relaxed">
                         <p class="font-bold text-navy-base mb-0.5">Informasi Akses Login Pembina</p>
                         <p class="text-gray-muted">
-                            Password awal pembina otomatis diatur ke <code>pembinasmpsmi</code>. Pembina akan login menggunakan username (misal: <code>namapembina@smpsmi.com</code>) dan kata sandi default tersebut, lalu wajib menggantinya saat login pertama.
+                            Password awal pembina otomatis diatur berupa <strong>tanggal lahir (format YYYYMMDD, contoh: 19850512)</strong>. Pembina akan login menggunakan username dan kata sandi default tersebut, lalu wajib menggantinya saat login pertama.
                         </p>
                     </div>
                 </div>

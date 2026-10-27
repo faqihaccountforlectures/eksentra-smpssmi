@@ -195,3 +195,6 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/payments', [StudentPaymentController::class, 'index'])->name('siswa.payments.index');
     Route::post('/siswa/payments', [StudentPaymentController::class, 'store'])->name('siswa.payments.store');
 });
+
+// Rute Tampilan Bukti Transfer Pembayaran Aman (Dilindungi Otorisasi Hak Akses)
+Route::middleware('auth')->get('/payments/{id}/proof', [\App\Http\Controllers\PaymentProofController::class, 'show'])->name('payments.proof');

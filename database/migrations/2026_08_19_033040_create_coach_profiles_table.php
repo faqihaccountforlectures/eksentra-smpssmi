@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
             $table->string('full_name', 100); // Nama lengkap pembina
             $table->enum('gender', ['laki-laki', 'perempuan']); // Jenis kelamin
+            $table->date('birth_date'); // Tanggal lahir pembina
             $table->string('phone_number', 20)->nullable(); // Nomor telepon
             $table->timestamps();
         });

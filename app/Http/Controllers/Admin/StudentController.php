@@ -69,10 +69,13 @@ class StudentController extends Controller
         $validatedData = $request->validated();
 
         DB::transaction(function () use ($validatedData) {
-            // Akun login siswa menggunakan username berupa NIS dengan password default 'siswasmpsmi'
+            // Kata sandi default siswa menggunakan tanggal lahir format YYYYMMDD (contoh: 20100817)
+            $birthDate = \Carbon\Carbon::parse($validatedData['birth_date']);
+            $defaultPassword = $birthDate->format('Ymd');
+
             $user = User::create([
                 'username' => $validatedData['nis'],
-                'password' => 'siswasmpsmi',
+                'password' => $defaultPassword,
                 'must_change_password' => true,
                 'role' => 'siswa',
             ]);
@@ -83,6 +86,7 @@ class StudentController extends Controller
                 'full_name' => $validatedData['full_name'],
                 'nis' => $validatedData['nis'],
                 'gender' => $validatedData['gender'],
+                'birth_date' => $validatedData['birth_date'],
                 'phone_number' => $validatedData['phone_number'],
                 'parent_phone' => $validatedData['parent_phone'],
             ]);
@@ -118,6 +122,7 @@ class StudentController extends Controller
                     'full_name' => $validatedData['full_name'],
                     'nis' => $validatedData['nis'],
                     'gender' => $validatedData['gender'],
+                    'birth_date' => $validatedData['birth_date'],
                     'phone_number' => $validatedData['phone_number'],
                     'parent_phone' => $validatedData['parent_phone'],
                 ]);
@@ -127,6 +132,7 @@ class StudentController extends Controller
                     'full_name' => $validatedData['full_name'],
                     'nis' => $validatedData['nis'],
                     'gender' => $validatedData['gender'],
+                    'birth_date' => $validatedData['birth_date'],
                     'phone_number' => $validatedData['phone_number'],
                     'parent_phone' => $validatedData['parent_phone'],
                 ]);
@@ -152,21 +158,23 @@ class StudentController extends Controller
     }
 
     /**
-     * Me-reset kata sandi akun siswa ke kata sandi default sistem ('siswasmpsmi')
+     * Me-reset kata sandi akun siswa ke kata sandi tanggal lahir (format YYYYMMDD)
      * dan mewajibkan siswa untuk mengganti kata sandi saat login berikutnya.
      */
     public function resetPassword($id)
     {
         $student = User::where('role', 'siswa')->with('studentProfile')->findOrFail($id);
+        $birthDate = $student->studentProfile?->birth_date;
+        $defaultPassword = $birthDate ? \Carbon\Carbon::parse($birthDate)->format('Ymd') : 'siswasmpsmi';
 
         $student->update([
-            'password'             => 'siswasmpsmi',
+            'password'             => $defaultPassword,
             'must_change_password' => true,
         ]);
 
         $name = $student->studentProfile->full_name ?? $student->username;
 
-        return redirect()->back()->with('success', "Kata sandi siswa {$name} berhasil di-reset ke default ('siswasmpsmi'). Siswa diwajibkan membuat kata sandi baru saat login kembali.");
+        return redirect()->back()->with('success', "Kata sandi siswa {$name} berhasil di-reset ke tanggal lahir (format YYYYMMDD: {$defaultPassword}). Siswa diwajibkan membuat kata sandi baru saat login kembali.");
     }
 
     /**
@@ -183,9 +191,10 @@ class StudentController extends Controller
             'A1' => 'Nama Lengkap',
             'B1' => 'NIS',
             'C1' => 'Jenis Kelamin',
-            'D1' => 'Nomor HP Siswa',
-            'E1' => 'Nomor HP Orang Tua',
-            'F1' => 'Kelas (Opsional)',
+            'D1' => 'Tanggal Lahir (YYYY-MM-DD)',
+            'E1' => 'Nomor HP Siswa',
+            'F1' => 'Nomor HP Orang Tua',
+            'G1' => 'Kelas (Opsional)',
         ];
 
         foreach ($headers as $cell => $value) {
@@ -194,8 +203,8 @@ class StudentController extends Controller
 
         // Contoh Data
         $sampleData = [
-            ['Ahmad Fauzi', '12345678', 'Laki-laki', '081234567890', '081298765432', '7A'],
-            ['Siti Aisyah', '12345679', 'Perempuan', '082134567891', '082198765433', '7B'],
+            ['Ahmad Fauzi', '12345678', 'Laki-laki', '2010-08-17', '081234567890', '081298765432', '7A'],
+            ['Siti Aisyah', '12345679', 'Perempuan', '2011-01-25', '082134567891', '082198765433', '7B'],
         ];
 
         $rowIdx = 2;
@@ -205,14 +214,16 @@ class StudentController extends Controller
             $sheet->setCellValue('C' . $rowIdx, $row[2]);
             $sheet->setCellValueExplicit('D' . $rowIdx, $row[3], DataType::TYPE_STRING);
             $sheet->setCellValueExplicit('E' . $rowIdx, $row[4], DataType::TYPE_STRING);
-            $sheet->setCellValue('F' . $rowIdx, $row[5]);
+            $sheet->setCellValueExplicit('F' . $rowIdx, $row[5], DataType::TYPE_STRING);
+            $sheet->setCellValue('G' . $rowIdx, $row[6]);
             $rowIdx++;
         }
 
-        // Format kolom NIS dan Nomor HP sebagai Text (@) agar angka tidak berubah jadi ilmiah di Excel
+        // Format kolom NIS, Tanggal Lahir, dan Nomor HP sebagai Text (@) agar format tidak rusak di Excel
         $sheet->getStyle('B2:B500')->getNumberFormat()->setFormatCode('@');
         $sheet->getStyle('D2:D500')->getNumberFormat()->setFormatCode('@');
         $sheet->getStyle('E2:E500')->getNumberFormat()->setFormatCode('@');
+        $sheet->getStyle('F2:F500')->getNumberFormat()->setFormatCode('@');
 
         // Styling Header (Warna Navy, Font Putih Tebal, Center)
         $headerStyle = [
@@ -236,11 +247,11 @@ class StudentController extends Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A1:G1')->applyFromArray($headerStyle);
         $sheet->getRowDimension(1)->setRowHeight(28);
 
         // Lebar kolom otomatis menyesuaikan panjang konten
-        foreach (range('A', 'F') as $col) {
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
@@ -337,20 +348,51 @@ class StudentController extends Controller
             $fullName    = trim($row[0] ?? '');
             $nis         = trim(trim($row[1] ?? ''), "=\"' \t\n\r\0\x0B");
 
-            // Deteksi format: apakah kolom ke-2 adalah username/email lama atau langsung jenis kelamin
+            // Deteksi format kolom: apakah template baru (memiliki kolom Tanggal Lahir) atau template lama
             $col2 = trim($row[2] ?? '');
             $hasOldEmailColumn = str_contains($col2, '@') && filter_var($col2, FILTER_VALIDATE_EMAIL);
 
+            $birthDate = null;
+            $defaultPassword = 'siswasmpsmi';
+
             if ($hasOldEmailColumn) {
                 $genderRaw   = strtolower(trim($row[3] ?? ''));
+                $birthDateRaw = null;
                 $phoneNumber = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
                 $parentPhone = trim(trim($row[5] ?? ''), "=\"' \t\n\r\0\x0B");
                 $className   = trim(trim($row[6] ?? ''), "=\"' \t\n\r\0\x0B");
             } else {
-                $genderRaw   = strtolower($col2);
-                $phoneNumber = trim(trim($row[3] ?? ''), "=\"' \t\n\r\0\x0B");
-                $parentPhone = trim(trim($row[4] ?? ''), "=\"' \t\n\r\0\x0B");
-                $className   = trim(trim($row[5] ?? ''), "=\"' \t\n\r\0\x0B");
+                $genderRaw = strtolower($col2);
+                $col3Raw   = trim(trim((string)($row[3] ?? '')), "=\"' \t\n\r\0\x0B");
+
+                // Jika berkas memiliki 7 kolom atau kolom ke-4 berformat tanggal
+                if (count($row) >= 7 || preg_match('/\d{4}[-\/]\d{1,2}[-\/]\d{1,2}/', $col3Raw) || preg_match('/\d{1,2}[-\/]\d{1,2}[-\/]\d{4}/', $col3Raw)) {
+                    $birthDateRaw = $col3Raw;
+                    $phoneNumber  = trim(trim((string)($row[4] ?? '')), "=\"' \t\n\r\0\x0B");
+                    $parentPhone  = trim(trim((string)($row[5] ?? '')), "=\"' \t\n\r\0\x0B");
+                    $className    = trim(trim((string)($row[6] ?? '')), "=\"' \t\n\r\0\x0B");
+                } else {
+                    $birthDateRaw = null;
+                    $phoneNumber  = $col3Raw;
+                    $parentPhone  = trim(trim((string)($row[4] ?? '')), "=\"' \t\n\r\0\x0B");
+                    $className    = trim(trim((string)($row[5] ?? '')), "=\"' \t\n\r\0\x0B");
+                }
+            }
+
+            // Validasi & Parsing Tanggal Lahir jika diisi
+            if (!empty($birthDateRaw)) {
+                try {
+                    if (is_numeric($birthDateRaw)) {
+                        $parsedDate = \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($birthDateRaw));
+                    } else {
+                        $parsedDate = \Carbon\Carbon::parse($birthDateRaw);
+                    }
+                    $birthDate = $parsedDate->format('Y-m-d');
+                    $defaultPassword = $parsedDate->format('Ymd');
+                } catch (\Exception $e) {
+                    $errors[] = "Baris ke-{$rowNumber}: Format tanggal lahir '{$birthDateRaw}' tidak valid. Gunakan format YYYY-MM-DD (contoh: 2010-08-17).";
+                    continue;
+                }
             }
 
             // Validasi Nama Lengkap
@@ -425,12 +467,14 @@ class StudentController extends Controller
             $batchNis[] = $nis;
 
             $studentsToInsert[] = [
-                'full_name'     => $fullName,
-                'nis'           => $nis,
-                'gender'        => $gender,
-                'phone_number'  => $phoneNumber ?: null,
-                'parent_phone'  => $parentPhone ?: null,
-                'class_room_id' => $classRoomId,
+                'full_name'        => $fullName,
+                'nis'              => $nis,
+                'gender'           => $gender,
+                'birth_date'       => $birthDate,
+                'default_password' => $defaultPassword,
+                'phone_number'     => $phoneNumber ?: null,
+                'parent_phone'     => $parentPhone ?: null,
+                'class_room_id'    => $classRoomId,
             ];
         }
 
@@ -449,10 +493,10 @@ class StudentController extends Controller
         // 4. Eksekusi penyimpanan ke basis data menggunakan Database Transaction
         DB::transaction(function () use ($studentsToInsert, $activeYear) {
             foreach ($studentsToInsert as $studentData) {
-                // Membuat akun pengguna siswa dengan username NIS
+                // Membuat akun pengguna siswa dengan username NIS dan password tanggal lahir (YYYYMMDD)
                 $user = User::create([
                     'username'             => $studentData['nis'],
-                    'password'             => 'siswasmpsmi',
+                    'password'             => $studentData['default_password'],
                     'must_change_password' => true,
                     'role'                 => 'siswa',
                 ]);
@@ -463,6 +507,7 @@ class StudentController extends Controller
                     'full_name'    => $studentData['full_name'],
                     'nis'          => $studentData['nis'],
                     'gender'       => $studentData['gender'],
+                    'birth_date'   => $studentData['birth_date'],
                     'phone_number' => $studentData['phone_number'],
                     'parent_phone' => $studentData['parent_phone'],
                     'status'       => 'aktif',
