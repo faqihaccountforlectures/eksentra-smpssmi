@@ -38,8 +38,8 @@ Route::get('/login', function () {
 })->name('login');
 
 // Memproses formulir login manual (Email & Kata Sandi)
-// throttle:5,1 → maksimal 5 percobaan login per menit per IP (mencegah brute-force)
-Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('login.post');
+// throttle:login → maksimal 5 percobaan per menit berbasis kombinasi akun + IP (mencegah brute-force & false lockout)
+Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:login')->name('login.post');
 
 // Memproses proses keluar (Logout)
 Route::post('/logout', function () {
@@ -166,6 +166,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/class-enrollments/{class_id}/promote', [\App\Http\Controllers\Admin\ClassEnrollmentController::class, 'promoteStudents'])->name('class-enrollments.promote');
     Route::post('/admin/class-enrollments/{class_id}/promote', [\App\Http\Controllers\Admin\ClassEnrollmentController::class, 'storePromotion'])->name('class-enrollments.store-promotion');
     Route::delete('/admin/class-enrollments/{enrollment_id}', [\App\Http\Controllers\Admin\ClassEnrollmentController::class, 'destroy'])->name('class-enrollments.destroy');
+
+    // ==========================================
+    // RUTE AUDIT TRAIL / LOG AKTIVITAS (SECURITY)
+    // ==========================================
+    Route::get('/admin/activity-logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity-logs.index');
 });
 
 // ==========================================

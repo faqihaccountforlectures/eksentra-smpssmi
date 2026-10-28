@@ -137,14 +137,14 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="text-[10px] text-gray-muted mt-1">Dapat dikosongkan. Klik ikon mata 👁️ untuk melihat karakter password yang diketikkan.</p>
+                        <p class="text-[10px] text-gray-muted mt-1">Wajib diisi demi verifikasi keamanan. Klik ikon mata 👁️ untuk melihat karakter password yang diketikkan.</p>
                     </div>
 
                     <!-- Input 2: Password Baru -->
                     <div>
                         <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Password Baru <span class="text-rose-500">*</span></label>
                         <div class="relative">
-                            <input type="password" id="password" name="password" placeholder="Minimal 8 karakter campuran huruf & angka" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl pl-4 pr-11 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm" required>
+                            <input type="password" id="password" name="password" placeholder="Minimal 8 karakter kombinasi huruf & angka" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl pl-4 pr-11 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm" required>
                             <button type="button" onclick="togglePasswordVisibility('password', 'icon-password')" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-navy-base/60 hover:text-navy-dark transition-colors focus:outline-none" title="Tampilkan / Sembunyikan Password">
                                 <svg id="icon-password" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -152,7 +152,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="text-[10px] text-gray-muted mt-1">Gunakan kombinasi password yang kuat untuk keamanan sistem sekolah.</p>
+                        <p class="text-[10px] text-gray-muted mt-1">Wajib minimal 8 karakter dengan kombinasi huruf dan angka.</p>
                     </div>
 
                     <!-- Input 2: Konfirmasi Password Baru -->

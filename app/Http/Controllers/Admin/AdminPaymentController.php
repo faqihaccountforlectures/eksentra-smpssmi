@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
+use App\Models\ActivityLog;
 use App\Models\Payment;
 use App\Models\ExtracurricularRegistration;
 use Illuminate\Http\Request;
@@ -183,13 +184,23 @@ class AdminPaymentController extends Controller
      */
     public function verify($id)
     {
-        $payment = Payment::findOrFail($id);
+        $payment = Payment::with('registration.student.studentProfile')->findOrFail($id);
         
         // Ubah status jadi verified dan catat ID admin/guru yang melakukan klik
         $payment->update([
             'payment_status' => 'verified',
             'verified_by' => auth()->id() 
         ]);
+
+        $student = $payment->registration?->student;
+        $studentName = $student?->studentProfile?->full_name ?? $student?->display_name ?? '-';
+        $studentNis = $student?->studentProfile?->nis ?? $student?->username ?? '-';
+        $amount = number_format($payment->total_amount ?? 0, 0, ',', '.');
+
+        ActivityLog::record(
+            'PAYMENT_VERIFIED',
+            "Admin menyetujui verifikasi pembayaran kas #{$payment->id} siswa {$studentName} (NIS: {$studentNis}) sebesar Rp {$amount}."
+        );
 
         return back()->with('success', 'Pembayaran siswa berhasil diverifikasi dan disetujui.');
     }
@@ -199,13 +210,23 @@ class AdminPaymentController extends Controller
      */
     public function reject($id)
     {
-        $payment = Payment::findOrFail($id);
+        $payment = Payment::with('registration.student.studentProfile')->findOrFail($id);
         
         // Ubah status jadi rejected dan catat siapa yang menolak
         $payment->update([
             'payment_status' => 'rejected',
             'verified_by' => auth()->id()
         ]);
+
+        $student = $payment->registration?->student;
+        $studentName = $student?->studentProfile?->full_name ?? $student?->display_name ?? '-';
+        $studentNis = $student?->studentProfile?->nis ?? $student?->username ?? '-';
+        $amount = number_format($payment->total_amount ?? 0, 0, ',', '.');
+
+        ActivityLog::record(
+            'PAYMENT_REJECTED',
+            "Admin menolak pembayaran kas #{$payment->id} siswa {$studentName} (NIS: {$studentNis}) sebesar Rp {$amount}."
+        );
 
         return back()->with('success', 'Pembayaran siswa telah ditolak.');
     }
