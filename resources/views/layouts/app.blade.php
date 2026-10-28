@@ -327,7 +327,7 @@
                     <div class="h-5 w-px bg-slate-200"></div>
 
                     <!-- Tombol Logout -->
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form id="global-logout-form" action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="p-1.5 sm:p-2 bg-white border border-slate-200 text-slate-400 rounded-lg hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-all outline-none focus:outline-none" title="Keluar dari Sistem">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -503,6 +503,88 @@
                 }
             });
         });
+
+        // =========================================================================
+        // AUTO LOGOUT INAKTIVITAS (10 MENIT) & SINKRONISASI ANTAR-TAB BROWSER
+        // =========================================================================
+        (function() {
+            const IDLE_TIMEOUT_MS = 10 * 60 * 1000; // 10 menit = 600.000 ms
+            const STORAGE_KEY = 'portal_last_activity_timestamp';
+            let isLoggingOut = false;
+
+            function updateActivity() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, Date.now().toString());
+                } catch (e) {}
+            }
+
+            // Inisialisasi awal timestamp saat halaman dimuat
+            updateActivity();
+
+            // Throttle agar event mousemove/scroll tidak membebani performa
+            let throttleTimer = null;
+            function handleUserActivity() {
+                if (!throttleTimer) {
+                    throttleTimer = setTimeout(function() {
+                        updateActivity();
+                        throttleTimer = null;
+                    }, 1000); // Maksimal simpan 1 kali per detik
+                }
+            }
+
+            const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
+            activityEvents.forEach(function(eventName) {
+                window.addEventListener(eventName, handleUserActivity, { passive: true });
+            });
+
+            function triggerSessionTimeoutLogout() {
+                if (isLoggingOut) return;
+                isLoggingOut = true;
+
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                } catch (e) {}
+
+                const logoutForm = document.getElementById('global-logout-form');
+                if (logoutForm) {
+                    let timeoutInput = logoutForm.querySelector('input[name="timeout"]');
+                    if (!timeoutInput) {
+                        timeoutInput = document.createElement('input');
+                        timeoutInput.type = 'hidden';
+                        timeoutInput.name = 'timeout';
+                        timeoutInput.value = '1';
+                        logoutForm.appendChild(timeoutInput);
+                    }
+                    logoutForm.submit();
+                } else {
+                    window.location.href = "{{ route('login') }}";
+                }
+            }
+
+            function checkIdleTimeout() {
+                let lastActivity = Date.now();
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) {
+                        lastActivity = parseInt(saved, 10);
+                    }
+                } catch (e) {}
+
+                if (Date.now() - lastActivity >= IDLE_TIMEOUT_MS) {
+                    triggerSessionTimeoutLogout();
+                }
+            }
+
+            // Periksa setiap 5 detik
+            setInterval(checkIdleTimeout, 5000);
+
+            // Periksa seketika saat user kembali membuka tab browser
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    checkIdleTimeout();
+                }
+            });
+        })();
     </script>
 </body>
 </html>

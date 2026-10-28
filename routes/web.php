@@ -46,6 +46,12 @@ Route::post('/logout', function () {
     Auth::logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
+
+    // Jika logout dipicu oleh timeout inaktivitas otomatis (10 menit)
+    if (request()->boolean('timeout')) {
+        return redirect()->route('login')->with('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama 10 menit. Silakan masuk kembali.');
+    }
+
     return redirect('/');
 })->name('logout');
 

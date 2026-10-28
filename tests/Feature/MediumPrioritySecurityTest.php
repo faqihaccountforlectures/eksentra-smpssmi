@@ -194,4 +194,42 @@ class MediumPrioritySecurityTest extends TestCase
             'action'  => 'ADMIN_PASSWORD_CHANGED',
         ]);
     }
+
+    /**
+     * Test Sesi: Konfigurasi session lifetime adalah 10 menit dan expire_on_close aktif.
+     */
+    public function test_session_lifetime_and_expire_on_close_configuration(): void
+    {
+        $this->assertEquals(10, config('session.lifetime'));
+        $this->assertTrue(config('session.expire_on_close'));
+    }
+
+    /**
+     * Test Auto Logout: Logout dengan parameter timeout mengarahkan ke login dengan notifikasi sesi berakhir.
+     */
+    public function test_idle_timeout_logout_redirects_to_login_with_message(): void
+    {
+        $user = User::first();
+
+        $response = $this->actingAs($user)->post('/logout', [
+            'timeout' => '1',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHas('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama 10 menit. Silakan masuk kembali.');
+    }
+
+    /**
+     * Test Normal Logout: Logout biasa tanpa timeout mengarahkan ke landing page (/).
+     */
+    public function test_regular_logout_redirects_to_home(): void
+    {
+        $user = User::first();
+
+        $response = $this->actingAs($user)->post('/logout');
+
+        $this->assertGuest();
+        $response->assertRedirect('/');
+    }
 }
