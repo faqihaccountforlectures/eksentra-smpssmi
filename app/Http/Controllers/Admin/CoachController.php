@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\ActivityLog;
 use App\Models\CoachProfile;
 use App\Http\Requests\Admin\StoreCoachRequest;
 use App\Http\Requests\Admin\UpdateCoachRequest;
@@ -133,7 +134,13 @@ class CoachController extends Controller
      */
     public function destroy($id)
     {
-        $coach = User::findOrFail($id);
+        $coach = User::with('coachProfile')->findOrFail($id);
+        $name = $coach->coachProfile->full_name ?? $coach->username;
+
+        ActivityLog::record(
+            'COACH_DELETED',
+            "Admin menghapus akun dan profil pembina {$name} (Username: {$coach->username})."
+        );
         
         if ($coach->coachProfile) {
             $coach->coachProfile->delete();
@@ -160,6 +167,11 @@ class CoachController extends Controller
         ]);
 
         $name = $coach->coachProfile->full_name ?? $coach->username;
+
+        ActivityLog::record(
+            'COACH_PASSWORD_RESET',
+            "Admin me-reset kata sandi akun pembina {$name} (Username: {$coach->username}) ke default tanggal lahir."
+        );
 
         return redirect()->back()->with('success', "Kata sandi pembina {$name} berhasil di-reset ke tanggal lahir (format YYYYMMDD: {$defaultPassword}). Pembina diwajibkan membuat kata sandi baru saat login kembali.");
     }

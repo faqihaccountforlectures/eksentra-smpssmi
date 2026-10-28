@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Extracurricular;
+use App\Models\ActivityLog;
 use App\Models\AcademicYear;
 use App\Models\ExtracurricularGrade;
 use App\Models\ClassRoom;
@@ -200,6 +201,7 @@ class ExtracurricularController extends Controller
         
         $registration = $extracurricular->registrations()
             ->where('status', 'approved')
+            ->with(['student.studentProfile'])
             ->findOrFail($registrationId);
 
         $validated = $request->validate([
@@ -273,6 +275,27 @@ class ExtracurricularController extends Controller
                 'semester' => 'genap',
             ])->delete();
         }
+
+        $studentUser = $registration->student;
+        $studentName = $studentUser?->studentProfile?->full_name ?? $studentUser?->display_name ?? '-';
+        $studentNis  = $studentUser?->studentProfile?->nis ?? $studentUser?->username ?? '-';
+
+        $gradeParts = [];
+        if (!empty($validated['ganjil_grade'])) {
+            $scoreText = isset($validated['ganjil_score']) && $validated['ganjil_score'] !== '' ? " (Skor: {$validated['ganjil_score']})" : '';
+            $gradeParts[] = "Ganjil: {$validated['ganjil_grade']}{$scoreText}";
+        }
+        if (!empty($validated['genap_grade'])) {
+            $scoreText = isset($validated['genap_score']) && $validated['genap_score'] !== '' ? " (Skor: {$validated['genap_score']})" : '';
+            $gradeParts[] = "Genap: {$validated['genap_grade']}{$scoreText}";
+        }
+
+        $gradeSummary = !empty($gradeParts) ? implode(', ', $gradeParts) : 'Penilaian dikosongkan/direset';
+
+        ActivityLog::record(
+            'GRADE_UPDATED',
+            "Pembina {$extracurricular->name} memperbarui nilai siswa {$studentName} (NIS: {$studentNis}) pada Tahun Ajaran {$academicYear->year_name} [{$gradeSummary}]."
+        );
 
         return redirect()->back()->with('success', "Nilai ekstrakurikuler tahun ajaran {$academicYear->year_name} (Semester Ganjil & Genap) berhasil disimpan!");
     }

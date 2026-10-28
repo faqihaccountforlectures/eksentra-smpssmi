@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\User;
+use App\Models\ActivityLog;
 use App\Models\StudentProfile;
 use App\Models\ClassRoom;
 use App\Models\ClassEnrollment;
@@ -145,7 +146,14 @@ class StudentController extends Controller
     // Proses hapus data
     public function destroy($id)
     {
-        $student = User::findOrFail($id);
+        $student = User::with('studentProfile')->findOrFail($id);
+        $nis = $student->studentProfile->nis ?? $student->username;
+        $name = $student->studentProfile->full_name ?? '-';
+
+        ActivityLog::record(
+            'STUDENT_DELETED',
+            "Admin menghapus akun dan data profil siswa {$name} (NIS: {$nis})."
+        );
         
         // Hapus profilnya dulu biar bersih, baru hapus akunnya
         if ($student->studentProfile) {
@@ -173,6 +181,11 @@ class StudentController extends Controller
         ]);
 
         $name = $student->studentProfile->full_name ?? $student->username;
+
+        ActivityLog::record(
+            'STUDENT_PASSWORD_RESET',
+            "Admin me-reset kata sandi akun siswa {$name} (NIS: {$student->username}) ke default tanggal lahir."
+        );
 
         return redirect()->back()->with('success', "Kata sandi siswa {$name} berhasil di-reset ke tanggal lahir (format YYYYMMDD: {$defaultPassword}). Siswa diwajibkan membuat kata sandi baru saat login kembali.");
     }

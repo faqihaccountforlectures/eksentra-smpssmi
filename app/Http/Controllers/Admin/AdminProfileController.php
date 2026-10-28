@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -63,11 +64,13 @@ class AdminProfileController extends Controller
         // Validasi form penggantian password: kata sandi saat ini wajib diisi demi keamanan
         $request->validate([
             'current_password' => ['required', 'string'],
-            'password'         => ['required', 'string', 'confirmed', 'different:current_password', Password::min(8)],
+            'password'         => ['required', 'string', 'confirmed', 'different:current_password', Password::min(8)->letters()->numbers()],
         ], [
             'current_password.required' => 'Password saat ini wajib diisi.',
             'password.required'         => 'Password baru wajib diisi.',
             'password.min'              => 'Password baru minimal harus 8 karakter.',
+            'password.letters'          => 'Password baru harus mengandung setidaknya satu huruf.',
+            'password.numbers'          => 'Password baru harus mengandung setidaknya satu angka.',
             'password.confirmed'        => 'Konfirmasi password baru tidak cocok.',
             'password.different'        => 'Password baru harus berbeda dari password saat ini.',
         ]);
@@ -81,6 +84,12 @@ class AdminProfileController extends Controller
         $user->update([
             'password' => $request->password,
         ]);
+
+        // Catat ke Audit Trail / Log Aktivitas
+        ActivityLog::record(
+            'ADMIN_PASSWORD_CHANGED',
+            "Admin ({$user->username}) memperbarui kata sandi akun dan menghentikan seluruh sesi aktif lain."
+        );
 
         // 2. FITUR KEAMANAN UTAMA: Purge Sesi Login di Perangkat Lain!
         // Ketika password diganti (misal saat serah terima admin baru),
