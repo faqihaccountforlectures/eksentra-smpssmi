@@ -545,20 +545,8 @@
                     localStorage.removeItem(STORAGE_KEY);
                 } catch (e) {}
 
-                const logoutForm = document.getElementById('global-logout-form');
-                if (logoutForm) {
-                    let timeoutInput = logoutForm.querySelector('input[name="timeout"]');
-                    if (!timeoutInput) {
-                        timeoutInput = document.createElement('input');
-                        timeoutInput.type = 'hidden';
-                        timeoutInput.name = 'timeout';
-                        timeoutInput.value = '1';
-                        logoutForm.appendChild(timeoutInput);
-                    }
-                    logoutForm.submit();
-                } else {
-                    window.location.href = "{{ route('login') }}";
-                }
+                // Arahkan langsung ke route logout dengan penanda parameter timeout=1
+                window.location.href = "{{ route('logout') }}?timeout=1";
             }
 
             function checkIdleTimeout() {

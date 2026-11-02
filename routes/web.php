@@ -41,8 +41,8 @@ Route::get('/login', function () {
 // throttle:login → maksimal 5 percobaan per menit berbasis kombinasi akun + IP (mencegah brute-force & false lockout)
 Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:login')->name('login.post');
 
-// Memproses proses keluar (Logout)
-Route::post('/logout', function () {
+// Memproses proses keluar (Logout) - mendukung POST dan GET (untuk auto logout inaktivitas)
+Route::match(['get', 'post'], '/logout', function () {
     Auth::logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();

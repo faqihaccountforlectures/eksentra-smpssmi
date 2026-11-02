@@ -46,6 +46,12 @@ class Handler extends ExceptionHandler
         });
 
         // Mengarahkan kembali ke halaman login jika token CSRF/sesi kedaluwarsa karena inaktivitas
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+            if ($e->getStatusCode() === 419) {
+                return redirect()->route('login')->with('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama 10 menit. Silakan masuk kembali.');
+            }
+        });
+
         $this->renderable(function (\Illuminate\Session\TokenMismatchException $e, $request) {
             return redirect()->route('login')->with('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama 10 menit. Silakan masuk kembali.');
         });

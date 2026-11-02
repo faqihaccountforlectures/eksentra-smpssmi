@@ -211,6 +211,7 @@ class MediumPrioritySecurityTest extends TestCase
     {
         $user = User::first();
 
+        // Uji POST logout dengan parameter timeout
         $response = $this->actingAs($user)->post('/logout', [
             'timeout' => '1',
         ]);
@@ -218,6 +219,13 @@ class MediumPrioritySecurityTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect(route('login'));
         $response->assertSessionHas('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama 10 menit. Silakan masuk kembali.');
+
+        // Uji GET logout dengan parameter timeout (alur auto logout client-side)
+        $user2 = User::first();
+        $responseGet = $this->actingAs($user2)->get('/logout?timeout=1');
+        $this->assertGuest();
+        $responseGet->assertRedirect(route('login'));
+        $responseGet->assertSessionHas('error', 'Sesi Anda telah berakhir karena tidak ada aktivitas selama 10 menit. Silakan masuk kembali.');
     }
 
     /**
