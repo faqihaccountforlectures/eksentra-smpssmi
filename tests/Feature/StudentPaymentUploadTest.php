@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\AcademicYear;
 use App\Models\Extracurricular;
 use App\Models\ExtracurricularRegistration;
+use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
@@ -15,17 +16,33 @@ class StudentPaymentUploadTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private function createTestStudent(): User
+    {
+        $nis = '88' . rand(100000, 999999);
+        $user = User::create([
+            'username' => $nis,
+            'password' => 'secret123',
+            'role' => 'siswa',
+            'must_change_password' => false,
+        ]);
+
+        StudentProfile::create([
+            'user_id' => $user->id,
+            'full_name' => 'Siswa Test Upload',
+            'nis' => $nis,
+            'gender' => 'laki-laki',
+            'birth_date' => '2012-05-15',
+            'status' => 'aktif',
+        ]);
+
+        return $user;
+    }
+
     public function test_payment_proof_rejects_file_larger_than_10mb(): void
     {
         Storage::fake('local');
 
-        $student = User::where('role', 'siswa')->first();
-        if (!$student) {
-            $student = User::factory()->create(['role' => 'siswa']);
-        }
-        $student->must_change_password = false;
-        $student->save();
-
+        $student = $this->createTestStudent();
         $activeYear = AcademicYear::where('is_active', true)->first();
         $extracurricular = Extracurricular::first();
 
@@ -63,13 +80,7 @@ class StudentPaymentUploadTest extends TestCase
     {
         Storage::fake('local');
 
-        $student = User::where('role', 'siswa')->first();
-        if (!$student) {
-            $student = User::factory()->create(['role' => 'siswa']);
-        }
-        $student->must_change_password = false;
-        $student->save();
-
+        $student = $this->createTestStudent();
         $activeYear = AcademicYear::where('is_active', true)->first();
         $extracurricular = Extracurricular::first();
 

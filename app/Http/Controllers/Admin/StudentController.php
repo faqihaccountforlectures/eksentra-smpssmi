@@ -106,12 +106,14 @@ class StudentController extends Controller
     // Proses update data
     public function update(UpdateStudentRequest $request, $id)
     {
-        $student = User::findOrFail($id);
+        $student = User::with('studentProfile')->findOrFail($id);
 
         // 1. Ambil data yang sudah lolos validasi
         $validatedData = $request->validated();
+        $oldStatus = $student->studentProfile?->status ?? 'aktif';
+        $newStatus = $validatedData['status'];
 
-        DB::transaction(function () use ($validatedData, $student) {
+        DB::transaction(function () use ($validatedData, $student, $oldStatus, $newStatus) {
             // Update username sistem sesuai NIS siswa
             $student->update([
                 'username' => $validatedData['nis'],
@@ -126,6 +128,7 @@ class StudentController extends Controller
                     'birth_date' => $validatedData['birth_date'],
                     'phone_number' => $validatedData['phone_number'],
                     'parent_phone' => $validatedData['parent_phone'],
+                    'status' => $validatedData['status'],
                 ]);
             } else {
                 StudentProfile::create([
@@ -136,7 +139,18 @@ class StudentController extends Controller
                     'birth_date' => $validatedData['birth_date'],
                     'phone_number' => $validatedData['phone_number'],
                     'parent_phone' => $validatedData['parent_phone'],
+                    'status' => $validatedData['status'],
                 ]);
+            }
+
+            // Catat log aktivitas jika status berubah (misal: aktif -> keluar / pindah sekolah)
+            if ($oldStatus !== $newStatus) {
+                $name = $validatedData['full_name'];
+                $nis = $validatedData['nis'];
+                ActivityLog::record(
+                    'STUDENT_STATUS_CHANGED',
+                    "Admin mengubah status siswa {$name} (NIS: {$nis}) dari '{$oldStatus}' menjadi '{$newStatus}'."
+                );
             }
         });
 

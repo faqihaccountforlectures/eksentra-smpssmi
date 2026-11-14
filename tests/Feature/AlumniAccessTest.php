@@ -13,26 +13,31 @@ class AlumniAccessTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private function createAlumniUser(): User
+    {
+        $nis = '99' . rand(100000, 999999);
+        $user = User::create([
+            'username' => $nis,
+            'password' => 'secret123',
+            'role' => 'siswa',
+            'must_change_password' => false,
+        ]);
+
+        StudentProfile::create([
+            'user_id' => $user->id,
+            'full_name' => 'Siswa Test Alumni',
+            'nis' => $nis,
+            'gender' => 'laki-laki',
+            'birth_date' => '2010-08-17',
+            'status' => 'lulus',
+        ]);
+
+        return $user;
+    }
+
     public function test_alumni_cannot_register_extracurricular(): void
     {
-        $alumni = User::where('role', 'siswa')
-            ->whereHas('studentProfile', fn($q) => $q->where('status', 'lulus'))
-            ->first();
-
-        if (!$alumni) {
-            $alumni = User::factory()->create(['role' => 'siswa']);
-            StudentProfile::create([
-                'user_id' => $alumni->id,
-                'full_name' => 'Test Alumni',
-                'nis' => '99999999',
-                'gender' => 'laki-laki',
-                'status' => 'lulus',
-            ]);
-        }
-        $alumni->must_change_password = false;
-        $alumni->save();
-
-        $activeYear = AcademicYear::where('is_active', true)->first();
+        $alumni = $this->createAlumniUser();
         $extracurricular = Extracurricular::first();
 
         $response = $this->actingAs($alumni)->post(route('extracurricular-registrations.store'), [
@@ -45,22 +50,7 @@ class AlumniAccessTest extends TestCase
 
     public function test_alumni_has_no_unpaid_bills_in_new_academic_year(): void
     {
-        $alumni = User::where('role', 'siswa')
-            ->whereHas('studentProfile', fn($q) => $q->where('status', 'lulus'))
-            ->first();
-
-        if (!$alumni) {
-            $alumni = User::factory()->create(['role' => 'siswa']);
-            StudentProfile::create([
-                'user_id' => $alumni->id,
-                'full_name' => 'Test Alumni',
-                'nis' => '99999998',
-                'gender' => 'laki-laki',
-                'status' => 'lulus',
-            ]);
-        }
-        $alumni->must_change_password = false;
-        $alumni->save();
+        $alumni = $this->createAlumniUser();
 
         $response = $this->actingAs($alumni)->get(route('siswa.payments.index'));
         $response->assertStatus(200);

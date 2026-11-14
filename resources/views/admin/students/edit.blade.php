@@ -81,6 +81,23 @@
                         <p class="text-[11px] text-gray-muted mt-1">Digunakan sebagai kata sandi awal/reset siswa (format YYYYMMDD).</p>
                     </div>
 
+                    <!-- Status Siswa -->
+                    <div>
+                        <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">Status Siswa <span class="text-rose-500">*</span></label>
+                        <div class="relative">
+                            @php $currentStatus = old('status', $student->studentProfile->status ?? 'aktif'); @endphp
+                            <select name="status" required class="w-full bg-white border border-navy-light/40 text-navy-dark text-sm rounded-xl pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-navy-base focus:border-navy-base outline-none transition-all duration-200 appearance-none shadow-sm font-medium cursor-pointer">
+                                <option value="aktif" {{ $currentStatus == 'aktif' ? 'selected' : '' }}>Aktif (Peserta Didik Aktif)</option>
+                                <option value="keluar" {{ $currentStatus == 'keluar' ? 'selected' : '' }}>Keluar (Pindah Sekolah / Non-Aktif)</option>
+                                <option value="lulus" {{ $currentStatus == 'lulus' ? 'selected' : '' }}>Alumni (Lulus)</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-muted">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-gray-muted mt-1">Siswa 'Keluar' otomatis dinonaktifkan loginnya & tidak ditagih iuran.</p>
+                    </div>
+
                     <!-- Nomor Telepon Siswa -->
                     <div>
                         <label class="block text-sm font-bold text-navy-dark mb-1.5 tracking-wide">No. Telepon Siswa <span class="text-rose-500">*</span></label>

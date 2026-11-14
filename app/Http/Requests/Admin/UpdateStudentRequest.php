@@ -37,6 +37,7 @@ class UpdateStudentRequest extends FormRequest
             'birth_date' => 'required|date',
             'phone_number' => 'required|string|max:20',
             'parent_phone' => 'required|string|max:20',
+            'status' => 'required|in:aktif,keluar,lulus',
         ];
     }
 
@@ -55,6 +56,8 @@ class UpdateStudentRequest extends FormRequest
             'birth_date.date' => 'Format tanggal lahir tidak valid.',
             'phone_number.required' => 'Nomor telepon siswa wajib diisi.',
             'parent_phone.required' => 'Nomor telepon orang tua wajib diisi.',
+            'status.required' => 'Status siswa wajib dipilih.',
+            'status.in' => 'Status siswa yang dipilih tidak valid.',
         ];
     }
 }
