@@ -88,7 +88,12 @@
                 @if($approvedRegistrations->isEmpty())
                     <!-- Tampilan kalau siswa belum terdaftar di ekskul apa pun -->
                     <div class="bg-white-off border border-navy-light/30 rounded-xl p-4 text-center">
-                        <p class="text-xs text-gray-muted leading-relaxed font-medium">Anda belum memiliki ekstrakurikuler aktif pada Tahun Ajaran {{ $activeYear->year_name ?? '' }}. Silakan mendaftar terlebih dahulu di menu <a href="{{ route('siswa.extracurriculars.index') }}" class="text-navy-base font-bold hover:underline">Katalog Ekstrakurikuler</a>.</p>
+                        @if(auth()->user()->studentProfile && auth()->user()->studentProfile->status === 'lulus')
+                            <p class="text-xs text-navy-dark leading-relaxed font-bold">Status Anda: Alumni (Lulus)</p>
+                            <p class="text-xs text-gray-muted leading-relaxed font-medium mt-1">Tidak ada kewajiban iuran ekstrakurikuler pada Tahun Ajaran {{ $activeYear->year_name ?? '' }}. Anda dapat melihat seluruh riwayat transaksi terdahulu pada tabel riwayat di samping.</p>
+                        @else
+                            <p class="text-xs text-gray-muted leading-relaxed font-medium">Anda belum memiliki ekstrakurikuler aktif pada Tahun Ajaran {{ $activeYear->year_name ?? '' }}. Silakan mendaftar terlebih dahulu di menu <a href="{{ route('siswa.extracurriculars.index') }}" class="text-navy-base font-bold hover:underline">Katalog Ekstrakurikuler</a>.</p>
+                        @endif
                     </div>
                 @else
                     <form action="{{ route('siswa.payments.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">

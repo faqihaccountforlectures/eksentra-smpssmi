@@ -32,6 +32,12 @@
                     <svg class="w-3.5 h-3.5 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     <span class="font-bold text-[11px] text-blue-100">Kelas: {{ $className }}</span>
                 </div>
+                @if(($user->studentProfile->status ?? 'aktif') === 'lulus')
+                <div class="bg-emerald-900/80 border border-emerald-500/60 px-3 py-1 rounded-lg flex items-center gap-1.5 shadow-sm text-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span class="font-bold text-[11px] tracking-wide">Status: Alumni</span>
+                </div>
+                @endif
             </div>
         </div>
 
