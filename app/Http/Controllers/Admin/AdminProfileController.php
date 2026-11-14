@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\Password;
 class AdminProfileController extends Controller
 {
     /**
-     * Menampilkan halaman utama Profil & Pengaturan Akun Admin (Gabungan).
+     * Menampilkan halaman utama Profil & Pengaturan Akun Admin.
      * Memuat data admin yang sedang login untuk ditampilkan pada form.
      */
     public function index()
@@ -32,22 +32,30 @@ class AdminProfileController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Validasi input data profil
-        // Username harus unik kecuali untuk user itu sendiri
-        $usernameInput = trim($request->input('username') ?? $request->input('email') ?? '');
+        $oldUsername = $user->username;
+        $usernameInput = trim($request->input('username') ?? '');
         $request->merge(['username' => $usernameInput]);
 
         $request->validate([
-            'username' => 'required|string|max:100|unique:users,username,' . $user->id,
+            'username' => ['required', 'string', 'min:3', 'max:50', 'alpha_dash', 'unique:users,username,' . $user->id],
         ], [
-            'username.required' => 'Username wajib diisi.',
-            'username.unique'   => 'Username ini sudah digunakan oleh akun lain.',
+            'username.required'   => 'Username wajib diisi.',
+            'username.min'        => 'Username minimal harus 3 karakter.',
+            'username.max'        => 'Username maksimal 50 karakter.',
+            'username.alpha_dash' => 'Username hanya boleh berupa kombinasi huruf, angka, tanda strip (-), atau garis bawah (_).',
+            'username.unique'     => 'Username ini sudah digunakan oleh akun lain.',
         ]);
 
-        // Simpan perubahan profil ke database
-        $user->update([
-            'username' => $usernameInput,
-        ]);
+        if ($oldUsername !== $usernameInput) {
+            $user->update([
+                'username' => $usernameInput,
+            ]);
+
+            ActivityLog::record(
+                'ADMIN_USERNAME_CHANGED',
+                "Admin memperbarui username login dari '{$oldUsername}' menjadi '{$usernameInput}'."
+            );
+        }
 
         return back()->with('success', 'Username akun admin berhasil diperbarui.');
     }

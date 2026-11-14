@@ -14,12 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat Akun Admin Default langsung di seeder jika belum ada
-        User::firstOrCreate(
-            ['username' => 'admin'],
+        // Buat atau perbarui Akun Admin Utama Eksentra
+        User::updateOrCreate(
+            ['role' => 'admin'],
             [
+                'username' => 'admin_eksentra',
                 'password' => Hash::make('smpsmi_admin'),
-                'role' => 'admin',
             ]
         );
     }

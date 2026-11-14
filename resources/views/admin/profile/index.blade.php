@@ -35,7 +35,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <!-- ========================================================= -->
-        <!-- KARTU 1: FORM INFORMASI PROFIL ADMIN -->
+        <!-- KARTU 1: FORM INFORMASI PROFIL & USERNAME ADMIN -->
         <!-- ========================================================= -->
         <div class="lg:col-span-6 bg-white rounded-2xl border border-navy-light/30 shadow-sm overflow-hidden flex flex-col group hover:shadow-md hover:border-navy-base/30 transition-all duration-300">
             <!-- Header Kartu Profil -->
@@ -53,9 +53,9 @@
             </div>
 
             <!-- Body Kartu Form Profil -->
-            <div class="p-7 flex-1 flex flex-col justify-between">
+            <div class="p-7 flex-1 flex flex-col">
                 <!-- Banner Avatar & Ringkasan Akun -->
-                <div class="flex items-center gap-4 p-4 rounded-xl bg-white-off/50 border border-navy-light/20 mb-6">
+                <div class="flex items-center gap-4 p-4 rounded-xl bg-white-off/50 border border-navy-light/20 mb-5">
                     <div class="w-14 h-14 rounded-2xl bg-navy-base text-white-off font-bold text-xl flex items-center justify-center border border-navy-light/40 shadow-sm shrink-0">
                         {{ $user->initial }}
                     </div>
@@ -69,21 +69,21 @@
                     </div>
                 </div>
 
-                <!-- Form Perubahan Data Profil Admin -->
-                <form action="{{ route('admin.profile.update') }}" method="POST" class="space-y-4">
+                <!-- Form Perubahan Username Admin -->
+                <form action="{{ route('admin.profile.update') }}" method="POST" class="flex-1 flex flex-col">
                     @csrf
                     @method('PUT')
 
-                    <!-- Input: Username Login Admin -->
+                    <!-- Input: Username Login Admin (Dempet ke atas dekat banner profil) -->
                     <div>
                         <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Username Admin <span class="text-rose-500">*</span></label>
-                        <input type="text" name="username" value="{{ old('username', $user->username) }}" placeholder="admin" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm" required>
-                        <p class="text-[10px] text-gray-muted mt-1">Gunakan username ini untuk masuk / login ke dalam portal ekstrakurikuler.</p>
+                        <input type="text" name="username" value="{{ old('username', $user->username) }}" placeholder="admin_eksentra" class="w-full bg-white border border-navy-light/40 text-navy-dark text-xs font-semibold rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-navy-base/20 focus:border-navy-base outline-none transition-all shadow-sm" required>
+                        <p class="text-[10px] text-gray-muted mt-1.5 leading-relaxed">Gunakan username ini untuk masuk / login ke dalam portal ekstrakurikuler.</p>
                     </div>
 
-                    <!-- Tombol Simpan Perubahan Profil -->
-                    <div class="pt-3 border-t border-navy-light/20 flex justify-end">
-                        <button type="submit" class="px-5 py-2.5 bg-navy-dark text-white-off font-bold text-xs rounded-xl hover:bg-navy-base shadow-sm hover:shadow-md active:scale-95 transition-all flex items-center gap-2">
+                    <!-- Tombol Simpan Perubahan Profil (Rata bawah sejajar dengan tombol kartu sebelah kanan) -->
+                    <div class="pt-4 border-t border-navy-light/20 flex justify-end mt-auto">
+                        <button type="submit" class="px-5 py-2.5 bg-blue-800 hover:bg-blue-900 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow-md active:scale-95 transition-all flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             <span>Simpan Perubahan Username</span>
                         </button>
