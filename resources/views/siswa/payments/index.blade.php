@@ -158,7 +158,7 @@
                         <div id="proof_field_container">
                             <label class="block text-xs font-bold text-navy-dark uppercase tracking-wider mb-1.5">Bukti Transfer (JPG/PNG) <span class="text-rose-500">*</span></label>
                             <input type="file" name="proof_of_payment" id="proof_of_payment" accept="image/jpeg,image/png,image/jpg" class="w-full text-xs text-gray-muted file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-navy-light/10 file:text-navy-base hover:file:bg-navy-light/20 transition-all border border-navy-light/40 rounded-xl bg-white-off/50">
-                            <p class="text-[10px] text-gray-muted mt-1 font-medium">Format: JPG, JPEG, PNG. Maksimal 2MB.</p>
+                            <p class="text-[10px] text-gray-muted mt-1 font-medium">Format: JPG, JPEG, PNG. Maksimal 10MB.</p>
                         </div>
 
                         <!-- Tombol Submit -->
@@ -287,7 +287,7 @@
         </div>
     </div>
 
-    <!-- Script toggle upload bukti berdasarkan metode pembayaran -->
+    <!-- Script toggle upload bukti berdasarkan metode pembayaran & validasi ukuran file -->
     <script>
         function toggleProofField() {
             const method = document.getElementById('payment_method').value;
@@ -302,5 +302,15 @@
                 input.setAttribute('required', 'required');
             }
         }
+
+        document.getElementById('proof_of_payment')?.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                if (this.files[0].size > maxSize) {
+                    alert('Ukuran file bukti pembayaran melebihi batas maksimal 10MB.');
+                    this.value = '';
+                }
+            }
+        });
     </script>
 @endsection

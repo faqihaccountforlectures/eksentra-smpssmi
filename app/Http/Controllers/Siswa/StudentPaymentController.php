@@ -122,14 +122,19 @@ class StudentPaymentController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input form: jika metode transfer, bukti bayar (foto) wajib diunggah.
+        // Validasi input form: jika metode transfer, bukti bayar (foto) wajib diunggah (maksimal 10MB).
         $request->validate([
             'registration_id' => 'nullable|exists:extracurricular_registrations,id',
             'extracurricular_id' => 'nullable|exists:extracurriculars,id',
             'month' => 'required|string',
             'year' => 'required|integer',
             'payment_method' => 'required|in:transfer,cash',
-            'proof_of_payment' => 'required_if:payment_method,transfer|image|mimes:jpeg,png,jpg|max:2048'
+            'proof_of_payment' => 'required_if:payment_method,transfer|image|mimes:jpeg,png,jpg|max:10240'
+        ], [
+            'proof_of_payment.required_if' => 'Bukti pembayaran wajib diunggah untuk metode transfer.',
+            'proof_of_payment.image' => 'File bukti pembayaran harus berupa gambar.',
+            'proof_of_payment.mimes' => 'Format file bukti pembayaran harus JPG, JPEG, atau PNG.',
+            'proof_of_payment.max' => 'Ukuran file bukti pembayaran maksimal 10MB.',
         ]);
 
         // Cek apakah siswa benar-benar anggota aktif ekskul tersebut di tahun ajaran aktif
