@@ -33,10 +33,16 @@ class DashboardController extends Controller
         // 4. Hitung pembayaran ekstrakurikuler yang perlu verifikasi (pending)
         $pendingPayments = Payment::where('payment_status', 'pending')->count();
 
-        // 5. Hitung total pemasukan bulan ini (berdasarkan waktu verifikasi)
+        // 5. Hitung total pemasukan iuran bulan ini yang sudah diverifikasi (berdasarkan periode bulan & tahun iuran)
+        $monthsName = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+        ];
+        $currentMonthName = $monthsName[now()->month];
+
         $pemasukanBulanIni = Payment::where('payment_status', 'verified')
-            ->whereMonth('updated_at', now()->month)
-            ->whereYear('updated_at', now()->year)
+            ->where('month', $currentMonthName)
+            ->where('year', now()->year)
             ->sum('total_amount');
 
         // 6. Data untuk Chart.js (Grafik Ekskul Terfavorit)
