@@ -61,21 +61,21 @@
             @endphp
 
             <div class="bg-white rounded-2xl shadow-sm border border-blue-100 overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-md hover:border-blue-300 transition-all duration-300">
-                <!-- Header Kartu Foto / Gradien Navy -->
-                <div class="h-36 relative overflow-hidden text-white flex flex-col justify-end p-5 group/header border-b border-slate-100">
+                <!-- Banner Foto / Gradien Navy -->
+                <div class="h-36 relative overflow-hidden group/header border-b border-slate-100 bg-slate-100">
                     @if($ekskul->image)
-                        <img src="{{ asset('storage/' . $ekskul->image) }}" class="absolute inset-0 w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500" alt="{{ $ekskul->name }}">
-                        <!-- Overlay gradien navy agar teks nama ekskul kontras dan terbaca jelas -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/50 to-transparent"></div>
+                        <img src="{{ asset('storage/' . $ekskul->image) }}" class="w-full h-full object-cover group-hover/header:scale-105 transition-transform duration-500" alt="{{ $ekskul->name }}">
                     @else
-                        <div class="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950"></div>
-                        <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover/header:bg-white/15 transition-colors duration-500"></div>
+                        <div class="w-full h-full bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 relative">
+                            <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover/header:bg-white/15 transition-colors duration-500"></div>
+                        </div>
                     @endif
-                    <h3 class="text-lg font-bold font-heading tracking-wide relative z-10 drop-shadow-sm text-white">{{ $ekskul->name }}</h3>
                 </div>
                 
                 <!-- Body Kartu -->
                 <div class="p-6 flex-1 flex flex-col">
+                    <h3 class="text-lg font-bold font-heading text-navy-dark tracking-wide mb-4 pb-3 border-b border-slate-100 group-hover:text-blue-800 transition-colors">{{ $ekskul->name }}</h3>
+
                     <div class="space-y-4 mb-6 flex-1">
                         <!-- Info Pembina -->
                         <div class="flex items-start gap-3">

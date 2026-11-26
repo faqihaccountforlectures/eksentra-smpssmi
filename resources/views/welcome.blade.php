@@ -395,7 +395,7 @@
         </section>
 
         <!-- ============================================================== -->
-        <!-- 5. GALERI KEGIATAN (Bersih & Rapi)                            -->
+        <!-- 5. GALERI KEGIATAN (6 Foto Ekstrakurikuler)                    -->
         <!-- ============================================================== -->
         <section id="galeri" class="scroll-mt-20 py-10 sm:py-14 border-t border-slate-200">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -408,36 +408,88 @@
                         Galeri <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 to-indigo-800">Kegiatan</span>
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1.5">
-                        Jelajahi berbagai momen kegiatan ekstrakurikuler yang menjadi bagian dari perjalanan siswa SMPS Science Mutiara Insani.
+                        Jelajahi dokumentasi momen kegiatan ekstrakurikuler yang menjadi bagian dari perjalanan siswa SMPS Science Mutiara Insani.
                     </p>
                 </div>
 
-                <!-- 8 Kompak Placeholder Grid -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 stagger-items">
-                    @php
-                        $galeriItems = [
-                            ['label' => 'Sains & Robotik', 'cat' => 'Akademik & Riset'],
-                            ['label' => 'Pramuka & Kepemimpinan', 'cat' => 'Karakter & Disiplin'],
-                            ['label' => 'Olahraga & Futsal', 'cat' => 'Kebugaran & Sport'],
-                            ['label' => 'Seni Musik & Vokal', 'cat' => 'Kreativitas & Seni'],
-                            ['label' => 'PMR & Kemanusiaan', 'cat' => 'Sosial & Kesehatan'],
-                            ['label' => 'English Club', 'cat' => 'Bahasa & Wawasan'],
-                            ['label' => 'Tahfidz & Keislaman', 'cat' => 'Religius & Akhlak'],
-                            ['label' => 'Dokumentasi Acara', 'cat' => 'Momen Bersama'],
-                        ];
-                    @endphp
+                @php
+                    $galeriItems = [
+                        [
+                            'image' => asset('images/galeri/science-club-1.jpg'),
+                            'label' => 'Pembinaan & Persiapan Science Camp',
+                            'cat'   => 'Science Club',
+                            'desc'  => 'Penyampaian arahan kegiatan dan materi praktikum bersama pembina di ruang laboratorium.',
+                        ],
+                        [
+                            'image' => asset('images/galeri/science-club-2.jpg'),
+                            'label' => 'Praktikum Eksperimen Sains',
+                            'cat'   => 'Science Club',
+                            'desc'  => 'Siswa bekerja sama menyiapkan bahan dan mempraktikkan percobaan sains terapan.',
+                        ],
+                        [
+                            'image' => asset('images/galeri/science-club-3.jpg'),
+                            'label' => 'Pengukuran Suhu Laboratorium',
+                            'cat'   => 'Science Club',
+                            'desc'  => 'Pengamatan ketelitian pengukuran suhu larutan menggunakan termometer laboratorium.',
+                        ],
+                        [
+                            'image' => asset('images/galeri/science-club-4.jpg'),
+                            'label' => 'Pemaparan Materi Interaktif',
+                            'cat'   => 'Science Club',
+                            'desc'  => 'Sesi pengenalan alat dan langkah eksperimen melalui layar interaktif kelas.',
+                        ],
+                        [
+                            'image' => asset('images/galeri/science-club-5.jpg'),
+                            'label' => 'Diskusi & Kerja Kelompok',
+                            'cat'   => 'Science Club',
+                            'desc'  => 'Kolaborasi kelompok dalam menyusun rancangan dan lembar kerja kegiatan.',
+                        ],
+                        [
+                            'image' => asset('images/galeri/science-club-6.jpg'),
+                            'label' => 'Uji Coba Eksperimen Outdoor',
+                            'cat'   => 'Science Club',
+                            'desc'  => 'Antusiasme siswa melakukan praktik langsung bersama di halaman sekolah.',
+                        ],
+                    ];
+                @endphp
 
-                    @foreach($galeriItems as $item)
-                    <div class="bg-white p-4 rounded-2xl reveal group border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between h-36">
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 text-blue-800 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <!-- 6 Foto Grid Seimbang (3x2 di Desktop, 2x3 di Tablet) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger-items">
+                    @foreach($galeriItems as $index => $item)
+                    <button
+                        type="button"
+                        onclick="openGalleryModal({{ $index }})"
+                        class="bg-white rounded-2xl overflow-hidden reveal group border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all text-left flex flex-col focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                    >
+                        <div class="relative aspect-video w-full overflow-hidden bg-slate-100">
+                            <img
+                                src="{{ $item['image'] }}"
+                                alt="{{ $item['label'] }}"
+                                loading="lazy"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            >
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3">
+                                <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-white bg-slate-900/60 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                                    Lihat Foto
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-[10px] text-blue-700 font-mono font-bold">{{ $item['cat'] }}</span>
-                            <h4 class="text-xs font-bold text-slate-800 group-hover:text-blue-900 transition-colors mt-0.5 leading-snug">{{ $item['label'] }}</h4>
-                            <p class="text-[10px] text-slate-400 mt-1">Dokumentasi menyusul</p>
+
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[10px] text-blue-800 font-mono font-bold">
+                                    {{ $item['cat'] }}
+                                </span>
+                                <h3 class="text-sm font-bold text-slate-900 group-hover:text-blue-900 transition-colors mt-2 leading-snug">
+                                    {{ $item['label'] }}
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                    {{ $item['desc'] }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </button>
                     @endforeach
                 </div>
 
@@ -855,7 +907,86 @@
             const menu = document.getElementById('mobile-menu');
             if (menu) menu.classList.add('hidden');
         }
+
+        // 5. Lightbox Modal Galeri Kegiatan
+        const galleryItemsData = @json($galeriItems);
+        let currentGalleryIndex = 0;
+
+        function renderGalleryModal() {
+            const item = galleryItemsData[currentGalleryIndex];
+            if (!item) return;
+
+            document.getElementById('gallery-modal-img').src = item.image;
+            document.getElementById('gallery-modal-img').alt = item.label;
+            document.getElementById('gallery-modal-cat').textContent = item.cat;
+            document.getElementById('gallery-modal-title').textContent = item.label;
+            document.getElementById('gallery-modal-desc').textContent = item.desc;
+            document.getElementById('gallery-modal-counter').textContent = `${currentGalleryIndex + 1} / ${galleryItemsData.length}`;
+        }
+
+        function openGalleryModal(index) {
+            const modal = document.getElementById('gallery-modal');
+            if (!modal || !galleryItemsData.length) return;
+            currentGalleryIndex = index;
+            renderGalleryModal();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeGalleryModal() {
+            const modal = document.getElementById('gallery-modal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        function stepGalleryModal(delta) {
+            if (!galleryItemsData.length) return;
+            currentGalleryIndex = (currentGalleryIndex + delta + galleryItemsData.length) % galleryItemsData.length;
+            renderGalleryModal();
+        }
+
+        document.addEventListener('keydown', function (e) {
+            const modal = document.getElementById('gallery-modal');
+            if (!modal || modal.classList.contains('hidden')) return;
+            if (e.key === 'Escape') closeGalleryModal();
+            if (e.key === 'ArrowLeft') stepGalleryModal(-1);
+            if (e.key === 'ArrowRight') stepGalleryModal(1);
+        });
     </script>
+
+    <!-- Lightbox Modal Galeri -->
+    <div id="gallery-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4" onclick="if (event.target === this) closeGalleryModal()">
+        <div class="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <span id="gallery-modal-cat" class="px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[11px] font-mono font-bold text-blue-800"></span>
+                    <span id="gallery-modal-counter" class="text-xs font-mono text-slate-400"></span>
+                </div>
+                <button type="button" onclick="closeGalleryModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Tutup pratinjau foto">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="relative bg-slate-900 aspect-video w-full">
+                <img id="gallery-modal-img" src="" alt="" class="w-full h-full object-contain">
+
+                <button type="button" onclick="stepGalleryModal(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all" aria-label="Foto sebelumnya">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button type="button" onclick="stepGalleryModal(1)" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all" aria-label="Foto berikutnya">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+
+            <div class="p-5">
+                <h3 id="gallery-modal-title" class="text-base font-bold text-slate-900 font-heading"></h3>
+                <p id="gallery-modal-desc" class="text-xs sm:text-sm text-slate-600 mt-1"></p>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
