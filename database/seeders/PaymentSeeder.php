@@ -28,9 +28,9 @@ class PaymentSeeder extends Seeder
         $year2025 = AcademicYear::where('year_name', '2025/2026')->first();
         $year2026 = AcademicYear::where('year_name', '2026/2027')->first();
 
-        // Cari file bukti transfer yang ada di storage/app/public/payments
+        // Cari file bukti transfer yang ada di storage/app/payments
         $existingProofFiles = [];
-        $proofDir = storage_path('app/public/payments');
+        $proofDir = storage_path('app/payments');
         if (File::isDirectory($proofDir)) {
             $files = File::files($proofDir);
             foreach ($files as $file) {
